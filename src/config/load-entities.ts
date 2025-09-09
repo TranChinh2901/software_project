@@ -1,4 +1,20 @@
-import { User } from "@/modules/users/entities/user.entity";
+import { User } from "@/modules/users/entity/user.entity";
+import { Role } from "@/modules/roles/entity/role.entity";
+import { Product } from "@/modules/products/entity/product.entity";
+import { Category } from "@/modules/categories/entity/category.entity";
+import { Order } from "@/modules/orders/entity/order.entity";
+import { OrderItem } from "@/modules/orders/entity/order-item.entity";
+import { CartItem } from "@/modules/cart/entity/cart-item.entity";
+import { Review } from "@/modules/reviews/entity/review.entity";
 
 // import entity to use in config-database file
-export const entities = [User];
+export const entities = [
+  User,
+  Role,
+  Product,
+  Category,
+  Order,
+  OrderItem,
+  CartItem,
+  Review
+];

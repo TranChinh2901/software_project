@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryColumn, OneToOne } from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
 
+
 @Entity('roles')
 export class Role {
   @PrimaryColumn()
