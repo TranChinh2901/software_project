@@ -7,7 +7,12 @@ export interface CreateProductDto {
   sale_price?: number;
   stock_quantity: number;
   category_id: number;
+  brand_id: number;
   images?: string[];
+  sizes?: string[];
+  colors?: string[];
+  material?: string;
+  gender?: string;
 }
 
 export interface UpdateProductDto {
@@ -17,7 +22,12 @@ export interface UpdateProductDto {
   sale_price?: number;
   stock_quantity?: number;
   category_id?: number;
+  brand_id?: number;
   images?: string[];
+  sizes?: string[];
+  colors?: string[];
+  material?: string;
+  gender?: string;
   is_active?: boolean;
 }
 
@@ -29,7 +39,15 @@ export interface ProductResponseDto {
   sale_price?: number;
   stock_quantity: number;
   images?: string[];
+  sizes?: string[];
+  colors?: string[];
+  material?: string;
+  gender?: string;
   category: {
+    id: number;
+    name: string;
+  };
+  brand: {
     id: number;
     name: string;
   };

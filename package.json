@@ -11,7 +11,7 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "Một khung dự án backend sử dụng Express với TypeScript, tích hợp migration.",
+  "description": "Backend API cho website bán quần áo sử dụng Express với TypeScript và TypeORM.",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",

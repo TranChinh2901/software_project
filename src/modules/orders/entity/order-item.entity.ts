@@ -24,6 +24,12 @@ export class OrderItem {
   @Column()
   quantity!: number;
 
+  @Column({ nullable: true })
+  selected_size?: string; // Size được chọn
+
+  @Column({ nullable: true })
+  selected_color?: string; // Màu được chọn
+
   @Column('decimal', { precision: 10, scale: 2 })
   unit_price!: number;
 

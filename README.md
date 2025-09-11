@@ -12,13 +12,19 @@ Một khung dự án backend sử dụng Express với TypeScript, tích hợp m
 - Cấu trúc thư mục
 - License
 
+# Fashion E-commerce Backend
+
+Backend API cho website bán quần áo sử dụng Express với TypeScript và TypeORM.
+
 ## Giới thiệu
 
-Dự án sử dụng stack hiện đại:
-- Express + TypeScript
-- ORM hỗ trợ migration (TypeORM)
-- Phân lớp rõ ràng: Controller - Service
-- Hỗ trợ logging, xử lý lỗi tập trung, cấu hình môi trường .env
+Dự án backend cho website bán quần áo với các tính năng:
+- Quản lý sản phẩm (quần áo) với size, màu sắc, chất liệu
+- Quản lý thương hiệu (brands) và danh mục
+- Hệ thống giỏ hàng và đặt hàng  
+- Đánh giá sản phẩm
+- Authentication & Authorization
+- Phân lớp Controller - Service - Entity rõ ràng
 
 ## Công nghệ sử dụng
 

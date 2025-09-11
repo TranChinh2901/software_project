@@ -1,4 +1,5 @@
-import { AppDataSource } from "@/config/config-database";
+
+import { AppDataSource } from "@/config/database.config";
 import { logger } from "@/utils/logger";
 
 export const initDatabase = async () => {

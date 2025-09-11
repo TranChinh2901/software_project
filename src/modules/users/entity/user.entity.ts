@@ -1,34 +1,74 @@
-import { Role } from "@/modules/roles/entity/role.entity";
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
+// import { Role } from "@/modules/roles/entity/role.entity";
+// import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
 
+
+// @Entity('users')
+// export class User {
+//   @PrimaryColumn()
+//   username!: string;
+
+//   @Column()
+//   password_hash!: string;
+
+//   @Column()
+//   fullname!: string;
+
+//   @Column({ nullable: true })
+//   avatar_url?: string;
+
+//   @Column()
+//   email!: string;
+
+//   @Column()
+//   phonenumber!: string;
+
+//   @Column()
+//   create_at!: Date;
+
+//   @Column()
+//   role_id!: string;
+
+//   @OneToOne(() => Role)
+//   @JoinColumn({ name: 'role_id' })
+//   role!: Role;
+
+//   @Column({ type: 'boolean', default: false })
+//   is_deleted!: boolean;
+// }
+
+import { Role } from "@/modules/roles/entity/role.entity";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('users')
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column({ unique: true })
   username!: string;
 
   @Column()
-  password_hash!: string;
+  password!: string;
 
-  @Column()
+  @Column({ length: 100 })
   fullname!: string;
 
   @Column({ nullable: true })
-  avatar_url?: string;
+  avatar?: string;
 
-  @Column()
+  @Column({ unique: true })
   email!: string;
 
-  @Column()
-  phonenumber!: string;
+  @Column({ length: 20, nullable: true })
+  phone_number?: string;
 
-  @Column()
-  create_at!: Date;
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at!: Date;
 
-  @Column()
-  role_id!: string;
+  @UpdateDateColumn({ type: 'timestamp' })
+  updated_at!: Date;
 
-  @OneToOne(() => Role)
+  @ManyToOne(() => Role, (role) => role.user)
   @JoinColumn({ name: 'role_id' })
   role!: Role;
 

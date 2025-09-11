@@ -1,67 +1,83 @@
 export const SuccessMessages = {
   USER: {
     USER_CREATED: "User created successfully",
-
     USER_UPDATED: "User updated successfully",
-
     USER_DELETED: "User deleted successfully",
-
-    USER_GET: "Fetch user data successfully",
+    USER_GET: "User data fetched successfully",
   },
 
-  ARREST: {
-    ARREST_CREATED: "Arrest created successfully",
-
-    ARREST_UPDATED: "Arrest updated successfully",
-
-    ARREST_DELETED: "Arrest deleted successfully",
-
-    ARREST_GET: "Fetch arrest data successfully",
+  BRAND: {
+    BRAND_CREATED: "Brand created successfully",
+    BRAND_UPDATED: "Brand updated successfully",
+    BRAND_DELETED: "Brand deleted successfully",
+    BRAND_GET: "Brand data fetched successfully",
   },
 
-  PERMISSION: {
-    PERMISSION_CREATED: "Permission created successfully",
+  CATEGORY: {
+    CATEGORY_CREATED: "Category created successfully",
+    CATEGORY_UPDATED: "Category updated successfully",
+    CATEGORY_DELETED: "Category deleted successfully",
+    CATEGORY_GET: "Category data fetched successfully",
+  },
 
-    PERMISSION_UPDATED: "Permission updated successfully",
+  PRODUCT: {
+    PRODUCT_CREATED: "Product created successfully",
+    PRODUCT_UPDATED: "Product updated successfully",
+    PRODUCT_DELETED: "Product deleted successfully",
+    PRODUCT_GET: "Product data fetched successfully",
+  },
 
-    PERMISSION_DELETED: "Permission deleted successfully",
+  ORDER: {
+    ORDER_CREATED: "Order placed successfully",
+    ORDER_UPDATED: "Order updated successfully",
+    ORDER_DELETED: "Order cancelled successfully",
+    ORDER_GET: "Order data fetched successfully",
+  },
 
-    PERMISSION_GET: "Fetch permission data successfully",
+  CART: {
+    ITEM_ADDED: "Item added to cart successfully",
+    ITEM_REMOVED: "Item removed from cart successfully",
+    CART_CLEARED: "Cart cleared successfully",
   },
 
   AUTH: {
-    LOGIN_SUCCESS: "Login successfully",
-
-    LOGOUT_SUCCESS: "Logout successfully",
+    LOGIN_SUCCESS: "Logged in successfully",
+    LOGOUT_SUCCESS: "Logged out successfully",
+    REGISTER_SUCCESS: "Registered successfully",
   },
 } as const;
 
 export const ErrorMessages = {
   USER_NOT_FOUND: "User not found",
-
-  INVALID_ID: "Invalid id",
-
-  EMAIL_EXISTS: "Email already exists",
-
+  INVALID_ID: "Invalid ID",
+  EMAIL_ALREADY_EXISTS: "Email already exists",
   INVALID_CREDENTIALS: "Invalid email or password",
-
   UNAUTHORIZED: "You are not authorized",
-
   VALIDATION_FAILED: "Validation failed",
-
   SERVER_ERROR: "Something went wrong",
 
-  ARREST_NOT_FOUND: "Arrest not found",
+  // Product errors
+  PRODUCT_NOT_FOUND: "Product not found",
+  PRODUCT_OUT_OF_STOCK: "Product is out of stock",
+  INSUFFICIENT_STOCK: "Insufficient stock quantity",
 
-  ARREST_EXISTS: "Arrest already exists",
+  // Category errors
+  CATEGORY_NOT_FOUND: "Category not found",
+  CATEGORY_ALREADY_EXISTS: "Category already exists",
 
-  PERMISSION_NOT_FOUND: "Permission not found",
+  // Brand errors
+  BRAND_NOT_FOUND: "Brand not found",
+  BRAND_ALREADY_EXISTS: "Brand already exists",
 
-  PERMISSION_ALREADY_EXISTS: "Permission already exists",
+  // Order errors
+  ORDER_NOT_FOUND: "Order not found",
+  ORDER_CANNOT_BE_CANCELLED: "Order cannot be cancelled",
 
-  PERMISSION_EXISTS: "Permission already exists for this user",
+  // Cart errors
+  CART_ITEM_NOT_FOUND: "Cart item not found",
+  CART_IS_EMPTY: "Cart is empty",
 
-  SENTENCE_NOT_FOUND: "Sentence not found",
-
-  SENTENCE_EXISTS: "Sentence already exists",
+  // Payment errors
+  PAYMENT_FAILED: "Payment failed",
+  INVALID_PAYMENT_METHOD: "Invalid payment method",
 } as const;
