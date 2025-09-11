@@ -8,7 +8,7 @@ export class Order {
   id!: number;
 
   @Column()
-  user_id!: string;
+  user_id!: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })

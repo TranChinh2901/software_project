@@ -1,9 +1,9 @@
 import express from "express";
 
-import userController from "@/modules/users/user.controller";
+import userController from "@/modules/users/user.controller"
 import { asyncHandle } from "@/utils/handle-error";
 import { validateBody } from "@/middlewares/validate.middleware";
-import { CreateUserSchema } from "@/modules/users/schemas/create-user-schema";
+import { CreateUserSchema } from "@/modules/users/schema/user.schema";
 
 const router = express.Router();
 

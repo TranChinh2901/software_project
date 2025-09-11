@@ -8,7 +8,7 @@ export class CartItem {
   id!: number;
 
   @Column()
-  user_id!: string;
+  user_id!: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
@@ -25,10 +25,10 @@ export class CartItem {
   quantity!: number;
 
   @Column({ nullable: true })
-  selected_size?: string; // Size được chọn
+  selected_size?: string;
 
   @Column({ nullable: true })
-  selected_color?: string; // Màu được chọn
+  selected_color?: string; 
 
   @CreateDateColumn()
   created_at!: Date;
