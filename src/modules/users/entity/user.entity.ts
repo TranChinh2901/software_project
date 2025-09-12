@@ -6,23 +6,35 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ unique: true })
-  username!: string;
-
-  @Column()
-  password!: string;
-
   @Column({ length: 100 })
   fullname!: string;
 
-  @Column({ nullable: true })
-  avatar?: string;
-
-  @Column({ unique: true })
+    @Column({ unique: true })
   email!: string;
 
   @Column({ length: 20, nullable: true })
   phone_number?: string;
+  
+  @Column({nullable: true})
+  address?: string;
+
+  @Column({ nullable: true })
+  avatar?: string;
+
+  @Column()
+  password!: string;
+
+  @Column({ type: 'enum', enum: ['male', 'female'] })
+  gender!: string;
+
+  @Column() 
+  date_of_birth!: Date;
+
+  @Column({ type: 'boolean', default: false })
+  is_email_verified!: boolean;
+  
+  @Column({ type: 'boolean', default: false })
+  is_phone_verified!: boolean;
 
   @Column()
   role_id!: number;
