@@ -46,13 +46,6 @@ class UserService {
     });
   }
 
-  async getByUsername(username: string): Promise<User | null> {
-    return await this.userRepository.findOne({
-      where: { username, is_deleted: false },
-      relations: ['role']
-    });
-  }
-
   async create(createUserDto: CreateUserDto): Promise<User> {
     // Check if email already exists
     const existingUserByEmail = await this.getByEmail(createUserDto.email);
@@ -61,16 +54,6 @@ class UserService {
         ErrorMessages.EMAIL_ALREADY_EXISTS,
         HttpStatusCode.CONFLICT,
         ErrorCode.EMAIL_ALREADY_EXISTS
-      );
-    }
-
-    // Check if username already exists
-    const existingUserByUsername = await this.getByUsername(createUserDto.username);
-    if (existingUserByUsername) {
-      throw new AppError(
-        "Username already exists",
-        HttpStatusCode.CONFLICT,
-        ErrorCode.EMAIL_ALREADY_EXISTS // Reuse this code or create new one
       );
     }
 

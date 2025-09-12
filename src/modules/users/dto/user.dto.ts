@@ -1,30 +1,38 @@
 // Input DTO (from req.body)
 export interface CreateUserDto {
-  username: string;
+  fullname: string;
   email: string;
   password: string;
-  fullname: string;
   phone_number?: string;
-  role_id: number;
+  address?: string;
   avatar?: string;
+  gender: 'male' | 'female';
+  date_of_birth: Date;
+  role_id: number;
 }
 
 export interface UpdateUserDto {
-  username?: string;
   fullname?: string;
   phone_number?: string;
+  address?: string;
   avatar?: string;
+  gender?: 'male' | 'female';
+  date_of_birth?: Date;
   is_active?: boolean;
 }
 
 // Output DTO (for response)
 export interface UserResponseDto {
   id: number;
-  username: string;
   fullname: string;
   email: string;
   phone_number?: string;
+  address?: string;
   avatar?: string;
+  gender: string;
+  date_of_birth: Date;
+  is_email_verified: boolean;
+  is_phone_verified: boolean;
   role?: {
     id: number;
     name: string;

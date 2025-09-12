@@ -6,11 +6,15 @@ import { User } from "./entity/user.entity";
 export const toUserResponseDto = (user: User): UserResponseDto => {
   return {
     id: user.id,
-    username: user.username,
     fullname: user.fullname,
     email: user.email,
     phone_number: user.phone_number,
+    address: user.address,
     avatar: user.avatar,
+    gender: user.gender,
+    date_of_birth: user.date_of_birth,
+    is_email_verified: user.is_email_verified,
+    is_phone_verified: user.is_phone_verified,
     role: user.role ? {
       id: user.role.id,
       name: user.role.name
@@ -22,12 +26,15 @@ export const toUserResponseDto = (user: User): UserResponseDto => {
 };
 
 // Map user entity to safe response (without sensitive info)
-export const toUserSafeResponseDto = (user: User): Omit<UserResponseDto, 'email' | 'phone_number'> => {
+export const toUserSafeResponseDto = (user: User): Omit<UserResponseDto, 'email' | 'phone_number' | 'address'> => {
   return {
     id: user.id,
-    username: user.username,
     fullname: user.fullname,
     avatar: user.avatar,
+    gender: user.gender,
+    date_of_birth: user.date_of_birth,
+    is_email_verified: user.is_email_verified,
+    is_phone_verified: user.is_phone_verified,
     role: user.role ? {
       id: user.role.id,
       name: user.role.name
