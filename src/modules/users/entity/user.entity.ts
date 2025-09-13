@@ -31,10 +31,7 @@ export class User {
   date_of_birth!: Date;
 
   @Column({ type: 'boolean', default: false })
-  is_email_verified!: boolean;
-  
-  @Column({ type: 'boolean', default: false })
-  is_phone_verified!: boolean;
+  is_verified!: boolean;
 
   @Column()
   role_id!: number;

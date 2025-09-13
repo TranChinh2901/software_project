@@ -8,13 +8,16 @@ export class Product {
   id!: number;
 
   @Column()
-  name!: string;
+  name_product!: string;
 
   @Column('text')
   description!: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price!: number;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  original_price!: number;
 
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   sale_price?: number;
@@ -45,9 +48,6 @@ export class Product {
 
   @Column('json', { nullable: true })
   colors?: string[]; // ["Đỏ", "Xanh", "Đen", "Trắng"]
-
-  @Column({ nullable: true })
-  material?: string; // Chất liệu: "Cotton", "Polyester", etc.
 
   @Column({ nullable: true })
   gender?: string; // "Nam", "Nữ", "Unisex"
