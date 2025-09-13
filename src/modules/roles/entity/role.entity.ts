@@ -7,7 +7,7 @@ export class Role {
   id!: number;
 
   @Column({ unique: true })
-  name!: string; // 'ADMIN', 'USER', 'CUSTOMER'
+  name!: string; // 'ADMIN', 'USER'
 
   @Column({ nullable: true })
   description?: string;
