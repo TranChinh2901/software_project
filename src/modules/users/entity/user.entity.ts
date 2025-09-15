@@ -1,4 +1,5 @@
-import { Role } from "@/modules/roles/entity/role.entity";
+
+import { RoleType } from "@/constants/role-type";
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('users')
@@ -33,12 +34,8 @@ export class User {
   @Column({ type: 'boolean', default: false })
   is_verified!: boolean;
 
-  @Column()
-  role_id!: number;
-
-  @ManyToOne(() => Role, (role) => role.user)
-  @JoinColumn({ name: 'role_id' })
-  role!: Role;
+  @Column({ type: 'enum', enum: RoleType, default: RoleType.USER })
+  role!: RoleType;
 
   @Column({ type: 'int', default: 0 })
   is_deleted!: number;

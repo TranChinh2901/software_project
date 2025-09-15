@@ -1,3 +1,5 @@
+import { RoleType } from "@/constants/role-type";
+
 // Input DTO (from req.body)
 export interface CreateUserDto {
   fullname: string;
@@ -18,7 +20,7 @@ export interface UpdateUserDto {
   avatar?: string;
   gender?: 'male' | 'female';
   date_of_birth?: Date;
-  is_verified?: boolean;
+  is_active?: boolean;
 }
 
 // Output DTO (for response)
@@ -32,10 +34,7 @@ export interface UserResponseDto {
   gender: string;
   date_of_birth: Date;
   is_verified: boolean;
-  role?: {
-    id: number;
-    name: string;
-  };
+  role: RoleType; // chỉ là enum
   created_at: Date;
   updated_at: Date;
 }
