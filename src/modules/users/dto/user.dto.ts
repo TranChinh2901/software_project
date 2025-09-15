@@ -18,7 +18,7 @@ export interface UpdateUserDto {
   avatar?: string;
   gender?: 'male' | 'female';
   date_of_birth?: Date;
-  is_active?: boolean;
+  is_verified?: boolean;
 }
 
 // Output DTO (for response)
@@ -31,13 +31,11 @@ export interface UserResponseDto {
   avatar?: string;
   gender: string;
   date_of_birth: Date;
-  is_email_verified: boolean;
-  is_phone_verified: boolean;
+  is_verified: boolean;
   role?: {
     id: number;
     name: string;
   };
-  is_active: boolean;
   created_at: Date;
   updated_at: Date;
 }

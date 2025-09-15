@@ -18,13 +18,13 @@ class UserService {
   async getAll(): Promise<User[]> {
     return await this.userRepository.find({
       relations: ['role'],
-      where: { is_deleted: false }
+      where: { is_deleted: 0 }
     });
   }
 
   async getById(id: number): Promise<User> {
     const user = await this.userRepository.findOne({
-      where: { id, is_deleted: false },
+      where: { id, is_deleted: 0 },
       relations: ['role']
     });
 
@@ -41,7 +41,7 @@ class UserService {
 
   async getByEmail(email: string): Promise<User | null> {
     return await this.userRepository.findOne({
-      where: { email, is_deleted: false },
+      where: { email, is_deleted: 0 },
       relations: ['role']
     });
   }
@@ -88,7 +88,7 @@ class UserService {
     const user = await this.getById(id);
     
     // Soft delete
-    user.is_deleted = true;
+    user.is_deleted = 1;
     await this.userRepository.save(user);
   }
 

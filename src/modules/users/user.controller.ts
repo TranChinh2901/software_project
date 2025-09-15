@@ -45,17 +45,6 @@ class UserController {
     }).sendResponse(res);
   }
 
-  async create(req: Request, res: Response) {
-    const createUserDto: CreateUserDto = req.body as CreateUserDto;
-    const newUser = await userService.create(createUserDto);
-    const userDto: UserResponseDto = toUserResponseDto(newUser);
-
-    return new AppResponse({
-      message: SuccessMessages.USER.USER_CREATED,
-      statusCode: HttpStatusCode.CREATED,
-      data: userDto,
-    }).sendResponse(res);
-  }
 
   async update(req: Request, res: Response) {
     const id: number = parseInt(req.params.id);

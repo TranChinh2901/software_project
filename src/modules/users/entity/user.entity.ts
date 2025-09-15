@@ -9,25 +9,25 @@ export class User {
   @Column({ length: 100 })
   fullname!: string;
 
-    @Column({ unique: true })
+  @Column({ length: 150, unique: true })
   email!: string;
 
   @Column({ length: 20, nullable: true })
   phone_number?: string;
   
-  @Column({nullable: true})
+  @Column({ length: 255, nullable: true })
   address?: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 255, nullable: true })
   avatar?: string;
 
-  @Column()
+  @Column({ length: 255 })
   password!: string;
 
   @Column({ type: 'enum', enum: ['male', 'female'] })
   gender!: string;
 
-  @Column() 
+  @Column({ type: 'date' }) 
   date_of_birth!: Date;
 
   @Column({ type: 'boolean', default: false })
@@ -40,11 +40,8 @@ export class User {
   @JoinColumn({ name: 'role_id' })
   role!: Role;
 
-  @Column({ type: 'boolean', default: true })
-  is_active!: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  is_deleted!: boolean;
+  @Column({ type: 'int', default: 0 })
+  is_deleted!: number;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;

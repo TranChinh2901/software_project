@@ -19,7 +19,7 @@ export const UpdateUserSchema = Joi.object({
   avatar: Joi.string().uri().optional(),
   gender: Joi.string().valid('male', 'female').optional(),
   date_of_birth: Joi.date().iso().optional(),
-  is_active: Joi.boolean().optional(),
+  is_verified: Joi.boolean().optional(),
 });
 
 export const LoginSchema = Joi.object({

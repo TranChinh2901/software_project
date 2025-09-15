@@ -19,8 +19,8 @@ export class Product {
   @Column('decimal', { precision: 10, scale: 2 })
   original_price!: number;
 
-  @Column('decimal', { precision: 10, scale: 2, nullable: true })
-  sale_price?: number;
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
+  discount_price!: number;
 
   @Column()
   stock_quantity!: number;
@@ -47,7 +47,7 @@ export class Product {
   sizes?: string[]; // ["S", "M", "L", "XL", "XXL"]
 
   @Column('json', { nullable: true })
-  colors?: string[]; // ["Đỏ", "Xanh", "Đen", "Trắng"]
+  colors?: string[];
 
   @Column({ nullable: true })
   gender?: string; // "Nam", "Nữ", "Unisex"

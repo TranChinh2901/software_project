@@ -5,7 +5,7 @@ import { Category } from "@/modules/categories/entity/category.entity";
 import { Brand } from "@/modules/brands/entity/brand.entity";
 import { Order } from "@/modules/orders/entity/order.entity";
 import { OrderItem } from "@/modules/orders/entity/order-item.entity";
-import { CartItem } from "@/modules/cart/entity/cart-item.entity";
+import { CartItem } from "@/modules/carts/entity/cart-item.entity";
 import { Review } from "@/modules/reviews/entity/review.entity";
 
 // import entity to use in config-database file

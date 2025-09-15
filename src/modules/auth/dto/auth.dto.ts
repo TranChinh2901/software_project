@@ -4,19 +4,23 @@ export interface LoginDto {
 }
 
 export interface RegisterDto {
-  username: string;
+  fullname: string;
   email: string;
   password: string;
-  fullname: string;
   phone_number?: string;
+  address?: string;
+  gender: 'male' | 'female';
+  date_of_birth: Date;
+  role_id: number;
 }
 
 export interface AuthResponseDto {
   user: {
     id: number;
-    username: string;
-    email: string;
     fullname: string;
+    email: string;
+    phone_number?: string;
+    is_verified: boolean;
     role: {
       id: number;
       name: string;
