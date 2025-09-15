@@ -1,3 +1,4 @@
+import { GenderType } from "@/constants/gender-type";
 import { RoleType } from "@/constants/role-type";
 
 // Input DTO (from req.body)
@@ -8,9 +9,9 @@ export interface CreateUserDto {
   phone_number?: string;
   address?: string;
   avatar?: string;
-  gender: 'male' | 'female';
+  gender: GenderType;
   date_of_birth: Date;
-  role_id: number;
+  role: RoleType;
 }
 
 export interface UpdateUserDto {
@@ -18,9 +19,8 @@ export interface UpdateUserDto {
   phone_number?: string;
   address?: string;
   avatar?: string;
-  gender?: 'male' | 'female';
+  gender?: GenderType;
   date_of_birth?: Date;
-  is_active?: boolean;
 }
 
 // Output DTO (for response)
@@ -31,10 +31,10 @@ export interface UserResponseDto {
   phone_number?: string;
   address?: string;
   avatar?: string;
-  gender: string;
+  gender: GenderType;
   date_of_birth: Date;
   is_verified: boolean;
-  role: RoleType; // chỉ là enum
+  role: RoleType; 
   created_at: Date;
   updated_at: Date;
 }

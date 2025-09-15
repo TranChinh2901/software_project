@@ -1,3 +1,4 @@
+import { GenderType } from "@/constants/gender-type";
 import { UserResponseDto } from "./dto/user.dto";
 import { User } from "./entity/user.entity";
 import { RoleType } from "@/constants/role-type";
@@ -11,7 +12,7 @@ export const toUserResponseDto = (user: User): UserResponseDto => {
     phone_number: user.phone_number,
     address: user.address,
     avatar: user.avatar,
-    gender: user.gender,
+    gender: user.gender as GenderType,
     date_of_birth: user.date_of_birth,
     is_verified: user.is_verified,
     // role giờ chỉ là enum
@@ -32,7 +33,7 @@ export const toUserSafeResponseDto = (
     id: user.id,
     fullname: user.fullname,
     avatar: user.avatar,
-    gender: user.gender,
+    gender: user.gender as GenderType,
     date_of_birth: user.date_of_birth,
     is_verified: user.is_verified,
     role: user.role as RoleType,

@@ -4,33 +4,30 @@ import userController from "@/modules/users/user.controller"
 import { asyncHandle } from "@/utils/handle-error";
 import { validateBody } from "@/middlewares/validate.middleware";
 import { UpdateUserSchema } from "@/modules/users/schema/user.schema";
-import { authenticateToken, requireAdmin } from "@/modules/auth/auth.middleware";
+import { authMiddleware } from "@/middlewares/auth.middleware";
 
 const router = express.Router();
 
 // Admin only routes
 router.get("/", 
-  authenticateToken, 
-  requireAdmin, 
+  authMiddleware(['ADMIN']), 
   asyncHandle(userController.getAll)
 );
 
 router.get("/:id", 
-  authenticateToken, 
-  requireAdmin, 
+  authMiddleware(['ADMIN']), 
   asyncHandle(userController.getById)
 );
 
 // User can update their own profile (implement in controller)
 router.put("/:id",
-  authenticateToken,
+  authMiddleware(['USER', 'ADMIN']),
   validateBody(UpdateUserSchema),
   asyncHandle(userController.update)
 );
 
 router.delete("/:id",
-  authenticateToken,
-  requireAdmin,
+  authMiddleware(['ADMIN']),
   asyncHandle(userController.delete)
 );
 
