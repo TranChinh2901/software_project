@@ -8,18 +8,11 @@ export class OrderDetail {
   id!: number;
 
   @Column({ type: 'int' })
-  order_id!: number;
-
-  @Column({ type: 'int' })
-  product_variant_id!: number;
-
-  @Column({ type: 'int' })
   quantity!: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price!: number;
 
-  // Relations
   @ManyToOne(() => Order)
   @JoinColumn({ name: 'order_id' })
   order!: Order;

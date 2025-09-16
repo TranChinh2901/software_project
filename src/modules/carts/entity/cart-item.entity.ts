@@ -7,16 +7,9 @@ export class CartItem {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'int' })
-  cart_id!: number;
-
-  @Column({ type: 'int' })
-  product_variant_id!: number;
-
   @Column({ type: 'int', default: 1 })
   quantity!: number;
 
-  // Relations
   @ManyToOne(() => Cart)
   @JoinColumn({ name: 'cart_id' })
   cart!: Cart;

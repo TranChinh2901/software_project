@@ -2,17 +2,13 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDa
 import { User } from "@/modules/users/entity/user.entity";
 import { ShippingAddress } from "@/modules/shipping-address/entity/shipping-address.entity";
 import { OrderStatus } from "../enums/order.enum";
+import { OrderType, PaymentMethod, PaymentStatus } from "@/constants/cart-type";
+import { Voucher } from "@/modules/vouchers/entity/voucher.entity";
 
 @Entity('orders')
 export class Order {
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @Column({ type: 'int' })
-  user_id!: number;
-
-  @Column({ type: 'int' })
-  shipping_address_id!: number;
 
   @Column('decimal', { precision: 12, scale: 2 })
   total_amount!: number;
@@ -20,28 +16,28 @@ export class Order {
   @Column('text', { nullable: true })
   note?: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['pending', 'confirmed', 'shipping', 'completed', 'canceled'],
-    default: 'pending'
-  })
-  status!: string;
+
+  @Column({type: 'enum', enum: OrderType, default: OrderType.PENDING})
+  status!: OrderType;
 
   @Column('text', { nullable: true })
   cancel_reason?: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['COD', 'Momo', 'VNpay']
-  })
-  payment_method!: string;
+  // @Column({
+  //   type: 'enum',
+  //   enum: ['COD', 'Momo', 'VNpay']
+  // })
+  // payment_method!: string;
+
+  @Column({type: 'enum', enum: PaymentMethod, default: PaymentMethod.COD})
+  payment_method!: PaymentMethod;
 
   @Column({
     type: 'enum',
-    enum: ['unpaid', 'paid', 'refunded'],
-    default: 'unpaid'
+    enum: PaymentStatus,
+    default: PaymentStatus.UNPAID
   })
-  payment_status!: string;
+  payment_status!: PaymentStatus;
 
   @Column({ type: 'int', nullable: true })
   voucher_id?: number;
@@ -52,7 +48,6 @@ export class Order {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at!: Date;
 
-  // Relations
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user!: User;
@@ -60,4 +55,8 @@ export class Order {
   @ManyToOne(() => ShippingAddress)
   @JoinColumn({ name: 'shipping_address_id' })
   shipping_address!: ShippingAddress;
+
+  @ManyToOne(() => Voucher, { nullable: true })
+  @JoinColumn({ name: 'voucher_id' })
+  voucher?: Voucher;
 }

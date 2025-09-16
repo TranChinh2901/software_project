@@ -9,10 +9,6 @@ export class ProductGallery {
   @Column({ length: 255 })
   image_url!: string;
 
-  @Column({ type: 'int' })
-  product_id!: number;
-
-  // Relations
   @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })
   product!: Product;

@@ -8,11 +8,11 @@ export class Brand {
   @Column({ unique: true })
   name_brand!: string;
 
-  @Column('text', { nullable: true })
-  description_brand?: string;
-
   @Column({ nullable: true })
   logo_url?: string;
+
+  @Column('longtext', { nullable: true })
+  description_brand?: string;
 
   @Column({ type: 'boolean', default: false })
   is_deleted!: boolean;
