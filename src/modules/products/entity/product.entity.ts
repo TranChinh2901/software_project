@@ -1,8 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Category } from "@/modules/categories/entity/category.entity";
 import { Brand } from "@/modules/brands/entity/brand.entity";
+import { ProductType } from "@/constants/product-type";
 
-@Entity('products')
+@Entity("products")
 export class Product {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -10,44 +19,38 @@ export class Product {
   @Column({ length: 255 })
   name_product!: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column("decimal", { precision: 10, scale: 2 })
   price!: number;
 
-  @Column('decimal', { precision: 10, scale: 2, nullable: true })
+  @Column("decimal", { precision: 10, scale: 2, nullable: true })
   origin_price?: number;
 
   @Column({ length: 255, nullable: true })
   small_description?: string;
 
-  @Column('longtext', { nullable: true })
+  @Column("longtext", { nullable: true })
   meta_description?: string;
 
-  @Column('enum', { enum: ['active', 'inactive', 'out_of_stock'], default: 'active' })
-  status!: 'active' | 'inactive' | 'out_of_stock';
+  @Column({ type: "enum", enum: ProductType, default: ProductType.ACTIVE })
+  status!: ProductType;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: "int", nullable: true })
   stock_quantity?: number;
 
-  @Column()
-  category_id!: number;
-
   @ManyToOne(() => Category)
-  @JoinColumn({ name: 'category_id' })
+  @JoinColumn({ name: "category_id" })
   category!: Category;
 
-  @Column({ type: 'int', nullable: true })
-  brand_id?: number;
-
   @ManyToOne(() => Brand)
-  @JoinColumn({ name: 'brand_id' })
+  @JoinColumn({ name: "brand_id" })
   brand?: Brand;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: "boolean", default: false })
   is_deleted!: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: "timestamp" })
   created_at!: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: "timestamp" })
   updated_at!: Date;
 }
