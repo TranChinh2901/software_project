@@ -1,5 +1,6 @@
 
 import { RoleType } from "@/constants/role-type";
+import { GenderType } from "@/constants/gender-type";
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('users')
@@ -13,8 +14,8 @@ export class User {
   @Column({ length: 150, unique: true })
   email!: string;
 
-  @Column({ length: 20, nullable: true })
-  phone_number?: string;
+  @Column({ length: 20, unique: true })
+  phone_number!: string;
   
   @Column({ length: 255, nullable: true })
   address?: string;
@@ -25,11 +26,11 @@ export class User {
   @Column({ length: 255 })
   password!: string;
 
-  @Column({ type: 'enum', enum: ['male', 'female'] })
-  gender!: string;
+  @Column({ type: 'enum', enum: GenderType, nullable: true })
+  gender?: GenderType;
 
-  @Column({ type: 'date' }) 
-  date_of_birth!: Date;
+  @Column({ type: 'date', nullable: true }) 
+  date_of_birth?: Date;
 
   @Column({ type: 'boolean', default: false })
   is_verified!: boolean;
@@ -37,8 +38,8 @@ export class User {
   @Column({ type: 'enum', enum: RoleType, default: RoleType.USER })
   role!: RoleType;
 
-  @Column({ type: 'int', default: 0 })
-  is_deleted!: number;
+  @Column({ type: 'boolean', default: false })
+  is_deleted!: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;

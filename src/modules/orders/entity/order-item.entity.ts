@@ -1,41 +1,30 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Order } from "@/modules/orders/entity/order.entity";
-import { Product } from "@/modules/products/entity/product.entity";
+import { ProductVariant } from "@/modules/product-variants/entity/product-variant";
 
-@Entity('order_items')
-export class OrderItem {
+@Entity('order_details')
+export class OrderDetail {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'int' })
   order_id!: number;
 
+  @Column({ type: 'int' })
+  product_variant_id!: number;
+
+  @Column({ type: 'int' })
+  quantity!: number;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  price!: number;
+
+  // Relations
   @ManyToOne(() => Order)
   @JoinColumn({ name: 'order_id' })
   order!: Order;
 
-  @Column()
-  product_id!: number;
-
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: 'product_id' })
-  product!: Product;
-
-  @Column()
-  quantity!: number;
-
-  @Column({ nullable: true })
-  selected_size?: string; // Size được chọn
-
-  @Column({ nullable: true })
-  selected_color?: string; // Màu được chọn
-
-  @Column('decimal', { precision: 10, scale: 2 })
-  unit_price!: number;
-
-  @Column('decimal', { precision: 10, scale: 2 })
-  total_price!: number;
-
-  @CreateDateColumn()
-  created_at!: Date;
+  @ManyToOne(() => ProductVariant)
+  @JoinColumn({ name: 'product_variant_id' })
+  product_variant!: ProductVariant;
 }

@@ -1,38 +1,27 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { User } from "@/modules/users/entity/user.entity";
-import { Product } from "@/modules/products/entity/product.entity";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Cart } from "./cart.entity";
+import { ProductVariant } from "@/modules/product-variants/entity/product-variant";
 
 @Entity('cart_items')
 export class CartItem {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  user_id!: number;
+  @Column({ type: 'int' })
+  cart_id!: number;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user!: User;
+  @Column({ type: 'int' })
+  product_variant_id!: number;
 
-  @Column()
-  product_id!: number;
-
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: 'product_id' })
-  product!: Product;
-
-  @Column()
+  @Column({ type: 'int', default: 1 })
   quantity!: number;
 
-  @Column({ nullable: true })
-  selected_size?: string;
+  // Relations
+  @ManyToOne(() => Cart)
+  @JoinColumn({ name: 'cart_id' })
+  cart!: Cart;
 
-  @Column({ nullable: true })
-  selected_color?: string; 
-
-  @CreateDateColumn()
-  created_at!: Date;
-
-  @UpdateDateColumn()
-  updated_at!: Date;
+  @ManyToOne(() => ProductVariant)
+  @JoinColumn({ name: 'product_variant_id' })
+  product_variant!: ProductVariant;
 }

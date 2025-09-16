@@ -7,6 +7,7 @@ import { AppError } from "@/common/error.response";
 import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
 import { RoleType } from "@/constants/role-type";
+import { GenderType } from "@/constants/gender-type";
 import { User } from "@/modules/users/entity/user.entity";
 
 interface LoginData {
@@ -18,6 +19,10 @@ interface RegisterData {
   fullname: string;
   email: string;
   password: string;
+  phone_number: string;
+  address?: string;
+  gender?: GenderType;
+  date_of_birth?: Date;
   role?: RoleType;
 }
 
@@ -35,7 +40,7 @@ export class AuthService {
 
     // Find user by email
     const user = await this.userRepository.findOne({
-      where: { email, is_deleted: 0 }
+      where: { email, is_deleted: false }
     });
 
     if (!user) {
@@ -70,18 +75,22 @@ export class AuthService {
   }
 
   async register(registerData: RegisterData) {
-    const { email, password, ...userData } = registerData;
+    const { fullname, email, password, phone_number, address, gender, date_of_birth, role } = registerData;
 
-    // Check if email already exists
+    // Check if user already exists
     const existingUser = await this.userRepository.findOne({
-      where: { email, is_deleted: 0 }
+      where: [
+        { email },
+        { phone_number }
+      ]
     });
 
     if (existingUser) {
       throw new AppError(
-        "Email already exists",
+        'User with this email or phone number already exists',
         HttpStatusCode.CONFLICT,
-        ErrorCode.EMAIL_ALREADY_EXISTS
+        ErrorCode.EMAIL_ALREADY_EXISTS,
+        { email, phone_number }
       );
     }
 
@@ -90,10 +99,16 @@ export class AuthService {
 
     // Create new user
     const newUser = this.userRepository.create({
+      fullname,
       email,
+      phone_number,
+      address,
       password: hashedPassword,
-      role: registerData.role || RoleType.USER,
-      ...userData
+      gender: gender as GenderType,
+      date_of_birth,
+      role: role || RoleType.USER,
+      is_verified: false,
+      is_deleted: false
     });
 
     const savedUser = await this.userRepository.save(newUser);
@@ -135,7 +150,7 @@ export class AuthService {
 
   async getUserById(id: number): Promise<User | null> {
     return await this.userRepository.findOne({
-      where: { id, is_deleted: 0 }
+      where: { id, is_deleted: false }
     });
   }
 }

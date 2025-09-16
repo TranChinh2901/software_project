@@ -7,26 +7,26 @@ export class Product {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ length: 255 })
   name_product!: string;
-
-  @Column('text')
-  description!: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price!: number;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  original_price!: number;
+  @Column('decimal', { precision: 10, scale: 2, nullable: true })
+  origin_price?: number;
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  discount_price!: number;
+  @Column({ length: 255, nullable: true })
+  small_description?: string;
 
-  @Column()
-  stock_quantity!: number;
+  @Column('longtext', { nullable: true })
+  meta_description?: string;
 
-  @Column('json', { nullable: true })
-  images?: string[];
+  @Column('enum', { enum: ['active', 'inactive', 'out_of_stock'], default: 'active' })
+  status!: 'active' | 'inactive' | 'out_of_stock';
+
+  @Column({ type: 'int', nullable: true })
+  stock_quantity?: number;
 
   @Column()
   category_id!: number;
@@ -35,32 +35,19 @@ export class Product {
   @JoinColumn({ name: 'category_id' })
   category!: Category;
 
-  @Column()
-  brand_id!: number;
+  @Column({ type: 'int', nullable: true })
+  brand_id?: number;
 
   @ManyToOne(() => Brand)
   @JoinColumn({ name: 'brand_id' })
-  brand!: Brand;
-
-  // Thông tin đặc biệt cho quần áo
-  @Column('json', { nullable: true })
-  sizes?: string[]; // ["S", "M", "L", "XL", "XXL"]
-
-  @Column('json', { nullable: true })
-  colors?: string[];
-
-  @Column({ nullable: true })
-  gender?: string; // "Nam", "Nữ", "Unisex"
-
-  @Column({ type: 'boolean', default: true })
-  is_active!: boolean;
+  brand?: Brand;
 
   @Column({ type: 'boolean', default: false })
   is_deleted!: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updated_at!: Date;
 }

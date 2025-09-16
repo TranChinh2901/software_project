@@ -6,9 +6,27 @@ import { AuthenticatedRequest } from '@/middlewares/auth.middleware';
 
 class AuthController {
   async register(req: Request, res: Response) {
-    const { fullname, email, password, role } = req.body;
+    const { 
+      fullname, 
+      email, 
+      password, 
+      phone_number,
+      address,
+      gender,
+      date_of_birth,
+      role 
+    } = req.body;
     
-    const result = await authService.register({ fullname, email, password, role });
+    const result = await authService.register({ 
+      fullname, 
+      email, 
+      password, 
+      phone_number,
+      address,
+      gender,
+      date_of_birth,
+      role 
+    });
     
     return new AppResponse({
       message: 'User registered successfully',

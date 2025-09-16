@@ -15,6 +15,10 @@ curl -X POST http://localhost:4000/auth/register \
     "fullname": "John Doe",
     "email": "john@example.com", 
     "password": "password123",
+    "phone_number": "0123456789",
+    "address": "123 Main St, City",
+    "gender": "male",
+    "date_of_birth": "1990-01-01",
     "role": "user"
   }'
 ```
@@ -127,7 +131,10 @@ curl -X POST http://localhost:4000/auth/register \
   -d '{
     "fullname": "John Doe",
     "email": "invalid-email",
-    "password": "password123"
+    "password": "password123",
+    "phone_number": "0123456789",
+    "gender": "male",
+    "date_of_birth": "1990-01-01"
   }'
 ```
 
@@ -138,6 +145,36 @@ curl -X POST http://localhost:4000/auth/register \
   -d '{
     "fullname": "John Doe", 
     "email": "john@example.com",
-    "password": "123"
+    "password": "123",
+    "phone_number": "0123456789",
+    "gender": "male",
+    "date_of_birth": "1990-01-01"
+  }'
+```
+
+### Invalid gender
+```bash
+curl -X POST http://localhost:4000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fullname": "John Doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "phone_number": "0123456789",
+    "gender": "other",
+    "date_of_birth": "1990-01-01"
+  }'
+```
+
+### Missing required phone_number
+```bash
+curl -X POST http://localhost:4000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fullname": "John Doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "gender": "male",
+    "date_of_birth": "1990-01-01"
   }'
 ```
