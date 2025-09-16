@@ -27,13 +27,16 @@ Dự án backend cho website bán quần áo với các tính năng:
 - Phân lớp Controller - Service - Entity rõ ràng
 
 ## Công nghệ sử dụng
-* Backend: 
+Backend: 
 - Node.js
 - TypeScript
 - ORM: typeorm
-- dotenv
 - ts-node
-
+Frontend: 
+- NextJs
+- TypeScript
+Database: 
+- Mysql
 
 ## Cài đặt
 
@@ -41,8 +44,8 @@ Yêu cầu: Node.js >= 22.16.0, đã cài MySQL
 
 1. Clone dự án:
 
-git clone https://github.com/npnam2k3/express-ts-code-base.git
-cd express-ts-code-base
+git clone https://github.com/TranChinh2901/software_project
+cd software_project
 
 2. Cài dependencies:
 
