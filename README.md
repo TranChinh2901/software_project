@@ -27,16 +27,23 @@ Dự án backend cho website bán quần áo với các tính năng:
 - Phân lớp Controller - Service - Entity rõ ràng
 
 ## Công nghệ sử dụng
-Backend: 
-- Node.js
-- TypeScript
-- ORM: typeorm
-- ts-node
-Frontend: 
-- NextJs
-- TypeScript
-Database: 
-- Mysql
+
+### Backend:
+- **Node.js** - Runtime environment
+- **TypeScript** - Strongly typed JavaScript
+- **Express.js** - Web framework
+- **TypeORM** - Object-Relational Mapping
+- **ts-node** - TypeScript execution engine
+- **JWT** - Authentication
+- **bcryptjs** - Password hashing
+- **Joi** - Validation
+
+### Frontend:
+- **Next.js** - React framework
+- **TypeScript** - Type safety
+
+### Database:
+- **MySQL** - Relational database
 
 ## Cài đặt
 
