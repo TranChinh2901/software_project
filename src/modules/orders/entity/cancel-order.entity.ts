@@ -1,18 +1,10 @@
+import { CancelOrderStatus } from "@/constants/cart-type";
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
 
 @Entity('cancel_order')
 export class CancelOrder {
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @Column({ type: 'int' })
-  order_id!: number;
-
-  @Column({ type: 'int', nullable: true })
-  order_detail_id?: number;
-
-  @Column({ type: 'int' })
-  user_id!: number;
 
   @Column('text', { nullable: true })
   reason?: string;
@@ -23,11 +15,8 @@ export class CancelOrder {
   @Column('decimal', { precision: 12, scale: 2, nullable: true })
   refund_amount?: number;
 
-  @Column({
-    type: 'enum',
-    enum: ['requested', 'approved', 'rejected', 'refunded']
-  })
-  status!: string;
+  @Column({type: 'enum', enum: CancelOrderStatus, default: CancelOrderStatus.REQUESTED})
+  status!: CancelOrderStatus;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;

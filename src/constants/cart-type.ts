@@ -24,3 +24,11 @@ export enum CancelOrderStatus {
     REJECTED = 'rejected',
     REFUNDED = 'refunded'
 }
+
+
+export enum TransactionStatus {
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  FAILED = 'failed',
+  REFUNDED = 'refunded'
+}
