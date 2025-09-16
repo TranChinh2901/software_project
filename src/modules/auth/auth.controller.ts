@@ -48,13 +48,26 @@ class AuthController {
   }
 
   async logout(req: Request, res: Response) {
-    // For JWT, logout is typically handled client-side by removing the token
-    // But we can implement token blacklisting if needed
-    
     return new AppResponse({
       message: 'Logged out successfully',
       statusCode: HttpStatusCode.OK,
       data: { message: 'Please remove the token from client storage' }
+    }).sendResponse(res);
+  }
+
+  async refreshToken(req: Request, res: Response) {
+    const { refreshToken } = req.body;
+    
+    if (!refreshToken) {
+      throw new Error('Refresh token is required');
+    }
+    
+    const result = await authService.refreshToken(refreshToken);
+    
+    return new AppResponse({
+      message: 'Token refreshed successfully',
+      statusCode: HttpStatusCode.OK,
+      data: result
     }).sendResponse(res);
   }
 

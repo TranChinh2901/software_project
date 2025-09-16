@@ -1,5 +1,4 @@
 import { Repository } from "typeorm";
-import { sign, verify } from "jsonwebtoken";
 import { compare, hash } from "bcryptjs";
 
 import { AppDataSource } from "@/config/database.config";
@@ -9,6 +8,7 @@ import { ErrorCode } from "@/constants/error-code";
 import { RoleType } from "@/constants/role-type";
 import { GenderType } from "@/constants/gender-type";
 import { User } from "@/modules/users/entity/user.entity";
+import { JwtUtils } from "@/utils/jwt.util";
 
 interface LoginData {
   email: string;
@@ -61,10 +61,10 @@ export class AuthService {
       );
     }
 
-    const token = this.generateToken(user);
+    const tokens = this.generateToken(user);
     
     return {
-      accessToken: token,
+      ...tokens,
       user: {
         id: user.id,
         fullname: user.fullname,
@@ -113,10 +113,10 @@ export class AuthService {
 
     const savedUser = await this.userRepository.save(newUser);
 
-    const token = this.generateToken(savedUser);
+    const tokens = this.generateToken(savedUser);
     
     return {
-      accessToken: token,
+      ...tokens,
       user: {
         id: savedUser.id,
         fullname: savedUser.fullname,
@@ -126,19 +126,22 @@ export class AuthService {
     };
   }
 
-  generateToken(user: User): string {
+  generateToken(user: User) {
     const payload = {
       id: user.id,
       email: user.email,
       role: user.role,
     };
 
-    return sign(payload, this.JWT_SECRET, { expiresIn: "7d" });
+    return {
+      accessToken: JwtUtils.generateAccessToken(payload),
+      refreshToken: JwtUtils.generateRefreshToken(payload)
+    };
   }
 
   verifyToken(token: string) {
     try {
-      return verify(token, this.JWT_SECRET) as {
+      return JwtUtils.verifyAccessToken(token) as {
         id: number;
         email: string;
         role: string;
@@ -148,10 +151,69 @@ export class AuthService {
     }
   }
 
-  async getUserById(id: number): Promise<User | null> {
-    return await this.userRepository.findOne({
-      where: { id, is_deleted: false }
+  verifyRefreshToken(token: string) {
+    try {
+      return JwtUtils.verifyRefreshToken(token) as {
+        id: number;
+        email: string;
+        role: string;
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async refreshToken(refreshToken: string) {
+    const decoded = this.verifyRefreshToken(refreshToken);
+    if (!decoded) {
+      throw new AppError(
+        'Invalid or expired refresh token',
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.INVALID_TOKEN
+      );
+    }
+
+    // Get current user data
+    const user = await this.userRepository.findOne({
+      where: { id: decoded.id }
     });
+
+    if (!user) {
+      throw new AppError(
+        'User not found',
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.USER_NOT_FOUND
+      );
+    }
+
+    // Generate new tokens
+    const tokens = this.generateToken(user);
+    
+    return {
+      ...tokens,
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role
+      }
+    };
+  }
+
+  async getUserById(id: number) {
+    const user = await this.userRepository.findOne({
+      where: { id }
+    });
+
+    if (!user) {
+      throw new AppError(
+        'User not found',
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.USER_NOT_FOUND
+      );
+    }
+
+    return user;
   }
 }
 

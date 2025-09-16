@@ -3,16 +3,17 @@ import authService from '@/modules/auth/auth.service';
 import { AppError } from '@/common/error.response';
 import { HttpStatusCode } from '@/constants/status-code';
 import { ErrorCode } from '@/constants/error-code';
+import { RoleType, hasPermission } from '@/constants/role-type';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
     id: number;
     email: string;
-    role: string;
+    role: RoleType;
   };
 }
 
-export const authMiddleware = (roles?: string[]) => {
+export const authMiddleware = (requiredRole?: RoleType) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     // Get token from header
     const authHeader = req.headers.authorization;
@@ -41,13 +42,13 @@ export const authMiddleware = (roles?: string[]) => {
       }
 
       // Check if user has required role
-      if (roles && roles.length > 0 && !roles.includes(decoded.role)) {
+      if (requiredRole && !hasPermission(decoded.role as RoleType, requiredRole)) {
         throw new AppError(
           'Insufficient permissions to access this resource',
           HttpStatusCode.FORBIDDEN,
           ErrorCode.FORBIDDEN,
           { 
-            requiredRoles: roles,
+            requiredRole,
             userRole: decoded.role,
             reason: 'insufficient_permissions'
           }
@@ -58,7 +59,7 @@ export const authMiddleware = (roles?: string[]) => {
       req.user = {
         id: decoded.id,
         email: decoded.email,
-        role: decoded.role,
+        role: decoded.role as RoleType,
       };
 
       next();
@@ -79,5 +80,36 @@ export const authMiddleware = (roles?: string[]) => {
         }
       );
     }
+  };
+};
+
+// Helper middleware cho các role cụ thể
+export const requireAuth = () => authMiddleware();
+export const requireUser = () => authMiddleware(RoleType.USER);
+export const requireAdmin = () => authMiddleware(RoleType.ADMIN);
+
+// Middleware kiểm tra nhiều role (OR logic)
+export const requireAnyRole = (roles: RoleType[]) => {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const authCheck = authMiddleware();
+    authCheck(req, res, (error) => {
+      if (error) return next(error);
+      
+      const userRole = req.user?.role;
+      if (!userRole || !roles.some(role => hasPermission(userRole, role))) {
+        throw new AppError(
+          'Insufficient permissions to access this resource',
+          HttpStatusCode.FORBIDDEN,
+          ErrorCode.FORBIDDEN,
+          { 
+            requiredRoles: roles,
+            userRole,
+            reason: 'insufficient_permissions'
+          }
+        );
+      }
+      
+      next();
+    });
   };
 };

@@ -23,7 +23,6 @@ export interface UpdateUserDto {
   date_of_birth?: Date;
 }
 
-// Output DTO (for response)
 export interface UserResponseDto {
   id: number;
   fullname: string;

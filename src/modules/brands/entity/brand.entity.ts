@@ -6,19 +6,13 @@ export class Brand {
   id!: number;
 
   @Column({ unique: true })
-  name!: string;
+  name_brand!: string;
 
   @Column('text', { nullable: true })
-  description?: string;
+  description_brand?: string;
 
   @Column({ nullable: true })
   logo_url?: string;
-
-  @Column({ nullable: true })
-  website?: string;
-
-  @Column({ type: 'boolean', default: true })
-  is_active!: boolean;
 
   @Column({ type: 'boolean', default: false })
   is_deleted!: boolean;

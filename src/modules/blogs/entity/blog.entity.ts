@@ -25,7 +25,6 @@ export class Blog {
   })
   status!: string;
 
-  // Relations
   @ManyToOne(() => User)
   @JoinColumn({ name: 'author_id' })
   author!: User;

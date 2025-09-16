@@ -16,7 +16,6 @@ import { Transaction } from "@/modules/transactions/entity/transaction.entity";
 import { Voucher } from "@/modules/vouchers/entity/voucher.entity";
 import { Blog } from "@/modules/blogs/entity/blog.entity";
 
-// import entity to use in config-database file
 export const entities = [
   User,
   Product,

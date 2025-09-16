@@ -8,6 +8,7 @@ import { ErrorCode } from "@/constants/error-code";
 import { CreateUserDto, UserResponseDto } from "./dto/user.dto";
 import { toUserResponseDto } from "./user.mapper";
 import { User } from "./entity/user.entity";
+import { AuthenticatedRequest } from "@/middlewares/auth.middleware";
 
 class UserController {
   async getAll(req: Request, res: Response) {
@@ -83,6 +84,48 @@ class UserController {
       message: SuccessMessages.USER.USER_DELETED,
       statusCode: HttpStatusCode.OK,
       data: {},
+    }).sendResponse(res);
+  }
+
+  // User profile methods
+  async getProfile(req: AuthenticatedRequest, res: Response) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new AppError(
+        "User not found in request",
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.UNAUTHORIZED
+      );
+    }
+
+    const user = await userService.getById(userId);
+    const userDto = toUserResponseDto(user);
+
+    return new AppResponse({
+      message: "Profile retrieved successfully",
+      statusCode: HttpStatusCode.OK,
+      data: userDto,
+    }).sendResponse(res);
+  }
+
+  async updateProfile(req: AuthenticatedRequest, res: Response) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new AppError(
+        "User not found in request",
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.UNAUTHORIZED
+      );
+    }
+
+    const updateData = req.body;
+    const updatedUser = await userService.update(userId, updateData);
+    const userDto = toUserResponseDto(updatedUser);
+
+    return new AppResponse({
+      message: "Profile updated successfully",
+      statusCode: HttpStatusCode.OK,
+      data: userDto,
     }).sendResponse(res);
   }
 }

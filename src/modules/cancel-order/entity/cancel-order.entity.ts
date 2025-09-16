@@ -1,7 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm";
-import { Order } from "@/modules/orders/entity/order.entity";
-import { OrderDetail } from "@/modules/orders/entity/order-item.entity";
-import { User } from "@/modules/users/entity/user.entity";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
 
 @Entity('cancel_order')
 export class CancelOrder {
@@ -37,17 +34,4 @@ export class CancelOrder {
 
   @Column({ type: 'timestamp', nullable: true })
   processed_at?: Date;
-
-  // Relations
-  @ManyToOne(() => Order)
-  @JoinColumn({ name: 'order_id' })
-  order!: Order;
-
-  @ManyToOne(() => OrderDetail)
-  @JoinColumn({ name: 'order_detail_id' })
-  order_detail?: OrderDetail;
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user!: User;
 }
