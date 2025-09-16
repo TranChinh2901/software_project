@@ -3,7 +3,7 @@ import authController from "@/modules/auth/auth.controller";
 import { asyncHandle } from "@/utils/handle-error";
 import { validateBody } from "@/middlewares/validate.middleware";
 import { LoginSchema, RegisterSchema, RefreshTokenSchema } from "@/modules/auth/schema/auth.schema";
-import { authenticateToken } from "@/modules/auth/auth.middleware";
+import { authMiddleware } from "@/middlewares/auth.middleware";
 
 const router = express.Router();
 
@@ -20,22 +20,23 @@ router.post(
   asyncHandle(authController.login)
 );
 
-router.post(
-  "/refresh-token",
-  validateBody(RefreshTokenSchema),
-  asyncHandle(authController.refreshToken)
-);
+// TODO: Implement refresh token functionality
+// router.post(
+//   "/refresh-token",
+//   validateBody(RefreshTokenSchema),
+//   asyncHandle(authController.refreshToken)
+// );
 
 // Protected routes
 router.post(
   "/logout",
-  authenticateToken,
+  authMiddleware(),
   asyncHandle(authController.logout)
 );
 
 router.get(
   "/profile",
-  authenticateToken,
+  authMiddleware(),
   asyncHandle(authController.getProfile)
 );
 

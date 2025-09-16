@@ -1,3 +1,5 @@
+import { GenderType } from "@/constants/gender-type";
+
 export interface LoginDto {
   email: string;
   password: string;
@@ -9,7 +11,7 @@ export interface RegisterDto {
   password: string;
   phone_number?: string;
   address?: string;
-  gender: 'male' | 'female';
+  gender: GenderType;
   date_of_birth: Date;
   role_id: number;
 }

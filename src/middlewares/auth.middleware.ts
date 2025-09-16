@@ -6,7 +6,8 @@ import { ErrorCode } from '@/constants/error-code';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
-    username: string;
+    id: number;
+    email: string;
     role: string;
   };
 }
@@ -55,7 +56,8 @@ export const authMiddleware = (roles?: string[]) => {
 
       // Add user to request
       req.user = {
-        username: decoded.username,
+        id: decoded.id,
+        email: decoded.email,
         role: decoded.role,
       };
 
@@ -70,7 +72,7 @@ export const authMiddleware = (roles?: string[]) => {
       throw new AppError(
         errorMessage,
         HttpStatusCode.UNAUTHORIZED,
-        ErrorCode.INVALID_TOKEN, // Using existing error code
+        ErrorCode.INVALID_TOKEN, 
         {
           reason: 'authentication_error',
           originalError: error instanceof Error ? error.message : String(error)

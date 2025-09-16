@@ -1,44 +1,59 @@
 import { Repository } from "typeorm";
-import { sign, verify, SignOptions } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { compare, hash } from "bcryptjs";
 
 import { AppDataSource } from "@/config/database.config";
 import { AppError } from "@/common/error.response";
 import { HttpStatusCode } from "@/constants/status-code";
+import { ErrorCode } from "@/constants/error-code";
 import { RoleType } from "@/constants/role-type";
-import { User } from "@/modules/users/entities/user.entity";
-import { UserStatus } from "@/modules/users/enums/user.enum";
+import { User } from "@/modules/users/entity/user.entity";
 
-import { LoginResponseDto } from "./dto/login.dto";
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface RegisterData {
+  fullname: string;
+  email: string;
+  password: string;
+  role?: RoleType;
+}
 
 export class AuthService {
   private userRepository: Repository<User>;
   private readonly JWT_SECRET: string;
-  private readonly JWT_EXPIRES_IN: string;
-  private readonly SALT_ROUNDS: number;
 
   constructor() {
     this.userRepository = AppDataSource.getRepository(User);
-    this.JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-    this.JWT_EXPIRES_IN = "1d";
-    this.SALT_ROUNDS = 10;
+    this.JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
   }
 
-  async validateUser(username: string, password: string): Promise<LoginResponseDto | null> {
-    const user = await this.userRepository
-      .createQueryBuilder("user")
-      .leftJoin("user.role", "role")
-      .where("user.username = :username", { username })
-      .andWhere("user.is_deleted = false")
-      .select([
-        "user.username AS username",
-        "user.password_hash AS password_hash",
-        "role.role_id AS role",
-      ])
-      .getRawOne();
+  async login(loginData: LoginData) {
+    const { email, password } = loginData;
 
-    if (!user || !(await compare(password, user.password_hash))) {
-      return null;
+    // Find user by email
+    const user = await this.userRepository.findOne({
+      where: { email, is_deleted: 0 }
+    });
+
+    if (!user) {
+      throw new AppError(
+        "Invalid email or password",
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.UNAUTHORIZED
+      );
+    }
+
+    // Verify password
+    const isPasswordValid = await compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new AppError(
+        "Invalid email or password",
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.UNAUTHORIZED
+      );
     }
 
     const token = this.generateToken(user);
@@ -46,142 +61,82 @@ export class AuthService {
     return {
       accessToken: token,
       user: {
-        username: user.username,
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
         role: user.role
       }
     };
   }
 
-  generateToken(user: User): string {
-    const payload = {
-      username: user.username,
-      role: user.role,
-    };
+  async register(registerData: RegisterData) {
+    const { email, password, ...userData } = registerData;
 
-    const options: SignOptions = {
-      expiresIn: "1d" as const,
-    };
-
-    return sign(payload, this.JWT_SECRET, options);
-  }
-
-  async signup(userData: {
-    username: string;
-    email?: string;
-    password: string;
-    fullname: string;
-    avatar_url?: string;
-    dob: Date;
-    phone_number?: string;
-    gender?: any;
-    date_attended: Date;
-    roleType?: RoleType;
-  }): Promise<LoginResponseDto | null> {
-    const {
-      username,
-      password,
-      email,
-      fullname,
-      dob,
-      roleType = RoleType.USER,
-    } = userData;
-
-    // Check if username or email already exists
-    const existingUser = await this.userRepository
-      .createQueryBuilder("user")
-      .where("user.username = :username", { username })
-      .andWhere("user.is_deleted = false")
-      .getOne();
+    // Check if email already exists
+    const existingUser = await this.userRepository.findOne({
+      where: { email, is_deleted: 0 }
+    });
 
     if (existingUser) {
       throw new AppError(
-        "Username or email already exists",
+        "Email already exists",
         HttpStatusCode.CONFLICT,
-        "USER_ALREADY_EXISTS"
-      );
-    }
-
-    // Get the default role ()
-    const role = await this.roleRepository.findOne({
-      where: { role_id: roleType },
-    });
-
-    if (!role) {
-      throw new AppError(
-        "Default role not found",
-        HttpStatusCode.NOT_FOUND,
-        "ROLE_NOT_FOUND"
+        ErrorCode.EMAIL_ALREADY_EXISTS
       );
     }
 
     // Hash password
-    const hashedPassword = await hash(password, this.SALT_ROUNDS);
+    const hashedPassword = await hash(password, 10);
 
-    // Create and save the new user
+    // Create new user
     const newUser = this.userRepository.create({
-      username,
-      password_hash: hashedPassword,
       email,
-      fullname,
-      avatar_url: userData.avatar_url,
-      dob,
-      phone_number: userData.phone_number,
-      gender: userData.gender,
-      date_attended: userData.date_attended,
-      create_at: new Date(),      
-      role,
-      status: UserStatus.ACTIVE,
+      password: hashedPassword,
+      role: registerData.role || RoleType.USER,
+      ...userData
     });
 
     const savedUser = await this.userRepository.save(newUser);
-    
-    if (!savedUser) {
-      return null;
-    }
 
     const token = this.generateToken(savedUser);
     
     return {
       accessToken: token,
       user: {
-        username: savedUser.username,
-        role: savedUser.role.role_id,
-      },
+        id: savedUser.id,
+        fullname: savedUser.fullname,
+        email: savedUser.email,
+        role: savedUser.role
+      }
     };
   }
 
-  verifyToken(token: string): any {
+  generateToken(user: User): string {
+    const payload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    return sign(payload, this.JWT_SECRET, { expiresIn: "7d" });
+  }
+
+  verifyToken(token: string) {
     try {
-      return verify(token, this.JWT_SECRET);
+      return verify(token, this.JWT_SECRET) as {
+        id: number;
+        email: string;
+        role: string;
+      };
     } catch (error) {
       return null;
     }
   }
 
-  async refreshToken(refreshToken: string) {
-    const payload = this.verifyToken(refreshToken);
-    if (!payload) {
-      throw new AppError(
-        "Invalid refresh token",
-        HttpStatusCode.UNAUTHORIZED,
-        "INVALID_REFRESH_TOKEN"
-      );
-    }
-
-    const user = await this.userRepository.findOne({
-      where: { username: payload.username },
-      relations: ["role"],
+  async getUserById(id: number): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: { id, is_deleted: 0 }
     });
-
-    if (!user) {
-      throw new AppError(
-        "User not found",
-        HttpStatusCode.NOT_FOUND,
-        "USER_NOT_FOUND"
-      );
-    }
-
-    return this.generateToken(user);
   }
 }
 
