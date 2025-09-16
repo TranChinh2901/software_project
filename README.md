@@ -34,9 +34,6 @@ Dự án backend cho website bán quần áo với các tính năng:
 - **Express.js** - Web framework
 - **TypeORM** - Object-Relational Mapping
 - **ts-node** - TypeScript execution engine
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **Joi** - Validation
 
 ### Frontend:
 - **Next.js** - React framework
