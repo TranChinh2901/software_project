@@ -6,6 +6,9 @@ export class Cart {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ type: 'int' })
+  user_id!: number;
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
 
