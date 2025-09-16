@@ -48,8 +48,8 @@ Yêu cầu: Node.js >= 22.16.0, đã cài MySQL
 
 1. Clone dự án:
 
-git clone https://github.com/TranChinh2901/software_project
-cd software_project
+## git clone https://github.com/TranChinh2901/software_project
+## cd software_project
 
 2. Cài dependencies:
 
