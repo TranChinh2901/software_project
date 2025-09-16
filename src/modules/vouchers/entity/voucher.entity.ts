@@ -1,3 +1,4 @@
+import { VoucherType } from "@/constants/cart-type";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('vouchers')
@@ -14,8 +15,8 @@ export class Voucher {
   @Column({ type: 'date' })
   expiry_date!: Date;
 
-  @Column({ type: 'boolean', default: true })
-  status!: boolean;
+  @Column({ type: 'enum', enum: VoucherType, default: VoucherType.ACTIVE })
+  status!: VoucherType;
 
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   min_order_value?: number;

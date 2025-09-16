@@ -22,7 +22,6 @@ export class Transaction {
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
 
-  // Relations
   @ManyToOne(() => Order)
   @JoinColumn({ name: 'order_id' })
   order!: Order;

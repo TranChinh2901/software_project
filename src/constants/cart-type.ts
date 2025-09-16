@@ -32,3 +32,9 @@ export enum TransactionStatus {
   FAILED = 'failed',
   REFUNDED = 'refunded'
 }
+
+
+export enum VoucherType {
+    ACTIVE = 'active',
+    INACTIVE = 'inactive'
+}

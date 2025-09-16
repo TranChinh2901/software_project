@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
+import { BlogType } from "@/constants/blog-type";
 
 @Entity('blogs')
 export class Blog {
@@ -15,15 +16,8 @@ export class Blog {
   @Column({ length: 255, nullable: true })
   image_blogs?: string;
 
-  @Column({ type: 'int' })
-  author_id!: number;
-
-  @Column({
-    type: 'enum',
-    enum: ['active', 'inactive'],
-    default: 'active'
-  })
-  status!: string;
+@Column({type: 'enum', enum: BlogType, default: BlogType.ACTIVE})
+status!: BlogType;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'author_id' })
