@@ -27,14 +27,13 @@ Dự án backend cho website bán quần áo với các tính năng:
 - Phân lớp Controller - Service - Entity rõ ràng
 
 ## Công nghệ sử dụng
-
+* Backend: 
 - Node.js
-- Express.js
 - TypeScript
 - ORM: typeorm
-- Mysql
 - dotenv
 - ts-node
+
 
 ## Cài đặt
 
