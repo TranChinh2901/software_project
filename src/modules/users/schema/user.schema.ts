@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { GenderType } from "../enum/user.enum";
 
 export const CreateUserSchema = Joi.object({
   fullname: Joi.string().min(2).max(100).required(),
@@ -7,7 +8,7 @@ export const CreateUserSchema = Joi.object({
   phone_number: Joi.string().min(10).max(20).optional(),
   address: Joi.string().max(255).optional(),
   avatar: Joi.string().uri().optional(),
-  gender: Joi.string().valid('male', 'female').required(),
+  gender: Joi.string().valid(GenderType.MALE),
   date_of_birth: Joi.date().iso().required(),
   role_id: Joi.number().integer().positive().required(),
 });
@@ -17,7 +18,7 @@ export const UpdateUserSchema = Joi.object({
   phone_number: Joi.string().min(10).max(20).optional(),
   address: Joi.string().max(255).optional(),
   avatar: Joi.string().uri().optional(),
-  gender: Joi.string().valid('male', 'female').optional(),
+  gender: Joi.string().valid(GenderType.FEMALE),
   date_of_birth: Joi.date().iso().optional(),
   is_verified: Joi.boolean().optional(),
 });

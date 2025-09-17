@@ -1,7 +1,8 @@
 
-import { RoleType } from "@/constants/role-type";
-import { GenderType } from "@/constants/gender-type";
+
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { GenderType } from "../enum/user.enum";
+import { RoleType } from "@/modules/auth/enum/auth.enum";
 
 @Entity('users')
 export class User {

@@ -1,5 +1,6 @@
-import { CancelOrderStatus } from "@/constants/cart-type";
+
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import { CancelOrderStatus } from "../enum/order.enum";
 
 @Entity('cancel_order')
 export class CancelOrder {
