@@ -11,49 +11,38 @@ import { HttpStatusCode } from "@/constants/status-code";
 
 const router = express.Router();
 
-// ===== USER ROUTES =====
-
-// User can view their own profile
 router.get("/profile", 
   requireAuth(), 
   asyncHandle(userController.getProfile)
 );
 
-// User can update their own profile
 router.put("/profile",
   requireAuth(),
   validateBody(UpdateUserSchema),
   asyncHandle(userController.updateProfile)
 );
 
-// ===== ADMIN ROUTES =====
-
-// Admin only - Get all users
 router.get("/", 
   requireAdmin(), 
   asyncHandle(userController.getAll)
 );
 
-// Admin only - Get user by ID
 router.get("/:id", 
   requireAdmin(), 
   asyncHandle(userController.getById)
 );
 
-// Admin only - Update any user
 router.put("/:id",
   requireAdmin(),
   validateBody(UpdateUserSchema),
   asyncHandle(userController.update)
 );
 
-// Admin only - Delete user
 router.delete("/:id",
   requireAdmin(),
   asyncHandle(userController.delete)
 );
 
-// Admin only - System settings
 router.get("/admin/settings", requireAdmin(), (req, res) => {
   return new AppResponse({
     message: "System settings retrieved successfully", 
@@ -68,7 +57,6 @@ router.get("/admin/settings", requireAdmin(), (req, res) => {
   }).sendResponse(res);
 });
 
-// Both USER and ADMIN - Dashboard
 router.get("/dashboard", requireAnyRole([RoleType.USER, RoleType.ADMIN]), (req, res) => {
   const user = (req as any).user;
   

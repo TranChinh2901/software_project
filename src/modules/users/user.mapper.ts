@@ -1,7 +1,8 @@
-import { GenderType } from "@/constants/gender-type";
+import { RoleType } from "../auth/enum/auth.enum";
 import { UserResponseDto } from "./dto/user.dto";
 import { User } from "./entity/user.entity";
-import { RoleType } from "@/constants/role-type";
+import { GenderType } from "./enum/user.enum";
+
 
 // Map user entity to user response dto
 export const toUserResponseDto = (user: User): UserResponseDto => {

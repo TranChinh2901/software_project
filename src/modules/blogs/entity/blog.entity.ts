@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
-import { BlogType } from "@/constants/blog-type";
+import { BlogType } from "../enum/blob.enum";
 
 @Entity('blogs')
 export class Blog {

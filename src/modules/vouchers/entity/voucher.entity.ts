@@ -1,4 +1,5 @@
-import { VoucherType } from "@/constants/cart-type";
+
+import { VoucherType } from "@/modules/orders/enum/order.enum";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('vouchers')

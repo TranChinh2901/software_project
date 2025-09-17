@@ -1,8 +1,7 @@
-import { SizeType } from './../../../constants/size-type';
-
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Product } from "@/modules/products/entity/product.entity";
 import { Color } from "@/modules/colors/entity/color.entity";
+import { SizeType } from "../enum/product-variant.enum";
 
 @Entity('product_variants')
 export class ProductVariant {

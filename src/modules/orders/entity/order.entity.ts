@@ -1,9 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
 import { ShippingAddress } from "@/modules/shipping-address/entity/shipping-address.entity";
-import { OrderStatus } from "../enums/order.enum";
-import { OrderType, PaymentMethod, PaymentStatus } from "@/constants/cart-type";
 import { Voucher } from "@/modules/vouchers/entity/voucher.entity";
+import { OrderType, PaymentMethod, PaymentStatus } from "../enum/order.enum";
 
 @Entity('orders')
 export class Order {

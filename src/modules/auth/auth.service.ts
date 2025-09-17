@@ -5,10 +5,10 @@ import { AppDataSource } from "@/config/database.config";
 import { AppError } from "@/common/error.response";
 import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
-import { RoleType } from "@/constants/role-type";
-import { GenderType } from "@/constants/gender-type";
 import { User } from "@/modules/users/entity/user.entity";
 import { JwtUtils } from "@/utils/jwt.util";
+import { GenderType } from "../users/enum/user.enum";
+import { RoleType } from "./enum/auth.enum";
 
 interface LoginData {
   email: string;

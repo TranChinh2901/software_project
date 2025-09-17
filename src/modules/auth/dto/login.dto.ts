@@ -1,12 +1,12 @@
 export interface LoginDto {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface LoginResponseDto {
   accessToken: string;
   user: {
-    username: string;
+    email: string;
     role: string;
   };
 }

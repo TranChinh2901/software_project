@@ -1,7 +1,9 @@
 import { GenderType } from "@/modules/users/enum/user.enum";
 import { RoleType } from "../enum/auth.enum";
 
-export interface CreateUserDto {
+
+
+export interface SignupDto {
   fullname: string;
   email: string;
   password: string;
@@ -9,13 +11,12 @@ export interface CreateUserDto {
   address?: string;
   gender: GenderType;
   date_of_birth: Date;
-  role_id: RoleType;
+  role_id: number;
+
 }
 
-// Output DTO (for response)
-export interface UserResponseDto {
-  id: number;
+export interface SignupResponseDto {
   fullname: string;
-  gender: GenderType;
-  createdAt?: Date; 
+  email: string;
+  role: RoleType;
 }

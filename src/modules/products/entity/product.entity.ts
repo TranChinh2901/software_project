@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { Category } from "@/modules/categories/entity/category.entity";
 import { Brand } from "@/modules/brands/entity/brand.entity";
-import { ProductType } from "@/constants/product-type";
+import { ProductType } from "../enum/product.enum";
 
 @Entity("products")
 export class Product {

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm";
 import { Order } from "@/modules/orders/entity/order.entity";
-import { PaymentMethod, TransactionStatus } from "@/constants/cart-type";
+import { PaymentMethod, TransactionStatus } from "@/modules/orders/enum/order.enum";
 
 @Entity('transactions')
 export class Transaction {

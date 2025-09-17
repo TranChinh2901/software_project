@@ -1,5 +1,6 @@
-import { GenderType } from "@/constants/gender-type";
-import { RoleType } from "@/constants/role-type";
+import { RoleType } from "@/modules/auth/enum/auth.enum";
+import { GenderType } from "../enum/user.enum";
+
 
 // Input DTO (from req.body)
 export interface CreateUserDto {

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
-import { ShippingAddressType } from "@/constants/shipping-address.type";
+import { ShippingAddressType } from "../enum/shipping-address.enum";
 
 @Entity('shipping_address')
 export class ShippingAddress {
@@ -16,7 +16,7 @@ export class ShippingAddress {
   @Column({ length: 255 })
   address!: string;
 
-  @Column({ type: "enum", enum: ShippingAddressType, default: ShippingAddressType.HOME })
+  @Column({ type: "enum", enum: ShippingAddressType,  default: ShippingAddressType.HOME })
   type_address!: ShippingAddressType;
 
   @Column({ type: 'boolean', default: false })

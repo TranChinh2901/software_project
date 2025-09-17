@@ -1,0 +1,57 @@
+### Register new user
+POST http://localhost:4000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullname": "Test User New",
+  "email": "testnew@example.com",
+  "password": "password123",
+  "phone_number": "0999111222",
+  "gender": "female",
+  "date_of_birth": "1993-08-25"
+}
+
+### Login with admin account
+POST http://localhost:4000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+
+### Login with user account  
+POST http://localhost:4000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com", 
+  "password": "password123"
+}
+
+### Get current user profile (need token)
+GET http://localhost:4000/api/v1/auth/profile
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Refresh token
+POST http://localhost:4000/api/v1/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refresh_token": "YOUR_REFRESH_TOKEN_HERE"
+}
+
+### Test admin access - Get all users (ADMIN only)
+GET http://localhost:4000/api/v1/users
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+### Test user access - Get user profile (USER can access)
+GET http://localhost:4000/api/v1/users/profile
+Authorization: Bearer YOUR_USER_JWT_TOKEN_HERE
+
+### Test unauthorized access (should fail)
+GET http://localhost:4000/api/v1/users
+
+### Logout
+POST http://localhost:4000/api/v1/auth/logout
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
