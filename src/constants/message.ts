@@ -80,4 +80,12 @@ export const ErrorMessages = {
   // Payment errors
   PAYMENT_FAILED: "Payment failed",
   INVALID_PAYMENT_METHOD: "Invalid payment method",
+
+
+  //Vourchẻ errors
+  VOUCHER_NOT_FOUND: "Voucher not found",
+  VOUCHER_EXPIRED: "Voucher has expired",
+  VOUCHER_ALREADY_USED: "Voucher has already been used",
+
+  
 } as const;
