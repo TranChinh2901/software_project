@@ -1,22 +1,24 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class UpdateAllDB41758041541684 implements MigrationInterface {
-    name = 'UpdateAllDB41758041541684'
+export class Update170920251758122065831 implements MigrationInterface {
+    name = 'Update170920251758122065831'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        // await queryRunner.query(`DROP INDEX \`IDX_2ec1c94a977b940d85a4f498ae\` ON \`carts\``);
-        await queryRunner.query(`DROP INDEX \`FK_04ab7a90e5ddebddb437caf6117\` ON \`cancel_order\``);
-        await queryRunner.query(`DROP INDEX \`FK_60d7023219b58048989d6993334\` ON \`cancel_order\``);
-        await queryRunner.query(`DROP INDEX \`FK_d0186460d1e282c0a8e3613f9f0\` ON \`cancel_order\``);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` DROP FOREIGN KEY \`FK_04ab7a90e5ddebddb437caf6117\``);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` DROP FOREIGN KEY \`FK_60d7023219b58048989d6993334\``);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` DROP FOREIGN KEY \`FK_d0186460d1e282c0a8e3613f9f0\``);
+        await queryRunner.query(`DROP INDEX \`FK_a2cecd1a3531c0b041e29ba46e1\` ON \`users\``);
+        await queryRunner.query(`DROP INDEX \`IDX_96db6bbbaa6f23cad26871339b\` ON \`brands\``);
+        await queryRunner.query(`DROP INDEX \`IDX_2ec1c94a977b940d85a4f498ae\` ON \`carts\``);
         await queryRunner.query(`ALTER TABLE \`users\` DROP COLUMN \`role_id\``);
-        await queryRunner.query(`ALTER TABLE \`brands\` DROP COLUMN \`description\``);
-        await queryRunner.query(`ALTER TABLE \`brands\` DROP COLUMN \`is_active\``);
         await queryRunner.query(`ALTER TABLE \`brands\` DROP COLUMN \`name\``);
+        await queryRunner.query(`ALTER TABLE \`brands\` DROP COLUMN \`description\``);
         await queryRunner.query(`ALTER TABLE \`brands\` DROP COLUMN \`website\``);
+        await queryRunner.query(`ALTER TABLE \`brands\` DROP COLUMN \`is_active\``);
         await queryRunner.query(`ALTER TABLE \`reviews\` DROP COLUMN \`images\``);
         await queryRunner.query(`ALTER TABLE \`reviews\` DROP COLUMN \`is_active\``);
-        await queryRunner.query(`ALTER TABLE \`cancel_order\` DROP COLUMN \`order_detail_id\``);
         await queryRunner.query(`ALTER TABLE \`cancel_order\` DROP COLUMN \`order_id\``);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` DROP COLUMN \`order_detail_id\``);
         await queryRunner.query(`ALTER TABLE \`cancel_order\` DROP COLUMN \`user_id\``);
         await queryRunner.query(`ALTER TABLE \`brands\` ADD \`name_brand\` varchar(255) NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`brands\` ADD UNIQUE INDEX \`IDX_5f0394bc9343da9a06dacc2737\` (\`name_brand\`)`);
@@ -138,19 +140,21 @@ export class UpdateAllDB41758041541684 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`brands\` DROP INDEX \`IDX_5f0394bc9343da9a06dacc2737\``);
         await queryRunner.query(`ALTER TABLE \`brands\` DROP COLUMN \`name_brand\``);
         await queryRunner.query(`ALTER TABLE \`cancel_order\` ADD \`user_id\` int NOT NULL`);
-        await queryRunner.query(`ALTER TABLE \`cancel_order\` ADD \`order_id\` int NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`cancel_order\` ADD \`order_detail_id\` int NULL`);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` ADD \`order_id\` int NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`reviews\` ADD \`is_active\` tinyint NOT NULL DEFAULT '1'`);
         await queryRunner.query(`ALTER TABLE \`reviews\` ADD \`images\` json NULL`);
-        await queryRunner.query(`ALTER TABLE \`brands\` ADD \`website\` varchar(255) NULL`);
-        await queryRunner.query(`ALTER TABLE \`brands\` ADD \`name\` varchar(255) NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`brands\` ADD \`is_active\` tinyint NOT NULL DEFAULT '1'`);
+        await queryRunner.query(`ALTER TABLE \`brands\` ADD \`website\` varchar(255) NULL`);
         await queryRunner.query(`ALTER TABLE \`brands\` ADD \`description\` text NULL`);
+        await queryRunner.query(`ALTER TABLE \`brands\` ADD \`name\` varchar(255) NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`users\` ADD \`role_id\` int NOT NULL`);
-        await queryRunner.query(`CREATE INDEX \`FK_d0186460d1e282c0a8e3613f9f0\` ON \`cancel_order\` (\`order_detail_id\`)`);
-        await queryRunner.query(`CREATE INDEX \`FK_60d7023219b58048989d6993334\` ON \`cancel_order\` (\`order_id\`)`);
-        await queryRunner.query(`CREATE INDEX \`FK_04ab7a90e5ddebddb437caf6117\` ON \`cancel_order\` (\`user_id\`)`);
         await queryRunner.query(`CREATE UNIQUE INDEX \`IDX_2ec1c94a977b940d85a4f498ae\` ON \`carts\` (\`user_id\`)`);
+        await queryRunner.query(`CREATE UNIQUE INDEX \`IDX_96db6bbbaa6f23cad26871339b\` ON \`brands\` (\`name\`)`);
+        await queryRunner.query(`CREATE INDEX \`FK_a2cecd1a3531c0b041e29ba46e1\` ON \`users\` (\`role_id\`)`);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` ADD CONSTRAINT \`FK_d0186460d1e282c0a8e3613f9f0\` FOREIGN KEY (\`order_detail_id\`) REFERENCES \`order_details\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` ADD CONSTRAINT \`FK_60d7023219b58048989d6993334\` FOREIGN KEY (\`order_id\`) REFERENCES \`orders\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE \`cancel_order\` ADD CONSTRAINT \`FK_04ab7a90e5ddebddb437caf6117\` FOREIGN KEY (\`user_id\`) REFERENCES \`users\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
     }
 
 }

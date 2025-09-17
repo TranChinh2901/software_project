@@ -1,9 +1,7 @@
 import express from "express";
 import productController from "@/modules/products/product.controller";
 import { asyncHandle } from "@/utils/handle-error";
-import { validateBody } from "@/middlewares/validate.middleware";
 import { requireAdmin, requireAuth, requireAnyRole } from "@/middlewares/auth.middleware";
-import { RoleType } from "@/constants/role-type";
 
 const router = express.Router();
 

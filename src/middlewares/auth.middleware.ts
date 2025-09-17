@@ -3,7 +3,7 @@ import authService from '@/modules/auth/auth.service';
 import { AppError } from '@/common/error.response';
 import { HttpStatusCode } from '@/constants/status-code';
 import { ErrorCode } from '@/constants/error-code';
-import { RoleType, hasPermission } from '@/constants/role-type';
+import { hasPermission, RoleType } from '@/modules/auth/enum/auth.enum';
 
 export interface AuthenticatedRequest extends Request {
   user?: {

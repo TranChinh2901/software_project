@@ -2,8 +2,9 @@ import express from "express";
 import authController from "@/modules/auth/auth.controller";
 import { asyncHandle } from "@/utils/handle-error";
 import { validateBody } from "@/middlewares/validate.middleware";
-import { LoginSchema, RegisterSchema, RefreshTokenSchema } from "@/modules/auth/schema/auth.schema";
 import { requireAuth } from "@/middlewares/auth.middleware";
+import { RefreshTokenSchema, RegisterSchema } from "@/modules/auth/schema/signup.chema";
+import { LoginSchema } from "@/modules/users/schema/user.schema";
 
 const router = express.Router();
 
