@@ -1,7 +1,9 @@
+
+
 import { AppDataSource } from "@/config/database.config";
+import { RoleType } from "@/modules/auth/enum/auth.enum";
 import { User } from "@/modules/users/entity/user.entity";
-import { RoleType } from "@/constants/role-type";
-import { GenderType } from "@/constants/gender-type";
+import { GenderType } from "@/modules/users/enum/user.enum";
 import * as bcrypt from "bcryptjs";
 
 const SALT_ROUNDS = 10;

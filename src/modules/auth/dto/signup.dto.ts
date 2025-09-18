@@ -11,7 +11,7 @@ export interface SignupDto {
   address?: string;
   gender: GenderType;
   date_of_birth: Date;
-  role_id: number;
+  role?: RoleType;
 
 }
 

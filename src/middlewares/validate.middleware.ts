@@ -2,6 +2,7 @@ import { AppError } from "@/common/error.response";
 import { ErrorCode } from "@/constants/error-code";
 import { ErrorMessages } from "@/constants/message";
 import { HttpStatusCode } from "@/constants/status-code";
+// import { HttpStatusCode } from "@/constants/status-code";
 import { Request, Response, NextFunction } from "express";
 import { ObjectSchema } from "joi";
 
@@ -17,7 +18,7 @@ export const validateBody = (schema: ObjectSchema) => {
         };
       });
       throw new AppError(
-        ErrorMessages.VALIDATION_FAILED,
+        ErrorMessages.VALIDATION.VALIDATION_FAILED,
         HttpStatusCode.BAD_REQUEST,
         ErrorCode.VALIDATION_ERROR,
         errorDetails

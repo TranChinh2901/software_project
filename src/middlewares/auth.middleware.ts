@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import authService from '@/modules/auth/auth.service';
 import { AppError } from '@/common/error.response';
 import { HttpStatusCode } from '@/constants/status-code';
-import { ErrorCode } from '@/constants/error-code';
+
 import { hasPermission, RoleType } from '@/modules/auth/enum/auth.enum';
+import { ErrorCode } from '@/constants/error-code';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
@@ -17,7 +18,7 @@ export const authMiddleware = (requiredRole?: RoleType) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     // Get token from header
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
+    const token = authHeader && authHeader.split(' ')[1]; 
 
     if (!token) {
       throw new AppError(

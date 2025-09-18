@@ -19,3 +19,12 @@ export interface UserResponseDto {
   gender: GenderType;
   createdAt?: Date; 
 }
+
+export interface UpdateProfileDto {
+  fullname?: string;
+  phone_number?: string;
+  address?: string;
+  gender?: GenderType;
+  date_of_birth?: Date;
+  avatar?: string;
+}

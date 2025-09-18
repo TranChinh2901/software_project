@@ -1,43 +1,43 @@
-import express from "express";
-import authController from "@/modules/auth/auth.controller";
-import { asyncHandle } from "@/utils/handle-error";
-import { validateBody } from "@/middlewares/validate.middleware";
-import { requireAuth } from "@/middlewares/auth.middleware";
-import { RefreshTokenSchema, RegisterSchema } from "@/modules/auth/schema/signup.chema";
-import { LoginSchema } from "@/modules/users/schema/user.schema";
+import { Router } from 'express';
+import authController from '@/modules/auth/auth.controller';
+import { LoginSchema, UpdateProfileSchema } from '@/modules/auth/schema/login.schema';
+import { RegisterSchema } from '@/modules/auth/schema/signup.chema';
+import { authMiddleware } from '@/middlewares/auth.middleware';
+import { validateBody } from '@/middlewares/validate.middleware';
+import { asyncHandle } from '@/utils/handle-error';
 
-const router = express.Router();
+const router = Router();
 
 // Public routes
-router.post(
-  "/register",
-  validateBody(RegisterSchema),
+router.post('/register', 
+  validateBody(RegisterSchema), 
   asyncHandle(authController.register)
 );
 
-router.post(
-  "/login",
-  validateBody(LoginSchema),
+router.post('/login', 
+  validateBody(LoginSchema), 
   asyncHandle(authController.login)
 );
 
-router.post(
-  "/refresh-token",
-  validateBody(RefreshTokenSchema),
+router.post('/refresh-token', 
   asyncHandle(authController.refreshToken)
 );
 
 // Protected routes
-router.post(
-  "/logout",
-  requireAuth(),
+router.post('/logout', 
+  authMiddleware, 
   asyncHandle(authController.logout)
 );
 
-router.get(
-  "/profile",
-  requireAuth(),
+router.get('/profile', 
+  authMiddleware(), 
   asyncHandle(authController.getProfile)
+);
+
+router.put('/profile', 
+  authMiddleware(),
+  validateBody(UpdateProfileSchema),
+  asyncHandle(authController.updateProfile)
 );
 
 export default router;

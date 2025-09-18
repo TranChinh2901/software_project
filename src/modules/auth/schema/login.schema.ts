@@ -14,3 +14,22 @@ export const LoginSchema = Joi.object({
   }),
 });
 
+
+
+export const UpdateProfileSchema = Joi.object({
+  fullname: Joi.string().min(2).max(100).optional().messages({
+    'string.min': 'Full name must be at least 2 characters long',
+    'string.max': 'Full name must not exceed 100 characters'
+  }),
+  phone_number: Joi.string().pattern(/^[0-9]{10,11}$/).optional().messages({
+    'string.pattern.base': 'Phone number must be 10-11 digits'
+  }),
+  address: Joi.string().max(255).optional().messages({
+    'string.max': 'Address must not exceed 255 characters'
+  }),
+  gender: Joi.string().valid('male', 'female').optional(),
+  date_of_birth: Joi.date().optional(),
+  avatar: Joi.string().uri().optional().messages({
+    'string.uri': 'Avatar must be a valid URL'
+  })
+});

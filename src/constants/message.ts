@@ -1,91 +1,319 @@
 export const SuccessMessages = {
+  AUTH: {
+    LOGIN_SUCCESS: "Login successful",
+    LOGOUT_SUCCESS: "Logout successful",
+    REGISTER_SUCCESS: "Regiter successful",
+    TOKEN_REFRESHED: "Token refresh successful",
+    PASSWORD_CHANGED: "Password changed",
+    PASSWORD_RESET: "Password reset",
+    EMAIL_VERIFIED: "Email verified",
+  },
+  PROFILE: {
+    PROFILE_FETCHED: "Profile fetched successfully",
+    PROFILE_UPDATED: "Profile updated successfully"
+  },
+
   USER: {
-    USER_CREATED: "User created successfully",
-    USER_UPDATED: "User updated successfully",
-    USER_DELETED: "User deleted successfully",
-    USER_GET: "User data fetched successfully",
-  },
-
-  BRAND: {
-    BRAND_CREATED: "Brand created successfully",
-    BRAND_UPDATED: "Brand updated successfully",
-    BRAND_DELETED: "Brand deleted successfully",
-    BRAND_GET: "Brand data fetched successfully",
-  },
-
-  CATEGORY: {
-    CATEGORY_CREATED: "Category created successfully",
-    CATEGORY_UPDATED: "Category updated successfully",
-    CATEGORY_DELETED: "Category deleted successfully",
-    CATEGORY_GET: "Category data fetched successfully",
+    USER_CREATED: "User created",
+    USER_UPDATED: "User updated",
+    USER_DELETED: "User deleted",
+    USER_GET: "User fetched",
+    USER_LIST_GET: "User list fetched",
+    USER_ACTIVATED: "User activated",
+    USER_DEACTIVATED: "User deactivated",
+    USER_ROLE_UPDATED: "User role updated"
   },
 
   PRODUCT: {
-    PRODUCT_CREATED: "Product created successfully",
-    PRODUCT_UPDATED: "Product updated successfully",
-    PRODUCT_DELETED: "Product deleted successfully",
-    PRODUCT_GET: "Product data fetched successfully",
+    PRODUCT_CREATED: "Product created",
+    PRODUCT_UPDATED: "Product updated",
+    PRODUCT_DELETED: "Product deleted",
+    PRODUCT_GET: "Product fetched",
+    PRODUCT_LIST_GET: "Product list fetched",
+    PRODUCT_ACTIVATED: "Product activated",
+    PRODUCT_DEACTIVATED: "Product deactivated",
+    PRODUCT_STOCK_UPDATED: "Stock updated"
+  },
+
+  VARIANT: {
+    VARIANT_CREATED: "Variant created",
+    VARIANT_UPDATED: "Variant updated",
+    VARIANT_DELETED: "Variant deleted",
+    VARIANT_GET: "Variant fetched",
+    VARIANT_LIST_GET: "Variant list fetched"
+  },
+
+  CATEGORY: {
+    CATEGORY_CREATED: "Category created",
+    CATEGORY_UPDATED: "Category updated",
+    CATEGORY_DELETED: "Category deleted",
+    CATEGORY_GET: "Category fetched",
+    CATEGORY_LIST_GET: "Category list fetched",
+    CATEGORY_ACTIVATED: "Category activated",
+    CATEGORY_DEACTIVATED: "Category deactivated"
+  },
+
+  BRAND: {
+    BRAND_CREATED: "Brand created",
+    BRAND_UPDATED: "Brand updated",
+    BRAND_DELETED: "Brand deleted",
+    BRAND_GET: "Brand fetched",
+    BRAND_LIST_GET: "Brand list fetched",
+    BRAND_ACTIVATED: "Brand activated",
+    BRAND_DEACTIVATED: "Brand deactivated"
   },
 
   ORDER: {
-    ORDER_CREATED: "Order placed successfully",
-    ORDER_UPDATED: "Order updated successfully",
-    ORDER_DELETED: "Order cancelled successfully",
-    ORDER_GET: "Order data fetched successfully",
+    ORDER_CREATED: "Order placed",
+    ORDER_UPDATED: "Order updated",
+    ORDER_CANCELLED: "Order cancelled",
+    ORDER_COMPLETED: "Order completed",
+    ORDER_SHIPPED: "Order shipped",
+    ORDER_DELIVERED: "Order delivered",
+    ORDER_GET: "Order fetched",
+    ORDER_LIST_GET: "Order list fetched",
+    ORDER_STATUS_UPDATED: "Order status updated"
   },
 
   CART: {
-    ITEM_ADDED: "Item added to cart successfully",
-    ITEM_REMOVED: "Item removed from cart successfully",
-    CART_CLEARED: "Cart cleared successfully",
+    ITEM_ADDED: "Item added to cart",
+    ITEM_UPDATED: "Cart item updated",
+    ITEM_REMOVED: "Item removed",
+    CART_CLEARED: "Cart cleared",
+    CART_GET: "Cart fetched",
+    QUANTITY_UPDATED: "Quantity updated"
   },
 
-  AUTH: {
-    LOGIN_SUCCESS: "Logged in successfully",
-    LOGOUT_SUCCESS: "Logged out successfully",
-    REGISTER_SUCCESS: "Registered successfully",
+  PAYMENT: {
+    PAYMENT_SUCCESS: "Payment processed",
+    PAYMENT_INITIATED: "Payment initiated",
+    REFUND_PROCESSED: "Refund processed",
+    TRANSACTION_CREATED: "Transaction created",
+    TRANSACTION_UPDATED: "Transaction updated"
   },
+
+  VOUCHER: {
+    VOUCHER_CREATED: "Voucher created",
+    VOUCHER_UPDATED: "Voucher updated",
+    VOUCHER_DELETED: "Voucher deleted",
+    VOUCHER_APPLIED: "Voucher applied",
+    VOUCHER_REMOVED: "Voucher removed",
+    VOUCHER_GET: "Voucher fetched",
+    VOUCHER_LIST_GET: "Voucher list fetched"
+  },
+
+  REVIEW: {
+    REVIEW_CREATED: "Review submitted",
+    REVIEW_UPDATED: "Review updated",
+    REVIEW_DELETED: "Review deleted",
+    REVIEW_GET: "Review fetched",
+    REVIEW_LIST_GET: "Review list fetched",
+    REVIEW_APPROVED: "Review approved",
+    REVIEW_REJECTED: "Review rejected"
+  },
+
+  SHIPPING: {
+    ADDRESS_CREATED: "Address created",
+    ADDRESS_UPDATED: "Address updated",
+    ADDRESS_DELETED: "Address deleted",
+    ADDRESS_GET: "Address fetched",
+    ADDRESS_LIST_GET: "Addresses fetched",
+    DEFAULT_ADDRESS_SET: "Default address set"
+  },
+
+  BLOG: {
+    BLOG_CREATED: "Blog post created",
+    BLOG_UPDATED: "Blog post updated",
+    BLOG_DELETED: "Blog post deleted",
+    BLOG_GET: "Blog post fetched",
+    BLOG_LIST_GET: "Blog list fetched",
+    BLOG_PUBLISHED: "Blog post published",
+    BLOG_UNPUBLISHED: "Blog post unpublished"
+  },
+
+  GALLERY: {
+    IMAGE_UPLOADED: "Image uploaded",
+    IMAGE_DELETED: "Image deleted",
+    IMAGE_UPDATED: "Image updated",
+    GALLERY_GET: "Gallery fetched"
+  },
+
+  CANCEL: {
+    CANCEL_REQUESTED: "Cancellation request submitted",
+    CANCEL_APPROVED: "Cancellation approved",
+    CANCEL_REJECTED: "Cancellation rejected",
+    CANCEL_PROCESSED: "Cancellation processed"
+  },
+
+  UPLOAD: {
+    FILE_UPLOADED: "File uploaded",
+    FILES_UPLOADED: "Files uploaded",
+    FILE_DELETED: "File deleted"
+  },
+
+  GENERAL: {
+    OPERATION_SUCCESS: "Operation successful",
+    DATA_RETRIEVED: "Data fetched",
+    DATA_UPDATED: "Data updated",
+    DATA_DELETED: "Data deleted",
+    DATA_CREATED: "Data created",
+    STATUS_UPDATED: "Status updated",
+    SETTINGS_SAVED: "Settings saved"
+  }
 } as const;
 
 export const ErrorMessages = {
-  USER_NOT_FOUND: "User not found",
-  INVALID_ID: "Invalid ID",
-  EMAIL_ALREADY_EXISTS: "Email already exists",
-  INVALID_CREDENTIALS: "Invalid email or password",
-  UNAUTHORIZED: "You are not authorized",
-  VALIDATION_FAILED: "Validation failed",
-  SERVER_ERROR: "Something went wrong",
+  AUTH: {
+    UNAUTHORIZED: "Unauthorized",
+    FORBIDDEN: "Forbidden",
+    INVALID_TOKEN: "Invalid or expired token",
+    TOKEN_EXPIRED: "Token expired",
+    INVALID_CREDENTIALS: "Invalid email or password",
+    ACCOUNT_DEACTIVATED: "Account deactivated",
+    PERMISSION_DENIED: "Permission denied"
+  },
 
-  // Product errors
-  PRODUCT_NOT_FOUND: "Product not found",
-  PRODUCT_OUT_OF_STOCK: "Product is out of stock",
-  INSUFFICIENT_STOCK: "Insufficient stock quantity",
+  VALIDATION: {
+    VALIDATION_FAILED: "Validation failed",
+    VALIDATION_ERROR: "Validation error",
+    REQUIRED_FIELD: "Field required",
+    INVALID_FORMAT: "Invalid format",
+    INVALID_EMAIL: "Invalid email",
+    INVALID_PHONE: "Invalid phone",
+    PASSWORD_TOO_SHORT: "Password too short",
+    INVALID_ID: "Invalid ID",
+    INVALID_PARAMS: "Invalid parameters"
+  },
 
-  // Category errors
-  CATEGORY_NOT_FOUND: "Category not found",
-  CATEGORY_ALREADY_EXISTS: "Category already exists",
+  USER: {
+    USER_NOT_FOUND: "User not found",
+    USER_ALREADY_EXISTS: "User already exists",
+    EMAIL_ALREADY_EXISTS: "Email already exists",
+    PHONE_ALREADY_EXISTS: "Phone already exists",
+    ALL_ALREADY_EXISTS: "Email and phone already exist",
+    USER_NOT_VERIFIED: "User not verified"
+  },
 
-  // Brand errors
-  BRAND_NOT_FOUND: "Brand not found",
-  BRAND_ALREADY_EXISTS: "Brand already exists",
+  PRODUCT: {
+    PRODUCT_NOT_FOUND: "Product not found",
+    PRODUCT_ALREADY_EXISTS: "Product already exists",
+    PRODUCT_OUT_OF_STOCK: "Out of stock",
+    INSUFFICIENT_STOCK: "Insufficient stock",
+    PRODUCT_INACTIVE: "Product inactive"
+  },
 
-  // Order errors
-  ORDER_NOT_FOUND: "Order not found",
-  ORDER_CANNOT_BE_CANCELLED: "Order cannot be cancelled",
+  VARIANT: {
+    VARIANT_NOT_FOUND: "Variant not found",
+    VARIANT_OUT_OF_STOCK: "Variant out of stock",
+    INVALID_SIZE: "Invalid size",
+    INVALID_COLOR: "Invalid color",
+    SIZE_OUT_OF_STOCK: "Size out of stock",
+    COLOR_OUT_OF_STOCK: "Color out of stock"
+  },
 
-  // Cart errors
-  CART_ITEM_NOT_FOUND: "Cart item not found",
-  CART_IS_EMPTY: "Cart is empty",
+  CATEGORY: {
+    CATEGORY_NOT_FOUND: "Category not found",
+    CATEGORY_ALREADY_EXISTS: "Category already exists",
+    CATEGORY_IN_USE: "Category in use"
+  },
 
-  // Payment errors
-  PAYMENT_FAILED: "Payment failed",
-  INVALID_PAYMENT_METHOD: "Invalid payment method",
+  BRAND: {
+    BRAND_NOT_FOUND: "Brand not found",
+    BRAND_ALREADY_EXISTS: "Brand already exists",
+    BRAND_IN_USE: "Brand in use"
+  },
 
+  ORDER: {
+    ORDER_NOT_FOUND: "Order not found",
+    ORDER_CANNOT_BE_CANCELLED: "Cannot cancel order",
+    ORDER_ALREADY_CANCELLED: "Order already cancelled",
+    ORDER_ALREADY_COMPLETED: "Order already completed",
+    ORDER_ALREADY_SHIPPED: "Order already shipped",
+    INVALID_ORDER_STATUS: "Invalid order status",
+    ORDER_DETAILS_NOT_FOUND: "Order details not found"
+  },
 
-  //Vourchẻ errors
-  VOUCHER_NOT_FOUND: "Voucher not found",
-  VOUCHER_EXPIRED: "Voucher has expired",
-  VOUCHER_ALREADY_USED: "Voucher has already been used",
+  CART: {
+    CART_NOT_FOUND: "Cart not found",
+    CART_ITEM_NOT_FOUND: "Item not in cart",
+    CART_IS_EMPTY: "Cart is empty",
+    ITEM_ALREADY_IN_CART: "Item already in cart",
+    CART_QUANTITY_EXCEEDED: "Quantity exceeds stock"
+  },
 
-  
+  PAYMENT: {
+    PAYMENT_FAILED: "Payment failed",
+    PAYMENT_PENDING: "Payment pending",
+    PAYMENT_CANCELLED: "Payment cancelled",
+    TRANSACTION_NOT_FOUND: "Transaction not found",
+    TRANSACTION_FAILED: "Transaction failed",
+    REFUND_FAILED: "Refund failed",
+    INVALID_PAYMENT_METHOD: "Invalid payment method"
+  },
+
+  VOUCHER: {
+    VOUCHER_NOT_FOUND: "Voucher not found",
+    VOUCHER_EXPIRED: "Voucher expired",
+    VOUCHER_ALREADY_USED: "Voucher already used",
+    VOUCHER_INACTIVE: "Voucher inactive",
+    VOUCHER_NOT_APPLICABLE: "Voucher not applicable",
+    VOUCHER_LIMIT_EXCEEDED: "Voucher limit exceeded"
+  },
+
+  REVIEW: {
+    REVIEW_NOT_FOUND: "Review not found",
+    REVIEW_ALREADY_EXISTS: "Already reviewed",
+    REVIEW_NOT_ALLOWED: "Not allowed to review",
+    REVIEW_INACTIVE: "Review inactive"
+  },
+
+  SHIPPING: {
+    SHIPPING_ADDRESS_NOT_FOUND: "Shipping address not found",
+    INVALID_ADDRESS_TYPE: "Invalid address type",
+    DEFAULT_ADDRESS_REQUIRED: "Default address required"
+  },
+
+  BLOG: {
+    BLOG_NOT_FOUND: "Blog post not found",
+    BLOG_ALREADY_EXISTS: "Blog post already exists",
+    BLOG_INACTIVE: "Blog post inactive"
+  },
+
+  GALLERY: {
+    GALLERY_IMAGE_NOT_FOUND: "Gallery image not found",
+    INVALID_IMAGE_FORMAT: "Invalid image format",
+    IMAGE_UPLOAD_FAILED: "Image upload failed",
+    TOO_MANY_IMAGES: "Too many images"
+  },
+
+  CANCEL: {
+    CANCEL_REQUEST_NOT_FOUND: "Cancellation request not found",
+    CANCEL_REQUEST_ALREADY_PROCESSED: "Request already processed",
+    CANCEL_NOT_ALLOWED: "Cancellation not allowed"
+  },
+
+  UPLOAD: {
+    FILE_TOO_LARGE: "File too large",
+    INVALID_FILE_TYPE: "Invalid file type",
+    UPLOAD_FAILED: "Upload failed",
+    FILE_NOT_FOUND: "File not found"
+  },
+
+  SERVER: {
+    DATABASE_ERROR: "Database error",
+    CONNECTION_ERROR: "Connection error",
+    INTERNAL_SERVER_ERROR: "Internal server error",
+    SERVER_ERROR: "Server error",
+    SERVICE_UNAVAILABLE: "Service unavailable"
+  },
+
+  GENERAL: {
+    BAD_REQUEST: "Bad request",
+    NOT_FOUND: "Resource not found",
+    OPERATION_FAILED: "Operation failed",
+    DUPLICATE_ENTRY: "Duplicate entry",
+    CONSTRAINT_VIOLATION: "Constraint violation",
+    RATE_LIMIT_EXCEEDED: "Rate limit exceeded",
+    MAINTENANCE_MODE: "System under maintenance"
+  }
 } as const;
