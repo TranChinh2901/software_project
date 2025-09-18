@@ -11,7 +11,7 @@ import { GenderType } from "../users/enum/user.enum";
 import { RoleType } from "./enum/auth.enum";
 import { LoginDto } from "./dto/login.dto";
 import { SignupDto } from "./dto/signup.dto";
-import { ErrorMessages } from "@/constants/message";
+import { ErrorMessages, SuccessMessages } from "@/constants/message";
 import { UpdateProfileDto } from "./dto/auth.dto";
 
 export class AuthService {
@@ -256,6 +256,28 @@ export class AuthService {
       role: updatedUser!.role
     };
   }
+
+
+  async deleteAccount(userId: number) {
+  const user = await this.userRepository.findOne({
+    where: { id: userId, is_deleted: false }
+  });
+  
+  if (!user) {
+    throw new AppError(
+      ErrorMessages.USER.USER_NOT_FOUND,
+      HttpStatusCode.NOT_FOUND,
+      ErrorCode.USER_NOT_FOUND
+    );
+  }
+
+  // Hard delete - xóa hoàn toàn khỏi database
+  await this.userRepository.remove(user);
+  
+  return { 
+    message: SuccessMessages.USER.USER_DELETED
+  };
+}
 }
 
 export default new AuthService();

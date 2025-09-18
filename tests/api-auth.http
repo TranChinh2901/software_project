@@ -16,7 +16,7 @@ POST http://localhost:4000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin@domain.com",
+  "email": "huhu@gmail.com",
   "password": "password123"
 }
 
@@ -29,6 +29,11 @@ Content-Type: application/json
   "password": "password123"
 }
 
+
+### Delete account
+DELETE http://localhost:4000/api/v1/auth/delete-account
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
 ### Get current user profile (need token)
 GET http://localhost:4000/api/v1/auth/profile
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhZG1pbkBkb21haW4uY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MjA2NDAwLCJleHAiOjE3NTgyMDczMDB9.FFxp_xbr7EwaDgJKFUBdDfVmnRXVsj6MAutZKas2K9I

@@ -120,6 +120,27 @@ class AuthController {
       data: result
     }).sendResponse(res);
   }
+
+
+  async delteAccount(req: AuthenticatedRequest, res: Response) {
+    const user = req.user;
+    
+    if (!user) {
+      throw new AppError(
+        ErrorMessages.USER.USER_NOT_FOUND,
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.UNAUTHORIZED
+      );
+    }
+
+    await authService.deleteAccount(user.id);
+    
+    return new AppResponse({
+      message: SuccessMessages.USER.USER_DELETED,
+      statusCode: HttpStatusCode.OK,
+      data: null
+    }).sendResponse(res);
+  }
 }
 
 export default new AuthController();
