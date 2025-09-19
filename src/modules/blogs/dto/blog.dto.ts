@@ -1,4 +1,4 @@
-import { BlogType } from "../enum/blob.enum";
+import { BlogType } from "../enum/blog.enum";
 
 export interface CreateBlogDto {
   title: string;

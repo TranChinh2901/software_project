@@ -274,6 +274,7 @@ export const ErrorMessages = {
   },
 
   BLOG: {
+    CREATE_BLOG_FAILED: "Failed to create blog post",
     BLOG_NOT_FOUND: "Blog post not found",
     BLOG_ALREADY_EXISTS: "Blog post already exists",
     BLOG_INACTIVE: "Blog post inactive"

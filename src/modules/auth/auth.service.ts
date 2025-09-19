@@ -1,3 +1,4 @@
+// import { GenderType } from '@/modules/users/enum/user.enum';
 import { Repository } from "typeorm";
 import { compare, hash } from "bcryptjs";
 
@@ -7,12 +8,13 @@ import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
 import { User } from "@/modules/users/entity/user.entity";
 import { JwtUtils } from "@/utils/jwt.util";
-import { GenderType } from "../users/enum/user.enum";
+// import { GenderType } from "../users/enum/user.enum";
 import { RoleType } from "./enum/auth.enum";
 import { LoginDto } from "./dto/login.dto";
 import { SignupDto } from "./dto/signup.dto";
 import { ErrorMessages, SuccessMessages } from "@/constants/message";
 import { UpdateProfileDto } from "./dto/auth.dto";
+import { GenderType } from "../users/enum/user.enum";
 
 export class AuthService {
   private userRepository: Repository<User>;
@@ -198,10 +200,10 @@ export class AuthService {
     phone_number: user.phone_number,
     address: user.address,
     avatar: user.avatar,
-    gender: user.gender,
+    gender: user.gender as GenderType,
     date_of_birth: user.date_of_birth,
     is_verified: user.is_verified,
-    role: user.role,
+    role: user.role as RoleType,
     created_at: user.created_at,
     updated_at: user.updated_at
     };
@@ -250,10 +252,10 @@ export class AuthService {
       email: updatedUser!.email,
       phone_number: updatedUser!.phone_number,
       address: updatedUser!.address,
-      gender: updatedUser!.gender,
+      gender: updatedUser!.gender as GenderType,
       date_of_birth: updatedUser!.date_of_birth,
       avatar: updatedUser!.avatar,
-      role: updatedUser!.role
+      role: updatedUser!.role as RoleType,
     };
   }
 

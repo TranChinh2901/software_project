@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
-import { BlogType } from "../enum/blob.enum";
+import { BlogType } from "../enum/blog.enum";
 
 @Entity("blogs")
 export class Blog {
@@ -31,9 +31,4 @@ export class Blog {
   @JoinColumn({ name: "author_id" })
   author!: User;
 
-  @CreateDateColumn()
-  createdAt!: Date;
-
-  @UpdateDateColumn()
-  updatedAt!: Date;
 }
