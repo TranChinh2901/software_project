@@ -1,8 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
 import { BlogType } from "../enum/blob.enum";
 
-@Entity('blogs')
+@Entity("blogs")
 export class Blog {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -10,16 +18,22 @@ export class Blog {
   @Column({ length: 255 })
   title!: string;
 
-  @Column('longtext', { nullable: true })
+  @Column("longtext", { nullable: true })
   content?: string;
 
   @Column({ length: 255, nullable: true })
   image_blogs?: string;
 
-@Column({type: 'enum', enum: BlogType, default: BlogType.ACTIVE})
-status!: BlogType;
+  @Column({ type: "enum", enum: BlogType, default: BlogType.ACTIVE })
+  status!: BlogType;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'author_id' })
+  @JoinColumn({ name: "author_id" })
   author!: User;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
