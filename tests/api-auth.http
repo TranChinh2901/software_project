@@ -3,10 +3,10 @@ POST http://localhost:4000/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "fullname": "Tranchinh",
-  "email": "huhu@gmail.com",
+  "fullname": "Test delete user",
+  "email": "user@gmail.com",
   "password": "password123",
-  "phone_number": "01999115211",
+  "phone_number": "0119299115211",
   "gender": "male",
   "date_of_birth": "1993-08-25"
 }
@@ -16,7 +16,7 @@ POST http://localhost:4000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "huhu@gmail.com",
+  "email": "Tranchinh@gmail.com",
   "password": "password123"
 }
 
@@ -25,28 +25,28 @@ POST http://localhost:4000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "haha@gmail.com", 
+  "email": "admin@example.com", 
   "password": "password123"
 }
 
 
 ### Delete account
 DELETE http://localhost:4000/api/v1/auth/delete-account
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4MjcxNjgyLCJleHAiOjE3NTgyNzM0ODJ9.y33cLdNqcKRF4WRp6RoNWlklMif6oKcqxM87QXbBo40
 Content-Type: application/json
 ### Get current user profile (need token)
 GET http://localhost:4000/api/v1/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhZG1pbkBkb21haW4uY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MjA2NDAwLCJleHAiOjE3NTgyMDczMDB9.FFxp_xbr7EwaDgJKFUBdDfVmnRXVsj6MAutZKas2K9I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4MjcxMzg4LCJleHAiOjE3NTgyNzMxODh9.U7-yR28BrtJxI6cJm1BS3iIfX50bj72hPmNNk74y1cc
 
 ### Update profile
 PUT http://localhost:4000/api/v1/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhZG1pbkBkb21haW4uY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MjA5MTE1LCJleHAiOjE3NTgyMTAwMTV9.4Kf4T7TaPpEAFJYVbVfkxwSd5E9IjQOgADeXwtPS85M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4MjcxMzg4LCJleHAiOjE3NTgyNzMxODh9.U7-yR28BrtJxI6cJm1BS3iIfX50bj72hPmNNk74y1cc
 Content-Type: application/json
 
 {
-  "fullname": "Updated Name",
+  "fullname": "Tesst delete Updated Name",
   "address": "123 New Address",
-  "phone_number": "0987654321"
+  "phone_number": "09873654321"
 }
 
 ### Refresh token

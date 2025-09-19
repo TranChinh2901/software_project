@@ -271,7 +271,6 @@ export class AuthService {
     );
   }
 
-  // Hard delete - xóa hoàn toàn khỏi database
   await this.userRepository.remove(user);
   
   return { 
