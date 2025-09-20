@@ -1,0 +1,27 @@
+### Login with admin account
+POST http://localhost:4000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "Tranchinh@gmail.com",
+  "password": "password123"
+}
+
+
+### Create new blog
+POST http://localhost:4000/api/v1/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzYwNTk2LCJleHAiOjE3NTgzNjIzOTZ9.VsY1VBOOoiGwbdpJMazY4p6_4T6xjQ-TppRZH21eDZk
+Content-Type: application/json
+
+{
+  "title": "My First Blog",
+  "content": "This is the content of my blog ddhshjdsjhjsdjsd...",
+  "image_blogs": "https://example.com/image.jpg",
+  "status": "active"
+}
+
+### Get all blogs
+GET http://localhost:4000/api/v1/blogs/
+
+### Get blog by id
+GET http://localhost:4000/api/v1/blogs/1

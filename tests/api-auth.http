@@ -36,7 +36,7 @@ Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOi
 Content-Type: application/json
 ### Get current user profile (need token)
 GET http://localhost:4000/api/v1/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4MjcxMzg4LCJleHAiOjE3NTgyNzMxODh9.U7-yR28BrtJxI6cJm1BS3iIfX50bj72hPmNNk74y1cc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzUzMzgyLCJleHAiOjE3NTgzNTUxODJ9.x2HEAmnWwiWzEshcJSQE2T2DP_--3imAJ2SL-zNO36g
 
 ### Update profile
 PUT http://localhost:4000/api/v1/auth/profile

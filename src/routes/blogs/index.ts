@@ -12,5 +12,11 @@ router.post("/",
   asyncHandle(blogController.createBlog)
 );
 
+router.get("/", 
+  asyncHandle(blogController.getAllBlogs)
+)
 
+router.get("/:id", 
+  asyncHandle(blogController.getBlogById)
+);
 export default router;

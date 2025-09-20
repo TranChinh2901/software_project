@@ -5,6 +5,7 @@
   "scripts": {
     "seed": "ts-node -r tsconfig-paths/register src/scripts/seed-users-roles.ts",
     "test:api": "ts-node -r tsconfig-paths/register src/scripts/test-api.ts",
+    "seed:blog": "ts-node -r tsconfig-paths/register src/scripts/seed-blog.ts",
     "dev": "nodemon --watch ./src --ext ts --exec ts-node -r tsconfig-paths/register src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/config/database.config.ts",

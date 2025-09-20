@@ -4,7 +4,7 @@ import { AppResponse } from "@/common/success.response";
 import { SuccessMessages } from "@/constants/message";
 import { HttpStatusCode } from "@/constants/status-code";
 import blogService from "./blog.service";
-import { Response } from "express";
+import { Request, Response } from "express";
 
 class BlogController {
     async createBlog(req: AuthenticatedRequest, res: Response) {
@@ -19,6 +19,35 @@ class BlogController {
             data: result
         }).sendResponse(res);
     }
+
+       async getAllBlogs(req: Request, res: Response) {
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+
+        const result = await blogService.getAllBlogs(page, limit);
+
+        return new AppResponse({
+            message: SuccessMessages.BLOG.BLOG_LIST_GET,
+            statusCode: HttpStatusCode.OK,
+            data: {
+                ...result,
+                currentPage: page,
+                limit
+            }
+        }).sendResponse(res);
+    }
+
+    async getBlogById(req: Request, res: Response) {
+        const id = parseInt(req.params.id);
+        const result = await blogService.getBlogById(id);
+
+        return new AppResponse({
+            message: SuccessMessages.BLOG.BLOG_GET,
+            statusCode: HttpStatusCode.OK,
+            data: result
+        }).sendResponse(res);
+    }
+
 }
 
 export default new BlogController();
