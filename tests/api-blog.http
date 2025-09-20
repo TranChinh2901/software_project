@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### Create new blog
 POST http://localhost:4000/api/v1/blogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzYwNTk2LCJleHAiOjE3NTgzNjIzOTZ9.VsY1VBOOoiGwbdpJMazY4p6_4T6xjQ-TppRZH21eDZk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzY0NzgxLCJleHAiOjE3NTgzNjY1ODF9.jJTKvw3bvA1lK_oBu1y-fAYdpuR-G8lR7WCyjG2wGis
 Content-Type: application/json
 
 {
@@ -24,4 +24,22 @@ Content-Type: application/json
 GET http://localhost:4000/api/v1/blogs/
 
 ### Get blog by id
-GET http://localhost:4000/api/v1/blogs/1
+GET http://localhost:4000/api/v1/blogs/2
+
+
+### Update blog
+PUT http://localhost:4000/api/v1/blogs/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzY0NzgxLCJleHAiOjE3NTgzNjY1ODF9.jJTKvw3bvA1lK_oBu1y-fAYdpuR-G8lR7WCyjG2wGis
+Content-Type: application/json
+
+{
+  "title": "My First Blog Update",
+  "content": "This is the content of my blog ddhshjdsjhjsdjsd...",
+  "image_blogs": "https://example.com/image.jpg",
+  "status": "active"
+}
+
+
+### Delete blog
+DELETE http://localhost:4000/api/v1/blogs/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzY0NzgxLCJleHAiOjE3NTgzNjY1ODF9.jJTKvw3bvA1lK_oBu1y-fAYdpuR-G8lR7WCyjG2wGis

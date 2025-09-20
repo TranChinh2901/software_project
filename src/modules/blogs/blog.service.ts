@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { Blog } from "./entity/blog.entity";
 import { User } from "../users/entity/user.entity";
 import { AppDataSource } from "@/config/database.config";
-import { BlogResponseDto, CreateBlogDto } from "./dto/blog.dto";
+import { BlogResponseDto, CreateBlogDto, UpdateBlogDto } from "./dto/blog.dto";
 import { ErrorMessages } from "@/constants/message";
 import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
@@ -120,6 +120,58 @@ export class BlogService {
       );
     }
   }
+
+async updateBlog(id: number, updateData: UpdateBlogDto): Promise<BlogResponseDto> {
+    try {
+        const blog = await this.blogRepository.findOne({
+            where: { id},
+            relations: ["author"]
+        })
+        if(!blog) {
+            throw new AppError(
+                ErrorMessages.BLOG.BLOG_NOT_FOUND,
+                HttpStatusCode.NOT_FOUND,
+                ErrorCode.BLOG_NOT_FOUND
+            )
+        }
+        Object.assign(blog, updateData);
+        const updatedBlog = await this.blogRepository.save(blog);
+        const blogWithAuthor = await this.blogRepository.findOne({
+            where: { id: updatedBlog.id },
+            relations: ["author"]
+        })
+        return BlogMapper.toBlogResponseDto(blogWithAuthor!);
+    } catch (error) {
+        throw new AppError(
+            ErrorMessages.SERVER.DATABASE_ERROR,
+            HttpStatusCode.INTERNAL_SERVER_ERROR,
+            ErrorCode.SERVER_ERROR,
+            error
+        );
+    }
+}
+async deleteBlog(id: number): Promise<void> {
+    try {
+      const blog = await this.blogRepository.findOne({
+        where: {id}
+      });
+      if(!blog) {
+        throw new AppError(
+          ErrorMessages.BLOG.BLOG_NOT_FOUND,
+          HttpStatusCode.NOT_FOUND,
+          ErrorCode.BLOG_NOT_FOUND
+        );
+      }
+      await this.blogRepository.remove(blog);
+    } catch (error) {
+      throw new AppError(
+        ErrorMessages.SERVER.DATABASE_ERROR,
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+        ErrorCode.SERVER_ERROR,
+        error
+      );
+    }
+}
 }
 
 export default new BlogService();
