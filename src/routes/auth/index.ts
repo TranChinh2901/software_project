@@ -42,6 +42,6 @@ router.put('/profile',
 
 router.delete('/delete-account', 
   authMiddleware(),
-  asyncHandle(authController.delteAccount));
+  asyncHandle(authController.deleteAccount));
 
 export default router;

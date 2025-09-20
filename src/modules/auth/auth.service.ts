@@ -1,4 +1,4 @@
-// import { GenderType } from '@/modules/users/enum/user.enum';
+
 import { Repository } from "typeorm";
 import { compare, hash } from "bcryptjs";
 
@@ -8,7 +8,6 @@ import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
 import { User } from "@/modules/users/entity/user.entity";
 import { JwtUtils } from "@/utils/jwt.util";
-// import { GenderType } from "../users/enum/user.enum";
 import { RoleType } from "./enum/auth.enum";
 import { LoginDto } from "./dto/login.dto";
 import { SignupDto } from "./dto/signup.dto";
@@ -38,7 +37,6 @@ export class AuthService {
         ErrorCode.UNAUTHORIZED
       );
     }
-
     const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) {
       throw new AppError(
@@ -49,7 +47,6 @@ export class AuthService {
     }
 
     const tokens = this.generateToken(user);
-    
     return {
       ...tokens,
       user: {
@@ -61,9 +58,9 @@ export class AuthService {
     };
   }
 
-  async register(registerData: SignupDto) {
-    const { fullname, email, password, phone_number, address, gender, date_of_birth, role } = registerData;
-    
+  async register(signupDto: SignupDto) {
+    const { fullname, email, password, phone_number, address, gender, date_of_birth, role } = signupDto;
+
     const existingUser = await this.userRepository.findOne({
       where: [
         { email },
@@ -93,10 +90,8 @@ export class AuthService {
       is_verified: false,
       is_deleted: false
     });
-
     const savedUser = await this.userRepository.save(newUser);
     const tokens = this.generateToken(savedUser);
-    
     return {
       ...tokens,
       user: {
