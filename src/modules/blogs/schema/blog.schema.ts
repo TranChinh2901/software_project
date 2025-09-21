@@ -10,9 +10,6 @@ export const CreateBlogSchema = Joi.object({
     "string.empty": "Content cannot be empty",
     "string.min": "Content must be at least 10 characters long",
   }),
-  image_blogs: Joi.string().uri().optional().allow("").messages({
-    "string.uri": "Image must be a valid URI",
-  }),
   status: Joi.string().valid("active", "inactive").optional().default("active").messages({
     "any.only": "Status must be either active or inactive",
   }),
@@ -25,9 +22,7 @@ export const UpdateBlogSchema = Joi.object({
   content: Joi.string().min(10).optional().messages({
     "string.min": "Content must be at least 10 characters long",
   }),
-  image_blogs: Joi.string().uri().optional().allow("", null).messages({
-    "string.uri": "Image must be a valid URI",
-  }),
+  
   status: Joi.string().valid("active", "inactive").optional().messages({
     "any.only": "Status must be either active or inactive",
   }),
