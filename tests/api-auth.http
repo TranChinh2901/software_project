@@ -71,4 +71,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiO
 
 ### Logout
 POST http://localhost:4000/api/v1/auth/logout
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4NDcxMDY1LCJleHAiOjE3NTg0NzI4NjV9.1sYHojnxsIWKAVTfyM0kXVWz9-_Ml8a2IAbvAwuvz6U
