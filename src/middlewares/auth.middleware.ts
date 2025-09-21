@@ -12,6 +12,7 @@ export interface AuthenticatedRequest extends Request {
     email: string;
     role: RoleType;
   };
+  avatar?: Express.Multer.File;
 }
 
 export const authMiddleware = (requiredRole?: RoleType) => {
@@ -96,7 +97,7 @@ export const requireAnyRole = (roles: RoleType[]) => {
     authCheck(req, res, (error) => {
       if (error) return next(error);
       
-      const userRole = req.user?.role;
+      const userRole = req.user?.role as RoleType;
       if (!userRole || !roles.some(role => hasPermission(userRole, role))) {
         throw new AppError(
           'Insufficient permissions to access this resource',

@@ -175,6 +175,57 @@ export class AuthService {
     };
   }
 
+  async getAllUsers(page: number = 1, limit: number = 10) {
+    const validPage = Math.max(1, page);
+    const validLimit = Math.min(100, Math.max(1, limit)); // max 100 
+    const skip = (validPage - 1) * validLimit;
+
+    const [users, total] = await this.userRepository.findAndCount({
+      where: { is_deleted: false },
+      select: [
+        'id', 
+        'fullname', 
+        'email', 
+        'phone_number', 
+        'address', 
+        'avatar', 
+        'gender', 
+        'date_of_birth',
+        'is_verified',
+        'role',
+        'created_at',
+        'updated_at'
+      ],
+      order: { created_at: 'DESC' },
+      skip,
+      take: validLimit
+    });
+
+    return {
+      users: users.map(user => ({
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        phone_number: user.phone_number,
+        address: user.address,
+        avatar: user.avatar,
+        gender: user.gender as GenderType,
+        date_of_birth: user.date_of_birth,
+        is_verified: user.is_verified,
+        role: user.role as RoleType,
+        created_at: user.created_at,
+        updated_at: user.updated_at
+      })),
+      pagination: {
+        currentPage: validPage,
+        totalPages: Math.ceil(total / validLimit),
+        totalItems: total,
+        itemsPerPage: validLimit,
+        hasNextPage: validPage < Math.ceil(total / validLimit),
+        hasPrevPage: validPage > 1
+      }
+    };
+  }
   async getUserById(id: number) {
     const user = await this.userRepository.findOne({
       where: { id, is_deleted: false }
@@ -274,6 +325,34 @@ export class AuthService {
     message: SuccessMessages.USER.USER_DELETED
   };
 }
+
+  async uploadAvatar(userId: number, avatarUrl: string) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId, is_deleted: false }
+    });
+
+    if (!user) {
+      throw new AppError(
+        ErrorMessages.USER.USER_NOT_FOUND,
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.USER_NOT_FOUND
+      );
+    }
+
+    await this.userRepository.update(userId, { avatar: avatarUrl });
+
+    const updatedUser = await this.userRepository.findOne({
+      where: { id: userId }
+    });
+
+    return {
+      id: updatedUser!.id,
+      fullname: updatedUser!.fullname,
+      email: updatedUser!.email,
+      avatar: updatedUser!.avatar,
+      message: "Avatar uploaded successfully"
+    };
+  }
 }
 
 export default new AuthService();

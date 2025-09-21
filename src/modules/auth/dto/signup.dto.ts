@@ -12,11 +12,4 @@ export interface SignupDto {
   gender: GenderType;
   date_of_birth: Date;
   role?: RoleType;
-
-}
-
-export interface SignupResponseDto {
-  fullname: string;
-  email: string;
-  role: RoleType;
 }

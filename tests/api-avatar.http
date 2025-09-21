@@ -1,0 +1,22 @@
+
+### Login with admin account
+POST http://localhost:4000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "Tranchinh@gmail.com",
+  "password": "password123"
+}
+
+
+### Upload Avatar
+
+PUT http://localhost:4000/api/v1/auth/upload-avatar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4NDQ3MTIxLCJleHAiOjE3NTg0NDg5MjF9.RBopSL-ZD2ZqbWgWNdC-YpCSGaq67eQ18wNnywevjvc
+
+
+Content-Disposition: form-data; name="avatar"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+
+

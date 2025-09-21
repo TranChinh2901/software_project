@@ -36,7 +36,7 @@ Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOi
 Content-Type: application/json
 ### Get current user profile (need token)
 GET http://localhost:4000/api/v1/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzUzMzgyLCJleHAiOjE3NTgzNTUxODJ9.x2HEAmnWwiWzEshcJSQE2T2DP_--3imAJ2SL-zNO36g
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4NDY3NDQ3LCJleHAiOjE3NTg0NjkyNDd9.Qlq_Lt2UYYbr9BS6BCB1oa2_DX6RwkrQ4ES4iaDW5ps
 
 ### Update profile
 PUT http://localhost:4000/api/v1/auth/profile
@@ -66,7 +66,8 @@ GET http://localhost:4000/api/v1/users/profile
 Authorization: Bearer YOUR_USER_JWT_TOKEN_HERE
 
 ### Test unauthorized access (should fail)
-GET http://localhost:4000/api/v1/users
+GET http://localhost:4000/api/v1/auth/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJUcmFuY2hpbmhAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4NDY5NjU1LCJleHAiOjE3NTg0NzE0NTV9.DFlkAi_Mdr02xVXpJihJpL-SDQ_tg5vioqL-QG_B-8M
 
 ### Logout
 POST http://localhost:4000/api/v1/auth/logout

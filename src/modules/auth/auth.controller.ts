@@ -272,6 +272,47 @@ class AuthController {
       data: null
     }).sendResponse(res);
   }
+
+  async uploadAvatar(req: AuthenticatedRequest, res: Response) {
+    const user = req.user;
+    
+    if (!user) {
+      throw new AppError(
+        ErrorMessages.USER.USER_NOT_FOUND,
+        HttpStatusCode.UNAUTHORIZED,
+        ErrorCode.UNAUTHORIZED
+      );
+    }
+    if (!req.file) {
+      throw new AppError(
+        'Avatar file is required',
+        HttpStatusCode.BAD_REQUEST,
+        ErrorCode.VALIDATION_ERROR
+      );
+    }
+
+    const avatarUrl = req.file.path;
+    const result = await authService.uploadAvatar(user.id, avatarUrl);
+    
+    return new AppResponse({
+      message: SuccessMessages.USER.AVATAR_UPLOADED,
+      statusCode: HttpStatusCode.OK,
+      data: result
+    }).sendResponse(res);
+  }
+
+  async getAllUsers(req: Request, res: Response) {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    
+    const result = await authService.getAllUsers(page, limit);
+    
+    return new AppResponse({
+      message: SuccessMessages.USER.USER_LIST_GET,
+      statusCode: HttpStatusCode.OK,
+      data: result
+    }).sendResponse(res);
+  }
 }
 
 export default new AuthController();

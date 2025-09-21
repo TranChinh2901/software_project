@@ -1,0 +1,57 @@
+### Get All Users API Test
+
+### 1. Get All Users (GET /api/auth/users) - Admin Only
+GET {{baseUrl}}/auth/users
+Authorization: Bearer {{adminToken}}
+
+### 2. Get All Users with Pagination
+GET {{baseUrl}}/auth/users?page=1&limit=5
+Authorization: Bearer {{adminToken}}
+
+### 3. Get All Users - Page 2
+GET {{baseUrl}}/auth/users?page=2&limit=10
+Authorization: Bearer {{adminToken}}
+
+### Variables
+@baseUrl = http://localhost:4000/api
+@adminToken = your_admin_token_here
+
+### Notes:
+# - Chỉ admin mới có quyền truy cập endpoint này
+# - Trả về danh sách user với pagination
+# - Không trả về password và thông tin nhạy cảm
+# - Default: page=1, limit=10
+# - Max limit=100 per request
+
+### Expected Response Format:
+# {
+#   "success": true,
+#   "message": "Users retrieved successfully",
+#   "statusCode": 200,
+#   "data": {
+#     "users": [
+#       {
+#         "id": 1,
+#         "fullname": "John Doe",
+#         "email": "john@example.com",
+#         "phone_number": "1234567890",
+#         "address": "123 Street",
+#         "avatar": "https://cloudinary.../avatar.jpg",
+#         "gender": "male",
+#         "date_of_birth": "1990-01-01",
+#         "is_verified": true,
+#         "role": "user",
+#         "created_at": "2025-09-21T10:00:00.000Z",
+#         "updated_at": "2025-09-21T10:00:00.000Z"
+#       }
+#     ],
+#     "pagination": {
+#       "currentPage": 1,
+#       "totalPages": 5,
+#       "totalItems": 50,
+#       "itemsPerPage": 10,
+#       "hasNextPage": true,
+#       "hasPrevPage": false
+#     }
+#   }
+# }

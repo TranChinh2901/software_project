@@ -7,7 +7,7 @@ export const CreateBlogSchema = Joi.object({
     "any.required": "Title is required",
   }),
   content: Joi.string().min(10).optional().messages({
-    "string.empty": "Content cannot be empty",
+    "string.empty": "Content cannot be empty  ",
     "string.min": "Content must be at least 10 characters long",
   }),
   status: Joi.string().valid("active", "inactive").optional().default("active").messages({
@@ -22,7 +22,7 @@ export const UpdateBlogSchema = Joi.object({
   content: Joi.string().min(10).optional().messages({
     "string.min": "Content must be at least 10 characters long",
   }),
-  
+
   status: Joi.string().valid("active", "inactive").optional().messages({
     "any.only": "Status must be either active or inactive",
   }),

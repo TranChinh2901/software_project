@@ -21,7 +21,8 @@ export const SuccessMessages = {
     USER_LIST_GET: "User list fetched",
     USER_ACTIVATED: "User activated",
     USER_DEACTIVATED: "User deactivated",
-    USER_ROLE_UPDATED: "User role updated"
+    USER_ROLE_UPDATED: "User role updated",
+    AVATAR_UPLOADED: "Avatar uploaded successfully"
   },
 
   PRODUCT: {
