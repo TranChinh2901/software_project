@@ -1,32 +1,34 @@
 # Express TypeScript Codebase
 
-Một khung dự án backend sử dụng Express với TypeScript, tích hợp migration.
+A backend project scaffold built with Express and TypeScript, integrated with database migrations.
 
-## Mục lục
+## Table of Contents
 
-- Giới thiệu
-- Công nghệ sử dụng
-- Cài đặt
-- Chạy dự án
+- Introduction
+- Technologié Used
+- Installation
+- Running the Project
 - Scripts
-- Cấu trúc thư mục
+- Project Structure
 - License
 
 # Fashion E-commerce Backend
 
-Backend API cho website bán quần áo sử dụng Express với TypeScript và TypeORM.
+Backend API for a clothing e-commerce website built with Express, TypeScript, and TypeORM.
 
-## Giới thiệu
+## Introduction
 
-Dự án backend cho website bán quần áo với các tính năng:
-- Quản lý sản phẩm (quần áo) với size, màu sắc, chất liệu
-- Quản lý thương hiệu (brands) và danh mục
-- Hệ thống giỏ hàng và đặt hàng  
-- Đánh giá sản phẩm
+This backend project powers a clothing e-commerce website with the
+following features:
+
+- Product management (clothing) with size, color, and material options
+- Brand and category management
+- Shopping cảt and order system 
+- Product reviews
 - Authentication & Authorization
 - Phân lớp Controller - Service - Entity rõ ràng
 
-## Công nghệ sử dụng
+## Technologies Used
 
 ### Backend:
 - **Node.js** - Runtime environment
@@ -42,66 +44,68 @@ Dự án backend cho website bán quần áo với các tính năng:
 ### Database:
 - **MySQL** - Relational database
 
-## Cài đặt
+## Installation
 
-Yêu cầu: Node.js >= 22.16.0, đã cài MySQL
-
-1. Clone dự án:
+Requirements: Node.js >= 22.16.0, MySQL installed
+ 
+1. Clone the repo:
 
 ## git clone https://github.com/TranChinh2901/software_project
 ## cd software_project
 
-2. Cài dependencies:
+2. Install dependencies:
 
 npm install
 
-3. Tạo file .env:
+3. Create the .env file:
 
 cp .env.example .env
 
-Cập nhật thông tin kết nối DB, PORT, JWT,... trong file .env
+Update the database connection details DB, PORT, JWT,... ínide file 
+.env
 
-## Chạy dự án
+## Running the project
 
-1. Chạy migration để tạo bảng:
+1. Run migrations to create tables:
 
 npm run migration:run
 
-2. Chạy ở môi trường phát triển:
+2. Run in develop mode:
 
 npm run dev
 
-3. Tạo bảng mới trong từ Entity dùng migration: (thay tên file, viết liền không dấu, không kí tự đặc biệt)
+3. Generate a new migration file from an Entity (replace the filename, no accents or special characters):
+
 npm run migration:generate -- src/migrations/tenFile
 
 ## Scripts
 
-| Lệnh                                 | Mô tả                                 |
+| Command                                 | Description                                 |
 |--------------------------------------|----------------------------------------|
-| npm run dev                          | Chạy server với ts-node-dev           |
-| npm run migration:run                | Chạy migration tạo bảng DB            |
-| npm run migration:generate -- src/migrations/tenFile   | Tạo file migration mới. Thay tên file viết liền không dấu, không kí tự đặc biệt             |
+| npm run dev                          | Start the server with ts-node-dev           |
+| npm run migration:run                | Run migrations to create database tables            |
+| npm run migration:generate -- src/migrations/tenFile   | Generate a new migration file (replace filename with no accents or special characters)             |
 
-## Cấu trúc thư mục
+## Project Structure
 ```bash
 src/
-  ├── common/                 // Định nghĩa response trả về (gồm error, success)
-  ├── config/                 // Cấu hình ứng dụng, DB, load env, load entity dùng cho khởi tạo DB
-  ├── constants/             // Định nghĩa hằng số dùng toàn app: error-code, message, status-code,...
-  ├── database/               // Khởi tạo kết nối DB từ DB config
-  ├── helpers/               // Hàm hỗ trợ
-  ├── middlewares/           // Middleware custom
-  ├── routes/                // Định nghĩa route
-  ├── migrations/             // File migration tạo bảng trong DB
-  ├── modules/              // Các module trong dự án: users, auth,...
-  ├── utils/                 // Hàm tiện ích
-main.ts                   // File chính: chạy app, middleware,...
+  ├── common/                 // Defines response structures (error, success)
+  ├── config/                 // Application and DB configuration; loads env & entities for DB initialization
+  ├── constants/             // App-wide constants: error codes, messages, status codes, etc.
+  ├── database/               // Database connection initialization
+  ├── helpers/               // Helper functions
+  ├── middlewares/           // customs middleware 
+  ├── routes/                // Route definition
+  ├── migrations/             // File migration to create DB tables
+  ├── modules/              // Modules in project: users, auth,...
+  ├── utils/                 // Utility functions
+main.ts                   // Entry point: app startup, middleware,...
 ```
 
 ## License
 
-Dự án được cấp phép theo MIT License.
+This project is licensed under the MIT License.
 
-## Tác giả
+## Author
 
 -Tranchinh2901

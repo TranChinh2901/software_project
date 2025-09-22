@@ -16,6 +16,9 @@ const avatarStorage = new CloudinaryStorage({
   } as any
 });
 
+
+
+// Cấu hình Cloudinary Storage cho blog images
 const blogImageStorage = new CloudinaryStorage({
   cloudinary,
   params: {
@@ -41,7 +44,7 @@ const categoryImageStorage = new CloudinaryStorage({
 
 });
 
-const brandImageStorage = new CloudinaryStorage({
+const brandLogoStorage = new CloudinaryStorage({
    cloudinary,
   params: {
     folder: 'brand-images',
@@ -72,6 +75,14 @@ export const uploadAvatar = multer({
   fileFilter,
   limits: {
     fileSize: 2 * 1024 * 1024 // 2MB
+  }
+});
+
+export const uploadBrandLogo = multer({
+  storage: brandLogoStorage,
+  fileFilter,
+  limits: {
+    fileSize: 3 * 1024 * 1024 // 3MB
   }
 });
 

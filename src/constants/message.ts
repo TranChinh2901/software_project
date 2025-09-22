@@ -55,13 +55,14 @@ export const SuccessMessages = {
   },
 
   BRAND: {
-    BRAND_CREATED: "Brand created",
-    BRAND_UPDATED: "Brand updated",
-    BRAND_DELETED: "Brand deleted",
-    BRAND_GET: "Brand fetched",
-    BRAND_LIST_GET: "Brand list fetched",
-    BRAND_ACTIVATED: "Brand activated",
-    BRAND_DEACTIVATED: "Brand deactivated"
+    BRAND_CREATED: "Brand created successfully",
+    BRAND_UPDATED: "Brand updated successfully",
+    BRAND_DELETED: "Brand deleted successfully",
+    BRAND_GET: "Brand fetched successfully",
+    BRAND_LIST_GET: "Brand list fetched successfully",
+    BRAND_LIST_BY_ID: "Brand list by ID fetched successfully",
+    BRAND_ACTIVATED: "Brand activated successfully",
+    BRAND_DEACTIVATED: "Brand deactivated successfully"
   },
 
   ORDER: {
@@ -221,7 +222,13 @@ export const ErrorMessages = {
   BRAND: {
     BRAND_NOT_FOUND: "Brand not found",
     BRAND_ALREADY_EXISTS: "Brand already exists",
-    BRAND_IN_USE: "Brand in use"
+    BRAND_NAME_ALREADY_EXISTS: "Brand name already exists",
+    BRAND_IN_USE: "Brand in use",
+    CREATE_BRAND_FAILED: "Failed to create brand",
+    FAILED_TO_FETCH_BRAND: "Failed to fetch brand",
+    FAILED_UPDATE_BRAND: "Failed to update brand",
+    FAILED_TO_FETCH_BRAND_BY_ID: "Failed to fetch brand by ID",
+    FAILED_DELETE_BRAND: "Failed to delete brand"
   },
 
   ORDER: {

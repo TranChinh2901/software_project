@@ -1,9 +1,8 @@
 
 export interface CreateBrandDto {
-  name_brand?: string;
-  logo_url?: string;
+  name_brand: string;
+  logo_url?: string; 
   description_brand?: string;
-
 }
 
 export interface UpdateBrandDto {
@@ -12,7 +11,6 @@ export interface UpdateBrandDto {
   description_brand?: string;
   is_deleted?: boolean;
 }
-
 
 export interface BrandResponseDto {
   id: number;

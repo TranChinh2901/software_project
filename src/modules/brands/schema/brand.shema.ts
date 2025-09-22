@@ -7,8 +7,9 @@ export const CreateBrandSchema = Joi.object({
     "string.min": "Brand name must be at least 2 characters long",
     "any.required": "Brand name is required",
   }),
-  description_brand: Joi.string().min(10).optional().messages({
+  description_brand: Joi.string().min(3).optional().messages({
     "string.empty": "Description cannot be empty",
-    "string.min": "Description  must be at least 10 characters long",
+    "string.min": "Description must be at least 3 characters long",
   }),
 });
+

@@ -1,0 +1,39 @@
+POST http://localhost:4000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "user1@gmail.com",
+  "password": "password123"
+}
+
+### Create new brand (must create in postman)
+POST http://localhost:4000/api/v1/brands
+Content-Type: application/json
+# Authorization
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1ODU1MTc1OSwiZXhwIjoxNzU4NTUzNTU5fQ.8xGsWDCoLFstU0-6ueoaGXySMER9tNRfDueOAjAu0hk
+{
+  "name_brand": "Brand Name",
+  "description_brand": "Description of the brand"
+}
+
+### GET all brands
+GET http://localhost:4000/api/v1/brands
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1ODU1MTc1OSwiZXhwIjoxNzU4NTUzNTU5fQ.8xGsWDCoLFstU0-6ueoaGXySMER9tNRfDueOAjAu0hk
+
+### GET brand by id
+GET http://localhost:4000/api/v1/brands/1
+
+
+### Update brand
+PUT http://localhost:4000/api/v1/brands/1
+Content-Type: application/json
+# Authorization
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1ODU1MTc1OSwiZXhwIjoxNzU4NTUzNTU5fQ.8xGsWDCoLFstU0-6ueoaGXySMER9tNRfDueOAjAu0hk
+
+{
+  "name_brand": "Updated Brand Name",
+  "description_brand": "Updated description"
+}
+
+### Delete brand
+DELETE http://localhost:4000/api/v1/brands/2
