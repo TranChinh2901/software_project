@@ -5,14 +5,11 @@ import { requireAdmin, requireAuth, requireAnyRole } from "@/middlewares/auth.mi
 
 const router = express.Router();
 
-// Public routes - Anyone can view products
 router.get("/", asyncHandle(productController.getAll));
 router.get("/:id", asyncHandle(productController.getById));
 
-// User routes - Authenticated users can view detailed product info
 router.get("/:id/variants", requireAuth(), asyncHandle(productController.getVariants));
 
-// Admin routes - Only admins can manage products
 router.post("/", 
   requireAdmin(), 
   // validateBody(CreateProductSchema),
