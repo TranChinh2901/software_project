@@ -6,7 +6,7 @@ import authRouter from "@/routes/auth";
 import productRouter from "@/routes/products";
 import blogRouter from "@/routes/blogs"; 
 import { brandRoutes } from "@/routes/brands";
-import { categoryRoutes } from "@/routes/categories";
+import {categoryRoutes} from "@/routes/categories";
 
 const router = express.Router();
 const API_V1 = "/api/v1";

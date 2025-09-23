@@ -53,7 +53,6 @@ class BlogController {
         const updateData: UpdateBlogDto = req.body;
 
         const result = await blogService.updateBlog(id, updateData);
-
         return new AppResponse({
             message: SuccessMessages.BLOG.BLOG_UPDATED,
             statusCode: HttpStatusCode.OK,

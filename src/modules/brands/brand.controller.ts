@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { BrandService } from "./brand.service";
-import { CreateBrandDto } from "./dto/brand.dto";
+import brandService, { BrandService } from "./brand.service";
+import { CreateBrandDto, UpdateBrandDto } from "./dto/brand.dto";
 import { AppResponse } from "@/common/success.response";
 import { HttpStatusCode } from "@/constants/status-code";
 import { AppError } from "@/common/error.response";
@@ -8,14 +8,9 @@ import { ErrorCode } from "@/constants/error-code";
 import { SuccessMessages } from "@/constants/message";
 
 export class BrandController {
-  private brandService: BrandService;
-
-  constructor() {
-    this.brandService = new BrandService();
-  }
 
 
-  createBrand = async (req: Request, res: Response, next: NextFunction) => {
+ async createBrand(req: Request, res: Response, next: NextFunction)  {
     try {
       const { name_brand, description_brand } = req.body;
 
@@ -32,7 +27,7 @@ export class BrandController {
         logo_url
       };
 
-      const brand = await this.brandService.createBrand(createBrandDto);
+      const brand = await brandService.createBrand(createBrandDto);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_CREATED,
@@ -44,9 +39,9 @@ export class BrandController {
     }
   };
 
-  getAllBrands = async (req: Request, res: Response, next: NextFunction) => {
+ async getAllBrands(req: Request, res: Response, next: NextFunction){
     try {
-      const brands = await this.brandService.getAllBrands();
+      const brands = await brandService.getAllBrands();
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_LIST_GET,
@@ -58,7 +53,7 @@ export class BrandController {
     }
   };
 
-  getBrandById = async (req: Request, res: Response, next: NextFunction) => {
+async getBrandById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const brandId = parseInt(id);
@@ -71,7 +66,7 @@ export class BrandController {
         );
       }
 
-      const brand = await this.brandService.getBrandById(brandId);
+      const brand = await brandService.getBrandById(brandId);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_LIST_BY_ID,
@@ -83,7 +78,7 @@ export class BrandController {
     }
   };
 
-  updateBrand = async (req: Request, res: Response, next: NextFunction) => {
+  async updateBrand(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const brandId = parseInt(id);
@@ -105,14 +100,14 @@ export class BrandController {
         logo_url = logoFile.path;
       }
 
-      const updateBrandDto = {
+      const updateBrandDto: UpdateBrandDto = {
         name_brand,
         description_brand,
         is_deleted,
         ...(logo_url && { logo_url })
       };
 
-      const brand = await this.brandService.updateBrand(brandId, updateBrandDto);
+      const brand = await brandService.updateBrand(brandId, updateBrandDto);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_UPDATED,
@@ -124,7 +119,7 @@ export class BrandController {
     }
   };
 
-  deleteBrand = async (req: Request, res: Response, next: NextFunction) => {
+  async deleteBrand(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const brandId = parseInt(id);
@@ -136,7 +131,7 @@ export class BrandController {
           ErrorCode.INVALID_PARAMS
         );
       }
-      await this.brandService.deleteBrand(brandId);
+      await brandService.deleteBrand(brandId);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_DELETED,
@@ -148,3 +143,6 @@ export class BrandController {
     }
   };
 }
+
+
+export default new BrandController();

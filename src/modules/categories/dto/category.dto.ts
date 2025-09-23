@@ -9,6 +9,7 @@ export interface UpdateCategoryDto {
     name_category?: string;
     image_category?: string;
     description_category?: string;
+    brand_id?: number;
 }
 
 export interface CategoryResponseDto {

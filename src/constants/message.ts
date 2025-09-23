@@ -51,7 +51,8 @@ export const SuccessMessages = {
     CATEGORY_GET: "Category fetched",
     CATEGORY_LIST_GET: "Category list fetched",
     CATEGORY_ACTIVATED: "Category activated",
-    CATEGORY_DEACTIVATED: "Category deactivated"
+    CATEGORY_DEACTIVATED: "Category deactivated",
+    CATEGORY_LIST_BY_ID: "Category list by ID fetched successfully"
   },
 
   BRAND: {
