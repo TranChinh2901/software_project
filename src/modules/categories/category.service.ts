@@ -17,7 +17,7 @@ export class CategoryService {
         this.categoryRespository = AppDataSource.getRepository(Category);
         this.brandResponsitory = AppDataSource.getRepository(Brand);
     }
-    
+
     async createCategory(categoryData: CreateCategoryDto): Promise<CategoryResponseDto> {
         try {
             const checkBrand = await this.brandResponsitory.findOne({
@@ -25,14 +25,13 @@ export class CategoryService {
                     id: categoryData.brand_id,
                 },
             });
-            
             if (!checkBrand) {
                 throw new AppError(
                     ErrorMessages.BRAND.BRAND_NOT_FOUND,
                     HttpStatusCode.NOT_FOUND,
                     ErrorCode.BRAND_NOT_FOUND
                 )
-            }
+            };
             const newCategory = this.categoryRespository.create({
                 ...categoryData,
                 brand: checkBrand,
@@ -51,6 +50,21 @@ export class CategoryService {
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
                 ErrorCode.SERVER_ERROR,
                 error
+            )
+        }
+    }
+
+    async getAllCategories(): Promise<CategoryResponseDto[]> {
+        try {
+            const categories = await this.categoryRespository.find({
+                relations: ["brand"]
+            });
+            return CategoryMapper.toCategoryResponseDtoList(categories);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.CATEGORY.FAILED_TO_FETCH_CATEGORY,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR
             )
         }
     }

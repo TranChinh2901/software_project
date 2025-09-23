@@ -1,11 +1,12 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "@/config/database.config";
 import { Brand } from "./entity/brand.entity";
-import { CreateBrandDto, UpdateBrandDto } from "./dto/brand.dto";
+import { CreateBrandDto, UpdateBrandDto, BrandResponseDto } from "./dto/brand.dto";
 import { AppError } from "@/common/error.response";
 import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
 import { ErrorMessages } from "@/constants/message";
+import { BrandMapper } from "./brand.mapper";
 
 export class BrandService {
   private brandRepository: Repository<Brand>;
@@ -14,7 +15,7 @@ export class BrandService {
     this.brandRepository = AppDataSource.getRepository(Brand);
   }
 
-  async createBrand(createBrandDto: CreateBrandDto): Promise<Brand> {
+  async createBrand(createBrandDto: CreateBrandDto): Promise<BrandResponseDto> {
     try {
       const existingBrand = await this.brandRepository.findOne({
         where: { name_brand: createBrandDto.name_brand, is_deleted: false }
@@ -27,11 +28,10 @@ export class BrandService {
           ErrorCode.BRAND_ALREADY_EXISTS
         );
       }
+
       const brand = this.brandRepository.create(createBrandDto);
-    //   console.log("Brand created:", brand);
       const savedBrand = await this.brandRepository.save(brand);
-    //   console.log("Brand saved:", savedBrand);
-      return savedBrand;
+      return BrandMapper.toBrandResponseDto(savedBrand);
     } catch (error) {
       if (error instanceof AppError) {
         throw error;
@@ -44,12 +44,13 @@ export class BrandService {
     }
   }
 
-  async getAllBrands(): Promise<Brand[]> {
+  async getAllBrands(): Promise<BrandResponseDto[]> {
     try {
-      return await this.brandRepository.find({
+      const brands = await this.brandRepository.find({
         where: { is_deleted: false },
         order: { created_at: 'DESC' }
       });
+      return BrandMapper.toBrandResponseDtoList(brands);
     } catch (error) {
       throw new AppError(
         ErrorMessages.BRAND.FAILED_TO_FETCH_BRAND,
@@ -59,7 +60,7 @@ export class BrandService {
     }
   }
 
-  async getBrandById(id: number): Promise<Brand> {
+  async getBrandById(id: number): Promise<BrandResponseDto> {
     try {
       const brand = await this.brandRepository.findOne({
         where: { id, is_deleted: false }
@@ -73,7 +74,7 @@ export class BrandService {
         );
       }
 
-      return brand;
+      return BrandMapper.toBrandResponseDto(brand);
     } catch (error) {
       if (error instanceof AppError) {
         throw error;
@@ -86,9 +87,20 @@ export class BrandService {
     }
   }
 
-  async updateBrand(id: number, updateBrandDto: UpdateBrandDto): Promise<Brand> {
+  async updateBrand(id: number, updateBrandDto: UpdateBrandDto): Promise<BrandResponseDto> {
     try {
-      const brand = await this.getBrandById(id);
+      const brand = await this.brandRepository.findOne({
+        where: { id, is_deleted: false }
+      });
+
+      if (!brand) {
+        throw new AppError(
+          ErrorMessages.BRAND.BRAND_NOT_FOUND,
+          HttpStatusCode.NOT_FOUND,
+          ErrorCode.BRAND_NOT_FOUND
+        );
+      }
+
       if (updateBrandDto.name_brand && updateBrandDto.name_brand !== brand.name_brand) {
         const existingBrand = await this.brandRepository.findOne({
           where: { name_brand: updateBrandDto.name_brand, is_deleted: false }
@@ -104,7 +116,8 @@ export class BrandService {
       }
 
       Object.assign(brand, updateBrandDto);
-      return await this.brandRepository.save(brand);
+      const updatedBrand = await this.brandRepository.save(brand);
+      return BrandMapper.toBrandResponseDto(updatedBrand);
     } catch (error) {
       if (error instanceof AppError) {
         throw error;
@@ -119,7 +132,18 @@ export class BrandService {
 
   async deleteBrand(id: number): Promise<void> {
     try {
-      const brand = await this.getBrandById(id);
+      const brand = await this.brandRepository.findOne({
+        where: { id, is_deleted: false }
+      });
+
+      if (!brand) {
+        throw new AppError(
+          ErrorMessages.BRAND.BRAND_NOT_FOUND,
+          HttpStatusCode.NOT_FOUND,
+          ErrorCode.BRAND_NOT_FOUND
+        );
+      }
+
       brand.is_deleted = true;
       await this.brandRepository.save(brand);
     } catch (error) {

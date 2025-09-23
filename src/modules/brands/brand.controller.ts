@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { BrandService } from "./brand.service";
-import { BrandMapper } from "./brand.mapper";
 import { CreateBrandDto } from "./dto/brand.dto";
 import { AppResponse } from "@/common/success.response";
 import { HttpStatusCode } from "@/constants/status-code";
@@ -34,12 +33,11 @@ export class BrandController {
       };
 
       const brand = await this.brandService.createBrand(createBrandDto);
-      const brandResponse = BrandMapper.toBrandResponseDto(brand);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_CREATED,
         statusCode: HttpStatusCode.CREATED,
-        data: brandResponse
+        data: brand
       }).sendResponse(res);
     } catch (error) {
       next(error);
@@ -49,12 +47,11 @@ export class BrandController {
   getAllBrands = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const brands = await this.brandService.getAllBrands();
-      const brandsResponse = BrandMapper.toBrandResponseDtoList(brands);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_LIST_GET,
         statusCode: HttpStatusCode.OK,
-        data: brandsResponse
+        data: brands
       }).sendResponse(res);
     } catch (error) {
       next(error);
@@ -75,12 +72,11 @@ export class BrandController {
       }
 
       const brand = await this.brandService.getBrandById(brandId);
-      const brandResponse = BrandMapper.toBrandResponseDto(brand);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_LIST_BY_ID,
         statusCode: HttpStatusCode.OK,
-        data: brandResponse
+        data: brand
       }).sendResponse(res);
     } catch (error) {
       next(error);
@@ -117,12 +113,11 @@ export class BrandController {
       };
 
       const brand = await this.brandService.updateBrand(brandId, updateBrandDto);
-      const brandResponse = BrandMapper.toBrandResponseDto(brand);
 
       return new AppResponse({
         message: SuccessMessages.BRAND.BRAND_UPDATED,
         statusCode: HttpStatusCode.OK,
-        data: brandResponse
+        data: brand
       }).sendResponse(res);
     } catch (error) {
       next(error);

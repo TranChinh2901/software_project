@@ -101,3 +101,11 @@ export const uploadProductImage = multer({
     fileSize: 5 * 1024 * 1024 
   }
 });
+
+export const uploadCategoryImage = multer({
+  storage: categoryImageStorage,
+  fileFilter,
+  limits: {
+    fileSize: 3 * 1024 * 1024 // 3MB
+  }
+});
