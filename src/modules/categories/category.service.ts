@@ -1,0 +1,57 @@
+import { Repository } from "typeorm";
+import { Category } from "./entity/category.entity";
+import { AppDataSource } from "@/config/database.config";
+import { Brand } from "../brands/entity/brand.entity";
+import { CategoryResponseDto, CreateCategoryDto } from "./dto/category.dto";
+import { AppError } from "@/common/error.response";
+import { ErrorMessages } from "@/constants/message";
+import { HttpStatusCode } from "@/constants/status-code";
+import { ErrorCode } from "@/constants/error-code";
+import { CategoryMapper } from "./category.mapper";
+
+export class CategoryService {
+    private categoryRespository: Repository<Category>;
+    private brandResponsitory: Repository<Brand>;
+
+    constructor() {
+        this.categoryRespository = AppDataSource.getRepository(Category);
+        this.brandResponsitory = AppDataSource.getRepository(Brand);
+    }
+    
+    async createCategory(categoryData: CreateCategoryDto): Promise<CategoryResponseDto> {
+        try {
+            const checkBrand = await this.brandResponsitory.findOne({
+                where: {
+                    id: categoryData.brand_id,
+                },
+            });
+            
+            if (!checkBrand) {
+                throw new AppError(
+                    ErrorMessages.BRAND.BRAND_NOT_FOUND,
+                    HttpStatusCode.NOT_FOUND,
+                    ErrorCode.BRAND_NOT_FOUND
+                )
+            }
+            const newCategory = this.categoryRespository.create({
+                ...categoryData,
+                brand: checkBrand,
+            });
+            const savedCategory = await this.categoryRespository.save(newCategory);
+            const categoryWithBrand = await this.categoryRespository.findOne({
+                where: {
+                    id: savedCategory.id,
+                }, 
+                relations: ["brand"],
+            });
+            return CategoryMapper.toCategoryResponseDto(categoryWithBrand!);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.CATEGORY.CREATE_CATEGORY_FAILED,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.SERVER_ERROR,
+                error
+            )
+        }
+    }
+}

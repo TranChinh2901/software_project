@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Brand } from "@/modules/brands/entity/brand.entity";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 
 @Entity('categories')
 export class Category {
@@ -17,4 +18,10 @@ export class Category {
 
   @UpdateDateColumn()
   updated_at!: Date;
+ 
+
+    @ManyToOne(() => Brand)
+    @JoinColumn({ name: 'brand_id' })
+    brand!: Brand;
+
 }

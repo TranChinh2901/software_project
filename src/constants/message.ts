@@ -216,7 +216,12 @@ export const ErrorMessages = {
   CATEGORY: {
     CATEGORY_NOT_FOUND: "Category not found",
     CATEGORY_ALREADY_EXISTS: "Category already exists",
-    CATEGORY_IN_USE: "Category in use"
+    CATEGORY_IN_USE: "Category in use",
+    CREATE_CATEGORY_FAILED: "Failed to create category",
+    FAILED_TO_FETCH_CATEGORY: "Failed to fetch category",
+    FAILED_UPDATE_CATEGORY: "Failed to update category",
+    FAILED_TO_FETCH_CATEGORY_BY_ID: "Failed to fetch category by ID",
+    FAILED_DELETE_CATEGORY: "Failed to delete category"
   },
 
   BRAND: {
