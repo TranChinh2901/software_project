@@ -12,7 +12,6 @@ export class Cart {
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
 
-  // Relations
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user!: User;
