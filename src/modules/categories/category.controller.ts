@@ -2,7 +2,7 @@ import { ErrorCode } from '@/constants/error-code';
 import { AppError } from '@/common/error.response';
 import { Request, Response, NextFunction } from "express";
 import categoryService, { CategoryService } from "./category.service";
-import { CreateCategoryDto } from "./dto/category.dto";
+import { CreateCategoryDto, UpdateCategoryDto } from "./dto/category.dto";
 import { AppResponse } from "@/common/success.response";
 import { HttpStatusCode } from "@/constants/status-code";
 import { SuccessMessages } from "@/constants/message";
@@ -91,7 +91,19 @@ export class CategoryController {
             if(imageFile) {
                 image_category = imageFile.path;
             }
-            // const updateCategory
+            const updateCategory: UpdateCategoryDto = {
+                name_category,
+                description_category,
+                image_category,
+                brand_id: brand_id ? parseInt(brand_id) : undefined
+            }
+            const category = await categoryService.updateCategory(categoryId, updateCategory);
+            return new AppResponse({
+                message: SuccessMessages.CATEGORY.CATEGORY_UPDATED,
+                statusCode: HttpStatusCode.OK,
+                data: category
+            }).sendResponse(res);
+
         } catch (error) {
             next(error);
         }

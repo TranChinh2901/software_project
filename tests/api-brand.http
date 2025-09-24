@@ -1,8 +1,9 @@
+
 POST http://localhost:4000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "user1@gmail.com",
+  "email": "admin@gmail.com",
   "password": "password123"
 }
 
@@ -37,3 +38,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiO
 
 ### Delete brand
 DELETE http://localhost:4000/api/v1/brands/2
+# Authorization
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg3MjIwMjMsImV4cCI6MTc1ODcyMzgyM30.2rCXJQfp1-lk9q1oIl5O6cM3RiGW8UG8BWjWnEFUORE

@@ -23,6 +23,7 @@ export class CategoryService {
             const checkBrand = await this.brandResponsitory.findOne({
                 where: {
                     id: categoryData.brand_id,
+                    is_deleted: false
                 },
             });
             if (!checkBrand) {
@@ -100,7 +101,6 @@ export class CategoryService {
                 where: { id },
                 relations: ["brand"]
             });
-
             if (!category) {
                 throw new AppError(
                     ErrorMessages.CATEGORY.CATEGORY_NOT_FOUND,
@@ -110,7 +110,9 @@ export class CategoryService {
             }
             if (updateData.brand_id) {
                 const newBrand = await this.brandResponsitory.findOne({
-                    where: { id: updateData.brand_id }
+                    where: { 
+                        id: updateData.brand_id
+                    }
                 });
 
                 if (!newBrand) {
@@ -128,12 +130,7 @@ export class CategoryService {
             
             const updatedCategory = await this.categoryRespository.save(category);
 
-            const categoryWithBrand = await this.categoryRespository.findOne({
-                where: { id: updatedCategory.id },
-                relations: ["brand"]
-            });
-
-            return CategoryMapper.toCategoryResponseDto(categoryWithBrand!);
+            return CategoryMapper.toCategoryResponseDto(updatedCategory);
 
         } catch (error) {
             if (error instanceof AppError) {
@@ -145,6 +142,30 @@ export class CategoryService {
                 ErrorCode.SERVER_ERROR,
                 error
             );
+        }
+    }
+
+    async deleteCategory(id: number): Promise<void> {
+        try {
+           const category = await this.categoryRespository.findOne({
+            where: {
+                id
+            }
+           });
+           if(!category) {
+             throw new AppError(
+                ErrorMessages.CATEGORY.CATEGORY_NOT_FOUND,
+                HttpStatusCode.NOT_FOUND,
+                ErrorCode.CATEGORY_NOT_FOUND
+             )
+           }
+           await this.categoryRespository.remove(category);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.CATEGORY.FAILED_DELETE_CATEGORY,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR
+            )
         }
     }
 }

@@ -15,10 +15,9 @@ export class Category {
   @Column({ type: 'text', nullable: true })
   description_category?: string;
 
-
-  @UpdateDateColumn()
-  updated_at!: Date;
- 
+  
+    @UpdateDateColumn()
+    updated_at!: Date;
 
     @ManyToOne(() => Brand)
     @JoinColumn({ name: 'brand_id' })

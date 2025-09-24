@@ -34,5 +34,11 @@ const categoryController = new CategoryController();
 
     router.get("/", categoryController.getAllCategories);
     router.get("/:id", categoryController.getCategoryById);
+    router.put("/:id", 
+        requireAuth(),
+        uploadCategoryImage.single("image_category"),
+        validateBody(CategorySchema),
+        categoryController.updateCategory
+    )
 
 export { router as categoryRoutes };
