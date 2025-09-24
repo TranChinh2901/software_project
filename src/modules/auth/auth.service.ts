@@ -27,7 +27,7 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
     const user = await this.userRepository.findOne({
-      where: { email, is_deleted: false }
+      where: { email }
     });
 
     if (!user) {
@@ -88,7 +88,7 @@ export class AuthService {
       date_of_birth,
       role: role || RoleType.USER,
       is_verified: false,
-      is_deleted: false
+     
     });
     const savedUser = await this.userRepository.save(newUser);
     const tokens = this.generateToken(savedUser);
@@ -177,11 +177,10 @@ export class AuthService {
 
   async getAllUsers(page: number = 1, limit: number = 10) {
     const validPage = Math.max(1, page);
-    const validLimit = Math.min(100, Math.max(1, limit)); // max 100 
+    const validLimit = Math.min(100, Math.max(1, limit)); 
     const skip = (validPage - 1) * validLimit;
 
     const [users, total] = await this.userRepository.findAndCount({
-      where: { is_deleted: false },
       select: [
         'id', 
         'fullname', 
@@ -228,7 +227,7 @@ export class AuthService {
   }
   async getUserById(id: number) {
     const user = await this.userRepository.findOne({
-      where: { id, is_deleted: false }
+      where: { id }
     });
 
     if (!user) {
@@ -255,12 +254,9 @@ export class AuthService {
     };
   }
 
-
-
-
   async updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
     const user = await this.userRepository.findOne({
-      where: { id: userId, is_deleted: false }
+      where: { id: userId }
     });
 
     if (!user) {
@@ -270,11 +266,9 @@ export class AuthService {
         ErrorCode.USER_NOT_FOUND
       );
     }
-
-    // Check if phone number is being updated and already exists
     if (updateProfileDto.phone_number && updateProfileDto.phone_number !== user.phone_number) {
       const existingUser = await this.userRepository.findOne({
-        where: { phone_number: updateProfileDto.phone_number, is_deleted: false }
+        where: { phone_number: updateProfileDto.phone_number }
       });
 
       if (existingUser) {
@@ -285,7 +279,6 @@ export class AuthService {
         );
       }
     }
-
     await this.userRepository.update(userId, updateProfileDto);
 
     const updatedUser = await this.userRepository.findOne({
@@ -308,7 +301,7 @@ export class AuthService {
 
   async deleteAccount(userId: number) {
   const user = await this.userRepository.findOne({
-    where: { id: userId, is_deleted: false }
+    where: { id: userId }
   });
   
   if (!user) {
@@ -328,7 +321,7 @@ export class AuthService {
 
   async uploadAvatar(userId: number, avatarUrl: string) {
     const user = await this.userRepository.findOne({
-      where: { id: userId, is_deleted: false }
+      where: { id: userId }
     });
 
     if (!user) {

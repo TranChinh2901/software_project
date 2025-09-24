@@ -91,7 +91,7 @@ async getBrandById(req: Request, res: Response, next: NextFunction) {
         );
       }
 
-      const { name_brand, description_brand, is_deleted } = req.body;
+      const { name_brand, description_brand } = req.body;
 
       const logoFile = req.file;
       let logo_url: string | undefined;
@@ -103,7 +103,6 @@ async getBrandById(req: Request, res: Response, next: NextFunction) {
       const updateBrandDto: UpdateBrandDto = {
         name_brand,
         description_brand,
-        is_deleted,
         ...(logo_url && { logo_url })
       };
 

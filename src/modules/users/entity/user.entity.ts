@@ -39,8 +39,8 @@ export class User {
   @Column({ type: 'enum', enum: RoleType, default: RoleType.USER })
   role!: RoleType;
 
-  @Column({ type: 'boolean', default: false })
-  is_deleted!: boolean;
+  // @Column({ type: 'boolean', default: false })
+  // is_deleted!: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;

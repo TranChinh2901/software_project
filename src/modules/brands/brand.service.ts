@@ -18,7 +18,7 @@ export class BrandService {
   async createBrand(createBrandDto: CreateBrandDto): Promise<BrandResponseDto> {
     try {
       const existingBrand = await this.brandRepository.findOne({
-        where: { name_brand: createBrandDto.name_brand, is_deleted: false }
+        where: { name_brand: createBrandDto.name_brand }
       });
 
       if (existingBrand) {
@@ -47,7 +47,6 @@ export class BrandService {
   async getAllBrands(): Promise<BrandResponseDto[]> {
     try {
       const brands = await this.brandRepository.find({
-        where: { is_deleted: false },
         order: { created_at: 'DESC' }
       });
       return BrandMapper.toBrandResponseDtoList(brands);
@@ -63,7 +62,7 @@ export class BrandService {
   async getBrandById(id: number): Promise<BrandResponseDto> {
     try {
       const brand = await this.brandRepository.findOne({
-        where: { id, is_deleted: false }
+        where: { id }
       });
 
       if (!brand) {
@@ -90,7 +89,7 @@ export class BrandService {
   async updateBrand(id: number, updateBrandDto: UpdateBrandDto): Promise<BrandResponseDto> {
     try {
       const brand = await this.brandRepository.findOne({
-        where: { id, is_deleted: false }
+        where: { id }
       });
 
       if (!brand) {
@@ -103,7 +102,7 @@ export class BrandService {
 
       if (updateBrandDto.name_brand && updateBrandDto.name_brand !== brand.name_brand) {
         const existingBrand = await this.brandRepository.findOne({
-          where: { name_brand: updateBrandDto.name_brand, is_deleted: false }
+          where: { name_brand: updateBrandDto.name_brand }
         });
 
         if (existingBrand) {
@@ -133,7 +132,7 @@ export class BrandService {
   async deleteBrand(id: number): Promise<void> {
     try {
       const brand = await this.brandRepository.findOne({
-        where: { id, is_deleted: false }
+        where: { id }
       });
 
       if (!brand) {
@@ -144,8 +143,7 @@ export class BrandService {
         );
       }
 
-      brand.is_deleted = true;
-      await this.brandRepository.save(brand);
+      await this.brandRepository.remove(brand);
     } catch (error) {
       if (error instanceof AppError) {
         throw error;

@@ -14,8 +14,8 @@ export class Brand {
   @Column('longtext', { nullable: true })
   description_brand?: string;
 
-  @Column({ type: 'boolean', default: false })
-  is_deleted!: boolean;
+  // @Column({ type: 'boolean', default: false })
+  // is_deleted!: boolean;
 
   @CreateDateColumn()
   created_at!: Date;

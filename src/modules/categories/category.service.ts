@@ -22,8 +22,7 @@ export class CategoryService {
         try {
             const checkBrand = await this.brandResponsitory.findOne({
                 where: {
-                    id: categoryData.brand_id,
-                    is_deleted: false
+                    id: categoryData.brand_id
                 },
             });
             if (!checkBrand) {
@@ -58,7 +57,8 @@ export class CategoryService {
     async getAllCategories(): Promise<CategoryResponseDto[]> {
         try {
             const categories = await this.categoryRespository.find({
-                relations: ["brand"]
+                relations: ["brand"],
+                order: { updated_at: 'DESC' }
             });
             return CategoryMapper.toCategoryResponseDtoList(categories);
         } catch (error) {
@@ -66,9 +66,10 @@ export class CategoryService {
                 ErrorMessages.CATEGORY.FAILED_TO_FETCH_CATEGORY,
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
                 ErrorCode.INTERNAL_SERVER_ERROR
-            )
+            );
         }
     }
+
     async getCategoryById(id: number): Promise<CategoryResponseDto> {
         try {
             const category = await this.categoryRespository.findOne({
