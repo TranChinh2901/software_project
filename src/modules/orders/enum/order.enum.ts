@@ -25,14 +25,12 @@ export enum CancelOrderStatus {
     REFUNDED = 'refunded'
 }
 
-
 export enum TransactionStatus {
   PENDING = 'pending',
   SUCCESS = 'success',
   FAILED = 'failed',
   REFUNDED = 'refunded'
 }
-
 
 export enum VoucherType {
     ACTIVE = 'active',

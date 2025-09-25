@@ -27,4 +27,6 @@ export class Voucher {
 
   @Column({ type: 'int', default: 0 })
   quantity!: number;
+
+
 }

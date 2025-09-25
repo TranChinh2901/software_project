@@ -102,7 +102,8 @@ export const SuccessMessages = {
     VOUCHER_APPLIED: "Voucher applied",
     VOUCHER_REMOVED: "Voucher removed",
     VOUCHER_GET: "Voucher fetched",
-    VOUCHER_LIST_GET: "Voucher list fetched"
+    VOUCHER_LIST_GET: "Voucher list fetched",
+    VOUCHER_LIST_BY_ID: "Voucher fetched by ID"
   },
 
   REVIEW: {
@@ -271,7 +272,13 @@ export const ErrorMessages = {
     VOUCHER_ALREADY_USED: "Voucher already used",
     VOUCHER_INACTIVE: "Voucher inactive",
     VOUCHER_NOT_APPLICABLE: "Voucher not applicable",
-    VOUCHER_LIMIT_EXCEEDED: "Voucher limit exceeded"
+    VOUCHER_LIMIT_EXCEEDED: "Voucher limit exceeded",
+    VOUCHER_CODE_ALREADY_EXISTS: "Voucher code already exists",
+    CREATE_VOUCHER_FAILED: "Failed to create voucher",
+    FAILED_TO_FETCH_VOUCHER: "Failed to fetch vouchers",
+    FAILED_UPDATE_VOUCHER: "Failed to update voucher",
+    FAILED_TO_FETCH_VOUCHER_BY_ID: "Failed to fetch voucher by ID",
+    FAILED_DELETE_VOUCHER: "Failed to delete voucher"
   },
 
   REVIEW: {
