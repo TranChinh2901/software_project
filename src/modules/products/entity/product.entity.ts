@@ -31,6 +31,9 @@ export class Product {
   @Column("longtext", { nullable: true })
   meta_description?: string;
 
+ @Column({ nullable: true })
+  image_product?: string;
+
   @Column({ type: "enum", enum: ProductType, default: ProductType.ACTIVE })
   status!: ProductType;
 

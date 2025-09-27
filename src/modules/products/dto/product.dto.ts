@@ -1,57 +1,50 @@
-import { Product } from "@/modules/products/entity/product.entity";
+
+import { ProductType } from "../enum/product.enum";
 
 export interface CreateProductDto {
-  name: string;
-  description: string;
+  name_product: string;
   price: number;
-  sale_price?: number;
+  origin_price?: number;
+  small_description: string;
+  meta_description: string;
+  image_product?: string;
+  status: ProductType,
   stock_quantity: number;
   category_id: number;
   brand_id: number;
-  images?: string[];
-  sizes?: string[];
-  colors?: string[];
-  material?: string;
-  gender?: string;
 }
 
 export interface UpdateProductDto {
-  name?: string;
-  description?: string;
-  price?: number;
-  sale_price?: number;
-  stock_quantity?: number;
-  category_id?: number;
-  brand_id?: number;
-  images?: string[];
-  sizes?: string[];
-  colors?: string[];
-  material?: string;
-  gender?: string;
-  is_active?: boolean;
+  name_product: string;
+  price: number;
+  origin_price?: number;
+  small_description: string;
+  meta_description: string;
+  image_product?: string;
+  status: ProductType,
+  stock_quantity: number;
+  category_id: number;
+  brand_id: number;
 }
 
 export interface ProductResponseDto {
   id: number;
-  name: string;
-  description: string;
+  name_product: string;
   price: number;
-  sale_price?: number;
-  stock_quantity: number;
-  images?: string[];
-  sizes?: string[];
-  colors?: string[];
-  material?: string;
-  gender?: string;
+  origin_price?: number;
+  small_description?: string;
+  meta_description?: string;
+  image_product?: string;
+  status: ProductType,
+  stock_quantity?: number;
   category: {
     id: number;
-    name: string;
+    name_category: string;
   };
-  brand: {
+  brand?: {
     id: number;
-    name: string;
+    name_brand: string;
   };
-  is_active: boolean;
   created_at: Date;
   updated_at: Date;
 }
