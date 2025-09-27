@@ -18,41 +18,41 @@ export class CategoryService {
         this.brandResponsitory = AppDataSource.getRepository(Brand);
     }
 
-    async createCategory(categoryData: CreateCategoryDto): Promise<CategoryResponseDto> {
-        try {
-            const checkBrand = await this.brandResponsitory.findOne({
-                where: {
-                    id: categoryData.brand_id
-                },
-            });
-            if (!checkBrand) {
+        async createCategory(categoryData: CreateCategoryDto): Promise<CategoryResponseDto> {
+            try {
+                const checkBrand = await this.brandResponsitory.findOne({
+                    where: {
+                        id: categoryData.brand_id
+                    },
+                });
+                if (!checkBrand) {
+                    throw new AppError(
+                        ErrorMessages.BRAND.BRAND_NOT_FOUND,
+                        HttpStatusCode.NOT_FOUND,
+                        ErrorCode.BRAND_NOT_FOUND
+                    )
+                };
+                const newCategory = this.categoryRespository.create({
+                    ...categoryData,
+                    brand: checkBrand,
+                });
+                const savedCategory = await this.categoryRespository.save(newCategory);
+                const categoryWithBrand = await this.categoryRespository.findOne({
+                    where: {
+                        id: savedCategory.id,
+                    }, 
+                    relations: ["brand"],
+                });
+                return CategoryMapper.toCategoryResponseDto(categoryWithBrand!);
+            } catch (error) {
                 throw new AppError(
-                    ErrorMessages.BRAND.BRAND_NOT_FOUND,
-                    HttpStatusCode.NOT_FOUND,
-                    ErrorCode.BRAND_NOT_FOUND
+                    ErrorMessages.CATEGORY.CREATE_CATEGORY_FAILED,
+                    HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    ErrorCode.SERVER_ERROR,
+                    error
                 )
-            };
-            const newCategory = this.categoryRespository.create({
-                ...categoryData,
-                brand: checkBrand,
-            });
-            const savedCategory = await this.categoryRespository.save(newCategory);
-            const categoryWithBrand = await this.categoryRespository.findOne({
-                where: {
-                    id: savedCategory.id,
-                }, 
-                relations: ["brand"],
-            });
-            return CategoryMapper.toCategoryResponseDto(categoryWithBrand!);
-        } catch (error) {
-            throw new AppError(
-                ErrorMessages.CATEGORY.CREATE_CATEGORY_FAILED,
-                HttpStatusCode.INTERNAL_SERVER_ERROR,
-                ErrorCode.SERVER_ERROR,
-                error
-            )
+            }
         }
-    }
 
     async getAllCategories(): Promise<CategoryResponseDto[]> {
         try {

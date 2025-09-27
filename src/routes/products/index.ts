@@ -1,36 +1,17 @@
-import express from "express";
+import { requireAuth } from "@/middlewares/auth.middleware";
+import { uploadProductImage } from "@/middlewares/upload.middleware";
+import { validateBody } from "@/middlewares/validate.middleware";
 import productController from "@/modules/products/product.controller";
-import { asyncHandle } from "@/utils/handle-error";
-import { requireAdmin, requireAuth, requireAnyRole } from "@/middlewares/auth.middleware";
-
+import { CreateProductSchema } from "@/modules/products/schema/product.schema";
+import express from "express";
 const router = express.Router();
 
-router.get("/", asyncHandle(productController.getAll));
-router.get("/:id", asyncHandle(productController.getById));
-
-router.get("/:id/variants", requireAuth(), asyncHandle(productController.getVariants));
-
 router.post("/", 
-  requireAdmin(), 
-  // validateBody(CreateProductSchema),
-  asyncHandle(productController.create)
-);
-
-router.put("/:id", 
-  requireAdmin(),
-  // validateBody(UpdateProductSchema), 
-  asyncHandle(productController.update)
-);
-
-router.delete("/:id", 
-  requireAdmin(), 
-  asyncHandle(productController.delete)
-);
-
-// Product images
-router.post("/:id/images", 
-  requireAdmin(),
-  asyncHandle(productController.uploadImages)
-);
+  requireAuth(),
+  uploadProductImage.single("image_product"), 
+  validateBody(CreateProductSchema),
+  productController.createProduct
+)
+router.get("/", productController.getAllProducts);
 
 export default router;

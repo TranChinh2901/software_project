@@ -203,7 +203,14 @@ export const ErrorMessages = {
     PRODUCT_ALREADY_EXISTS: "Product already exists",
     PRODUCT_OUT_OF_STOCK: "Out of stock",
     INSUFFICIENT_STOCK: "Insufficient stock",
-    PRODUCT_INACTIVE: "Product inactive"
+    PRODUCT_INACTIVE: "Product inactive",
+    CREATE_PRODUCT_FAILED: "Failed to create product",
+    UPDATE_PRODUCT_FAILED: "Failed to update product",
+    DELETE_PRODUCT_FAILED: "Failed to delete product",
+    FAILED_TO_FETCH_PRODUCT: "Failed to fetch products",
+    FAILED_UPDATE_PRODUCT: "Failed to update product",
+    FAILED_TO_FETCH_PRODUCT_BY_ID: "Failed to fetch product by ID",
+    FAILED_DELETE_PRODUCT: "Failed to delete product"
   },
 
   VARIANT: {

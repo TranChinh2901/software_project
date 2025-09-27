@@ -26,7 +26,7 @@ export class CategoryController {
                 image_category,
                 brand_id: parseInt(brand_id)
             };
-
+ 
             const category = await categoryService.createCategory(createCategoryDto);
 
             return new AppResponse({
