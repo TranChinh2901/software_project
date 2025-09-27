@@ -10,8 +10,8 @@ export class Voucher {
   @Column({ length: 50, unique: true })
   code!: string;
 
-  @Column('decimal', { precision: 5, scale: 2 })
-  discount_voucher!: number;
+@Column('decimal', { precision: 10, scale: 2 })
+discount_voucher!: number;
 
   @Column({ type: 'date' })
   expiry_date!: Date;

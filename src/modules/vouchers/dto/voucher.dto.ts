@@ -6,7 +6,6 @@ export interface CreateVoucherDto {
     expiry_date: Date;
     status?: VoucherType;
     min_order_value?: number;
-    max_discount?: number;
     quantity: number;
 }
 
@@ -16,7 +15,6 @@ export interface UpdateVoucherDto {
     expiry_date?: Date;
     status?: VoucherType;
     min_order_value?: number;
-    max_discount?: number;
     quantity?: number;
 }
 
@@ -27,6 +25,5 @@ export interface VoucherResponseDto {
     expiry_date: Date;
     status: VoucherType;
     min_order_value?: number;
-    max_discount?: number;
     quantity: number;
 }

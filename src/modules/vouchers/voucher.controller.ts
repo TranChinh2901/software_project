@@ -101,7 +101,6 @@ export class VoucherController {
                 ErrorCode.INVALID_PARAMS
             );
         }
-
         await voucherService.deleteVoucher(voucherId);
 
         return new AppResponse({
