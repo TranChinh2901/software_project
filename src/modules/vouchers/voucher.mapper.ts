@@ -10,7 +10,6 @@ export class VoucherMapper {
             expiry_date: voucher.expiry_date,
             status: voucher.status,
             min_order_value: voucher.min_order_value,
-            max_discount: voucher.max_discount,
             quantity: voucher.quantity
         }
     } 
