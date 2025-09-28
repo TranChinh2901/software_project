@@ -143,6 +143,15 @@ export const SuccessMessages = {
     GALLERY_GET: "Gallery fetched"
   },
 
+  COLORS: {
+    COLOR_CREATED: "Color created",
+    COLOR_UPDATED: "Color updated",
+    COLOR_DELETED: "Color deleted",
+    COLOR_GET: "Color fetched",
+    COLOR_LIST_GET: "Color list fetched",
+    COLOR_LIST_BY_ID: "Color fetched by ID"
+  },
+
   CANCEL: {
     CANCEL_REQUESTED: "Cancellation request submitted",
     CANCEL_APPROVED: "Cancellation approved",
@@ -247,6 +256,16 @@ export const ErrorMessages = {
     FAILED_DELETE_BRAND: "Failed to delete brand"
   },
 
+  COLORS: {
+    COLOR_NOT_FOUND: "Color not found",
+    COLOR_ALREADY_EXISTS: "Color already exists",
+    CREATE_COLOR_FAILED: "Failed to create color",
+    FAILED_TO_FETCH_COLORS: "Failed to fetch colors",
+    FAILED_TO_FETCH_COLOR_BY_ID: "Failed to fetch color by ID",
+    FAILED_TO_UPDATE_COLOR: "Failed to update color",
+    FAILED_TO_DELETE_COLOR: "Failed to delete color"
+  },
+
   ORDER: {
     ORDER_NOT_FOUND: "Order not found",
     ORDER_CANNOT_BE_CANCELLED: "Cannot cancel order",
@@ -348,3 +367,5 @@ export const ErrorMessages = {
     MAINTENANCE_MODE: "System under maintenance"
   }
 } as const;
+
+

@@ -10,7 +10,7 @@ import { ErrorCode } from "@/constants/error-code";
 export class ProductController {
   async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
-      const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, category_id, brand_id} = req.body;
+      const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id, brand_id} = req.body;
             const imageFile = req.file;
             let image_product: string | undefined;
             if (imageFile) {
@@ -25,6 +25,7 @@ export class ProductController {
               image_product,
               status,
               stock_quantity,
+              discount,
               category_id: parseInt(category_id),
               brand_id: parseInt(brand_id),
             }
@@ -82,7 +83,7 @@ export class ProductController {
             ErrorCode.INVALID_PARAMS
         )
       }
-       const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, category_id, brand_id} = req.body;
+       const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id, brand_id} = req.body;
        const imageFile = req.file;
         let image_product: string | undefined;
         if(imageFile) {
@@ -97,6 +98,7 @@ export class ProductController {
           image_product,
           status,
           stock_quantity,
+          discount,
           category_id: parseInt(category_id),
           brand_id: parseInt(brand_id),
         }

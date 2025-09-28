@@ -7,6 +7,7 @@ import productRouter from "@/routes/products";
 import blogRouter from "@/routes/blogs"; 
 import { brandRoutes } from "@/routes/brands";
 import {categoryRoutes} from "@/routes/categories";
+import colorRouter from "@/routes/colors";
 import voucherRouter from "@/routes/vouchers";
 
 const router = express.Router();
@@ -21,6 +22,8 @@ router.use(`${API_V1}/blogs`, blogRouter);
 router.use(`${API_V1}/brands`, brandRoutes);
 
 router.use(`${API_V1}/categories`, categoryRoutes);
+
+router.use(`${API_V1}/colors`, colorRouter);
 
 router.use(`${API_V1}/vouchers`, voucherRouter)
 

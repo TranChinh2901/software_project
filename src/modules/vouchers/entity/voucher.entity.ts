@@ -24,9 +24,6 @@ discount_voucher!: number;
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   min_order_value?: number;
 
-  // @Column('decimal', { precision: 10, scale: 2, nullable: true })
-  // max_discount?: number;
-
   @Column({ type: 'int', default: 0 })
   quantity!: number;
 

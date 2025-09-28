@@ -14,6 +14,7 @@ export class ProductMapper {
             image_product: product.image_product,
             status: product.status,
             stock_quantity: product.stock_quantity ?? undefined,
+            discount: product.discount ?? undefined,
             category: product.category ? {
                 id: product.category.id,
                 name_category: product.category.name_category,

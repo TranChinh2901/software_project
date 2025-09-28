@@ -75,4 +75,7 @@ export const ErrorCode = {
   
   SERVER_ERROR: "SERVER_ERROR",
   
+  COLOR_NOT_FOUND: "COLOR_NOT_FOUND",
+  COLOR_ALREADY_EXISTS: "COLOR_ALREADY_EXISTS",
+  
 } as const;

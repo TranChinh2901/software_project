@@ -10,6 +10,7 @@ export interface CreateProductDto {
   image_product?: string;
   status: ProductType,
   stock_quantity: number;
+  discount: number;
   category_id: number;
   brand_id: number;
 }
@@ -23,6 +24,7 @@ export interface UpdateProductDto {
   image_product?: string;
   status: ProductType,
   stock_quantity: number;
+  discount: number;
   category_id: number;
   brand_id: number;
 }
@@ -37,6 +39,7 @@ export interface ProductResponseDto {
   image_product?: string;
   status: ProductType,
   stock_quantity?: number;
+  discount?: number;
   category: {
     id: number;
     name_category: string;

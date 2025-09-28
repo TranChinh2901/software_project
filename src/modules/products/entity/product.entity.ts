@@ -40,6 +40,9 @@ export class Product {
   @Column({ type: "int", nullable: true })
   stock_quantity?: number;
 
+ @Column({ type: "int", nullable: true })
+  discount?: number;
+
   @ManyToOne(() => Category)
   @JoinColumn({ name: "category_id" })
   category!: Category;
