@@ -33,7 +33,8 @@ export const SuccessMessages = {
     PRODUCT_LIST_GET: "Product list fetched",
     PRODUCT_ACTIVATED: "Product activated",
     PRODUCT_DEACTIVATED: "Product deactivated",
-    PRODUCT_STOCK_UPDATED: "Stock updated"
+    PRODUCT_STOCK_UPDATED: "Stock updated",
+    PRODUCT_LIST_BY_ID: "Product list by ID fetched successfully"
   },
 
   VARIANT: {
@@ -210,7 +211,8 @@ export const ErrorMessages = {
     FAILED_TO_FETCH_PRODUCT: "Failed to fetch products",
     FAILED_UPDATE_PRODUCT: "Failed to update product",
     FAILED_TO_FETCH_PRODUCT_BY_ID: "Failed to fetch product by ID",
-    FAILED_DELETE_PRODUCT: "Failed to delete product"
+    FAILED_DELETE_PRODUCT: "Failed to delete product",
+    
   },
 
   VARIANT: {

@@ -16,7 +16,7 @@ export class Product {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ length: 255 })
+  @Column({ length: 255, unique: true })
   name_product!: string;
 
   @Column("decimal", { precision: 10, scale: 2 })

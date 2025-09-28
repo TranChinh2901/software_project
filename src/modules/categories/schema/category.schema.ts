@@ -10,10 +10,5 @@ export const CategorySchema = Joi.object({
         "string.empty": "Description cannot be empty",
         "string.min": "Description must be at least 3 characters long",
     }),
-    brand_id: Joi.number().integer().positive().required().messages({
-        "number.base": "Brand ID must be a number",
-        "number.integer": "Brand ID must be an integer",
-        "number.positive": "Brand ID must be a positive number",
-        "any.required": "Brand ID is required",
-    })
+ 
 })
