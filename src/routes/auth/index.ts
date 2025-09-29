@@ -11,7 +11,7 @@ const router = Router();
 
 // Public routes
 router.post('/register', 
-  validateBody(RegisterSchema), 
+  // validateBody(RegisterSchema), 
   asyncHandle(authController.register)
 );
 
