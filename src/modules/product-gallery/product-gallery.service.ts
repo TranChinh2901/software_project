@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { ProductGallery } from "./entity/product-gallery.entity";
 import { Product } from "../products/entity/product.entity";
 import { AppDataSource } from "@/config/database.config";
-import { CreateProductGalleryDto, ProductGalleryResponseDto } from "./dto/product-gallery.dto";
+import { CreateProductGalleryDto, ProductGalleryResponseDto, ProductGalleryGroupedResponseDto } from "./dto/product-gallery.dto";
 import { AppError } from "@/common/error.response";
 import { ErrorMessages } from "@/constants/message";
 import { HttpStatusCode } from "@/constants/status-code";
@@ -43,6 +43,83 @@ export class ProductGalleryService {
   return ProductGalleryMapper.toProductGalleryResponseDtoList(savedGalleries);
 }
 
+async getAllProductGalleries(): Promise<ProductGalleryResponseDto[]> {
+    try {
+    const galleries = await this.productGalleryRespository.find({
+      relations: ["product"]
+    });
+
+    const groups: Record<number, ProductGalleryGroupedResponseDto> = {};
+    galleries.forEach(g => {
+      const pid = g.product.id;
+      if (!groups[pid]) {
+        groups[pid] = {
+            id: g.id,
+          product_id: pid,
+          product: { id: g.product.id, name_product: g.product.name_product },
+          image_url: [g.image_url]
+        };
+      } else {
+        groups[pid].image_url.push(g.image_url);
+      }
+    });
+
+    return Object.values(groups) as any;
+    } catch (error) {
+        throw new AppError(
+            ErrorMessages.PRODUCT_GALLERY.FAILED_TO_FETCH_GALLERY,
+            HttpStatusCode.INTERNAL_SERVER_ERROR,
+            ErrorCode.SERVER_ERROR,
+        )
+    }
+}
+async deleteProductGallery(id: number): Promise<void> {
+    try {
+        const gallery = await this.productGalleryRespository.findOne({
+            where: { id }
+        })
+        if(!gallery) {
+            throw new AppError(
+                ErrorMessages.PRODUCT_GALLERY.PRODUCT_GALLERY_NOT_FOUND,
+                HttpStatusCode.NOT_FOUND,
+                ErrorCode.PRODUCT_GALLERY_NOT_FOUND
+            )
+        }
+  await this.productGalleryRespository.remove(gallery);
+  return;
+    } catch (error) {
+        throw new AppError(
+            ErrorMessages.PRODUCT_GALLERY.FAILED_DELETE_GALLERY,
+            HttpStatusCode.INTERNAL_SERVER_ERROR,
+            ErrorCode.SERVER_ERROR
+        )
+    }
+}
+
+async deleteByProductId(productId: number): Promise<void> {
+  try {
+    const galleries = await this.productGalleryRespository.find({
+      where: { product: { id: productId } },
+      relations: ["product"]
+    });
+    if (!galleries || galleries.length === 0) {
+      throw new AppError(
+        ErrorMessages.PRODUCT_GALLERY.PRODUCT_GALLERY_NOT_FOUND,
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.PRODUCT_GALLERY_NOT_FOUND
+      );
+    }
+    // remove all gallery rows for the product
+    await this.productGalleryRespository.remove(galleries);
+    return;
+  } catch (error) {
+    throw new AppError(
+      ErrorMessages.PRODUCT_GALLERY.FAILED_DELETE_GALLERY,
+      HttpStatusCode.INTERNAL_SERVER_ERROR,
+      ErrorCode.SERVER_ERROR
+    )
+  }
+}
 }
 
 export default new ProductGalleryService();

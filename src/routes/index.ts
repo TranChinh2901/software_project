@@ -26,7 +26,7 @@ router.use(`${API_V1}/categories`, categoryRoutes);
 
 router.use(`${API_V1}/colors`, colorRouter);
 
-router.use(`${API_V1}/vouchers`, voucherRouter)
+router.use(`${API_V1}/vouchers`, voucherRouter);
 
 router.use(`${API_V1}/product-gallery`, productGalleryRouter);
 

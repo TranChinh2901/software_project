@@ -17,3 +17,13 @@ export interface ProductGalleryResponseDto {
     name_product: string;
   }
 }
+
+export interface ProductGalleryGroupedResponseDto {
+  id: number;
+  product_id: number;
+  product: {
+    id: number;
+    name_product: string;
+  };
+  image_url: string[];
+}
