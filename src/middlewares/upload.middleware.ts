@@ -35,6 +35,14 @@ const productImageStorage = new CloudinaryStorage({
   } as any
 });
 
+const productGalleryImageStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'product-gallery-images',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp']
+  } as any
+});
+
 const categoryImageStorage = new CloudinaryStorage({
    cloudinary,
   params: {
@@ -101,6 +109,14 @@ export const uploadProductImage = multer({
     fileSize: 5 * 1024 * 1024 
   }
 });
+
+export const uploadProductGalleryImages = multer({
+  storage: productGalleryImageStorage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB per image
+  }
+})
 
 export const uploadCategoryImage = multer({
   storage: categoryImageStorage,

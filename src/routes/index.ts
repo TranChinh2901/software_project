@@ -9,6 +9,7 @@ import { brandRoutes } from "@/routes/brands";
 import {categoryRoutes} from "@/routes/categories";
 import colorRouter from "@/routes/colors";
 import voucherRouter from "@/routes/vouchers";
+import productGalleryRouter from "@/routes/product-gallery";
 
 const router = express.Router();
 const API_V1 = "/api/v1";
@@ -26,5 +27,7 @@ router.use(`${API_V1}/categories`, categoryRoutes);
 router.use(`${API_V1}/colors`, colorRouter);
 
 router.use(`${API_V1}/vouchers`, voucherRouter)
+
+router.use(`${API_V1}/product-gallery`, productGalleryRouter);
 
 export default router;

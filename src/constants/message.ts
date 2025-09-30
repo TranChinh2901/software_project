@@ -36,7 +36,13 @@ export const SuccessMessages = {
     PRODUCT_STOCK_UPDATED: "Stock updated",
     PRODUCT_LIST_BY_ID: "Product list by ID fetched successfully"
   },
-
+ PRODUCT_GALLERY: {
+    PRODUCT_GALLERY_CREATED: "Product gallery images added successfully",
+    PRODUCT_GALLERY_UPDATED: "Product gallery updated successfully",
+    PRODUCT_GALLERY_DELETED: "Product gallery images deleted successfully",
+    PRODUCT_GALLERY_GET: "Product gallery fetched successfully",
+    PRODUCT_GALLERY_LIST_GET: "Product gallery list fetched successfully"
+  },
   VARIANT: {
     VARIANT_CREATED: "Variant created",
     VARIANT_UPDATED: "Variant updated",
@@ -222,6 +228,15 @@ export const ErrorMessages = {
     FAILED_TO_FETCH_PRODUCT_BY_ID: "Failed to fetch product by ID",
     FAILED_DELETE_PRODUCT: "Failed to delete product",
     
+  },
+
+  PRODUCT_GALLERY: {
+    PRODUCT_GALLERY_NOT_FOUND: "Product gallery not found",
+    ADD_FAILED: "Failed to add images to product gallery",
+    REMOVE_FAILED: "Failed to remove images from product gallery",
+    UPDATE_FAILED: "Failed to update product gallery",
+    FAILED_TO_FETCH_GALLERY: "Failed to fetch product gallery",
+    FAILED_DELETE_GALLERY: "Failed to delete product gallery"
   },
 
   VARIANT: {
