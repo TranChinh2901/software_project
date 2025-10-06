@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Category } from "@/modules/categories/entity/category.entity";
+import { Product } from "@/modules/products/entity/product.entity";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('brands')
 export class Brand {
@@ -22,4 +24,12 @@ export class Brand {
 
   @UpdateDateColumn()
   updated_at!: Date;
+
+  // Relations
+  @OneToMany(() => Category, category => category.brand)
+  categories?: Category[];
+
+  // Products qua Category, không cần direct relation
+  // @OneToMany(() => Product, product => product.brand)
+  // products?: Product[];
 }

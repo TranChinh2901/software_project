@@ -95,31 +95,6 @@ async deleteProductGallery(id: number): Promise<void> {
         )
     }
 }
-
-async deleteByProductId(productId: number): Promise<void> {
-  try {
-    const galleries = await this.productGalleryRespository.find({
-      where: { product: { id: productId } },
-      relations: ["product"]
-    });
-    if (!galleries || galleries.length === 0) {
-      throw new AppError(
-        ErrorMessages.PRODUCT_GALLERY.PRODUCT_GALLERY_NOT_FOUND,
-        HttpStatusCode.NOT_FOUND,
-        ErrorCode.PRODUCT_GALLERY_NOT_FOUND
-      );
-    }
-    // remove all gallery rows for the product
-    await this.productGalleryRespository.remove(galleries);
-    return;
-  } catch (error) {
-    throw new AppError(
-      ErrorMessages.PRODUCT_GALLERY.FAILED_DELETE_GALLERY,
-      HttpStatusCode.INTERNAL_SERVER_ERROR,
-      ErrorCode.SERVER_ERROR
-    )
-  }
-}
 }
 
 export default new ProductGalleryService();

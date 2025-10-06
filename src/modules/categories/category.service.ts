@@ -149,9 +149,8 @@ export class CategoryService {
     async deleteCategory(id: number): Promise<void> {
         try {
            const category = await this.categoryRespository.findOne({
-            where: {
-                id
-            }
+            where: {id},
+            relations: ["brand", "products"]
            });
            if(!category) {
              throw new AppError(
@@ -160,12 +159,26 @@ export class CategoryService {
                 ErrorCode.CATEGORY_NOT_FOUND
              )
            }
+
+           // Kiểm tra xem category có đang được sử dụng bởi products không
+           if (category.products && category.products.length > 0) {
+            throw new AppError(
+                `Cannot delete category. It is being used by ${category.products.length} product(s). Please remove or reassign these products first.`,
+                HttpStatusCode.BAD_REQUEST,
+                ErrorCode.CATEGORY_IN_USE
+            );
+           }
+
            await this.categoryRespository.remove(category);
         } catch (error) {
+            if (error instanceof AppError) {
+                throw error;
+            }
             throw new AppError(
                 ErrorMessages.CATEGORY.FAILED_DELETE_CATEGORY,
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
-                ErrorCode.INTERNAL_SERVER_ERROR
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                error
             )
         }
     }

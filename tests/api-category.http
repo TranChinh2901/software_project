@@ -1,0 +1,39 @@
+
+### 1. Login with admin account
+POST http://localhost:4000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "password123"
+}
+
+### 2. Get all categories (to see existing IDs)
+GET http://localhost:4000/api/v1/categories
+
+### 3. Create a new category for testing delete
+POST http://localhost:4000/api/v1/categories
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTk3NjM4MDcsImV4cCI6MTc1OTc2NTYwN30.cV9HQ_0C7HWEgH50bY3TsOQSpQIRW4Jc3qSUv0g5L2s
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name_category"
+
+Test Delete Category
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description_category"
+
+This category is created for testing delete functionality
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="brand_id"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 4. Test delete category that has products (WILL FAIL with clear message)
+DELETE http://localhost:4000/api/v1/categories/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTk3NjI3NTYsImV4cCI6MTc1OTc2NDU1Nn0.PEKiynbuCcQ00JdorhNzbzxa-70-AqzsbFHiBRaQnWA
+
+### 5. Delete category ID 2 (should succeed if no products use it)
+DELETE http://localhost:4000/api/v1/categories/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTk3NjM4MDcsImV4cCI6MTc1OTc2NTYwN30.cV9HQ_0C7HWEgH50bY3TsOQSpQIRW4Jc3qSUv0g5L2s

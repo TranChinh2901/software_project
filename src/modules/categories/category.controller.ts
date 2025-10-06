@@ -108,7 +108,27 @@ export class CategoryController {
             next(error);
         }
     }
-    
+    async deleteCategory(req: Request, res: Response, next: NextFunction) {
+        try {
+            const {id} = req.params;
+            const categoryId = parseInt(id);
+            if(isNaN(categoryId)) {
+                throw new AppError(
+                    "Invalid category ID",
+                    HttpStatusCode.BAD_REQUEST,
+                    ErrorCode.INVALID_PARAMS
+                )
+            }
+            await categoryService.deleteCategory(categoryId);
+            return new AppResponse({
+                message: SuccessMessages.CATEGORY.CATEGORY_DELETED,
+                statusCode: HttpStatusCode.OK,
+                data: {id: categoryId}
+            }).sendResponse(res);
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 
