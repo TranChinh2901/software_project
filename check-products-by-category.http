@@ -1,5 +1,0 @@
-### Get products by category ID 1 to see which products are using this category
-GET http://localhost:4000/api/v1/products?category_id=1
-
-### Or get all products and check which ones have category_id = 1
-GET http://localhost:4000/api/v1/products
