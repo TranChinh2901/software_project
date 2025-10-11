@@ -100,7 +100,6 @@ export class ReviewController {
                     ErrorCode.INVALID_PARAMS
                 );
             }
-
             const updateData: UpdateReviewDto = req.body;
             const userId = req.user?.id!;
 
