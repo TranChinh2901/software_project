@@ -1,0 +1,64 @@
+### 1. Login to get token
+POST http://localhost:4000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "password123"
+}
+
+### 2. Create a review (requires authentication)
+POST http://localhost:4000/api/v1/reviews
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "rating": 5,
+  "comment": "Excellent product! Really satisfied with the quality.",
+  "product_id": 1
+}
+
+### 3. Get all reviews
+GET http://localhost:4000/api/v1/reviews
+
+### 4. Get reviews by product
+GET http://localhost:4000/api/v1/reviews/product/1
+
+### 5. Get review by ID
+GET http://localhost:4000/api/v1/reviews/1
+
+### 6. Update review (requires authentication + ownership)
+PUT http://localhost:4000/api/v1/reviews/1
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "rating": 4,
+  "comment": "Good product, updated my review."
+}
+
+### 7. Delete review (requires authentication + ownership)
+DELETE http://localhost:4000/api/v1/reviews/1
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 8. Test validation - Invalid rating
+POST http://localhost:4000/api/v1/reviews
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "rating": 6,
+  "comment": "This should fail",
+  "product_id": 1
+}
+
+### 9. Test duplicate review
+POST http://localhost:4000/api/v1/reviews
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "rating": 5,
+  "comment": "Second review for same product - should fail",
+  "product_id": 1
+}

@@ -1,27 +1,31 @@
 
 export interface CreateReviewDto {
-    rating: number;
+    rating: number; 
     comment?: string;
     user_id: number;
     product_id: number;
 }
 
 export interface UpdateReviewDto {
-    rating?: number;
+    rating?: number; 
     comment?: string;
-    user_id?: number;
-    product_id?: number;
 }
 
 export interface ReviewResponseDto {
   id: number;
   rating: number;
   comment?: string;
-  user_id: number;
-  product_id: number;
-
-  product?: {
+  created_at: Date;
+  
+  user: {
+    id: number;
+    fullname: string;
+    avatar?: string;
+  };
+  
+  product: {
     id: number;
     name_product: string;
+    image_product?: string;
   };
 }
