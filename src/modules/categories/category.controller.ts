@@ -38,7 +38,6 @@ export class CategoryController {
             next(error);
         }
     };
-
     async getAllCategories(req: Request, res: Response, next: NextFunction) {
         try {
             const categories = await categoryService.getAllCategories();
