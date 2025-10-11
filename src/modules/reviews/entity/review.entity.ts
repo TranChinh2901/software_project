@@ -8,7 +8,7 @@ export class Review {
   id!: number;
 
   @Column({ type: 'int', width: 1 })
-  rating!: number; // 1-5 stars
+  rating!: number; 
 
   @Column('text', { nullable: true })
   comment?: string;

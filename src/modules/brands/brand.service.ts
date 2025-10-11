@@ -14,7 +14,6 @@ export class BrandService {
   constructor() {
     this.brandRepository = AppDataSource.getRepository(Brand);
   }
-
   async createBrand(createBrandDto: CreateBrandDto): Promise<BrandResponseDto> {
     try {
       const existingBrand = await this.brandRepository.findOne({

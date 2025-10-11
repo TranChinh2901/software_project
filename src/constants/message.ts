@@ -328,7 +328,12 @@ export const ErrorMessages = {
     REVIEW_NOT_FOUND: "Review not found",
     REVIEW_ALREADY_EXISTS: "Already reviewed",
     REVIEW_NOT_ALLOWED: "Not allowed to review",
-    REVIEW_INACTIVE: "Review inactive"
+    REVIEW_INACTIVE: "Review inactive",
+    CREATE_REVIEW_FAILED: "Failed to create review",
+    FAILED_TO_FETCH_REVIEW: "Failed to fetch reviews",
+    FAILED_UPDATE_REVIEW: "Failed to update review",
+    FAILED_TO_FETCH_REVIEW_BY_ID: "Failed to fetch review by ID",
+    FAILED_DELETE_REVIEW: "Failed to delete review"
   },
 
   SHIPPING: {
