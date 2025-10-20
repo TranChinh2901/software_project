@@ -75,7 +75,7 @@ class AuthController {
       );
     }
 
-    const userDetails = await authService.getUserById(user.id);
+    const userDetails = await authService.getProfile(user.id);
     
     return new AppResponse({
       message: SuccessMessages.USER.USER_GET, 

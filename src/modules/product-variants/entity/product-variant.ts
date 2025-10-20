@@ -7,12 +7,7 @@ import { SizeType } from "../enum/product-variant.enum";
 export class ProductVariant {
   @PrimaryGeneratedColumn()
   id!: number;
-  // @Column({ 
-  //   type: 'enum', 
-  //   enum: ['S', 'M', 'L', 'XL'], 
-  //   nullable: true 
-  // })
-  // size?: string;
+ 
 
   @Column({type: 'enum', enum: SizeType, default: SizeType.M, nullable: true})
   size?: SizeType;

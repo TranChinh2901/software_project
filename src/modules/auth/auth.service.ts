@@ -53,6 +53,12 @@ export class AuthService {
         id: user.id,
         fullname: user.fullname,
         email: user.email,
+        phone_number: user.phone_number,
+        address: user.address,
+        gender: user.gender,
+        date_of_birth: user.date_of_birth,
+        avatar: user.avatar,
+        is_verified: user.is_verified,
         role: user.role
       }
     };
@@ -78,6 +84,12 @@ export class AuthService {
     }
 
     const hashedPassword = await hash(password, this.SALT_ROUNDS);
+    
+    // Convert date_of_birth to proper Date format for MySQL
+    const birthDate = typeof date_of_birth === 'string' 
+      ? new Date(date_of_birth) 
+      : date_of_birth;
+    
     const newUser = this.userRepository.create({
       fullname,
       email,
@@ -85,15 +97,17 @@ export class AuthService {
       address,
       password: hashedPassword,
       gender: gender as GenderType,
-      date_of_birth,
+      date_of_birth: birthDate,
       role: role || RoleType.USER,
       is_verified: false,
      
     });
     const savedUser = await this.userRepository.save(newUser);
-    const tokens = this.generateToken(savedUser);
+    
+    // KHÔNG tự động tạo token khi register
+    // User phải login sau khi register
     return {
-      ...tokens,
+      message: "Registration successful",
       user: {
         id: savedUser.id,
         fullname: savedUser.fullname,
@@ -251,6 +265,35 @@ export class AuthService {
     role: user.role as RoleType,
     created_at: user.created_at,
     updated_at: user.updated_at
+    };
+  }
+
+  async getProfile(userId: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId }
+    });
+
+    if (!user) {
+      throw new AppError(
+        ErrorMessages.USER.USER_NOT_FOUND,
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.USER_NOT_FOUND
+      );
+    }
+
+    return {
+      id: user.id,
+      fullname: user.fullname,
+      email: user.email,
+      phone_number: user.phone_number,
+      address: user.address,
+      avatar: user.avatar,
+      gender: user.gender,
+      date_of_birth: user.date_of_birth,
+      is_verified: user.is_verified,
+      role: user.role,
+      created_at: user.created_at,
+      updated_at: user.updated_at
     };
   }
 

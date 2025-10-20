@@ -10,7 +10,7 @@ Content-Type: application/json
 ### 2. Create a review (requires authentication)
 POST http://localhost:4000/api/v1/reviews
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjAxOTc1MDEsImV4cCI6MTc2MDE5OTMwMX0.HZqyCQ9HAJpv5mYgaH3AhXqMiBwFsYHpVdNGutnjNrU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjA2MzIxOTQsImV4cCI6MTc2MDYzMzk5NH0.4Z-mzeYHtBDlDNs-GJ5HuFobuN4-S4VW1OC33J-Meok
 
 {
   "rating": 5,

@@ -46,7 +46,7 @@ router.delete('/delete-account',
   asyncHandle(authController.deleteAccount));
 
 router.put('/upload-avatar', 
-  authMiddleware(),
+  // authMiddleware(),
   uploadAvatar.single('avatar'),
   asyncHandle(authController.uploadAvatar)
 );
