@@ -7,6 +7,9 @@ export class ShippingAddress {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ type: 'int' })
+  user_id!: number;
+
   @Column({ length: 100 })
   fullname!: string;
 

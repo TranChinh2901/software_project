@@ -15,6 +15,7 @@ import { Transaction } from "@/modules/transactions/entity/transaction.entity";
 import { Voucher } from "@/modules/vouchers/entity/voucher.entity";
 import { Blog } from "@/modules/blogs/entity/blog.entity";
 import { CancelOrder } from "@/modules/orders/entity/cancel-order.entity";
+import { Banner } from "@/modules/banners/banner.entity";
 
 export const entities = [
   User,
@@ -33,5 +34,6 @@ export const entities = [
   CancelOrder,
   Transaction,
   Voucher,
-  Blog
+  Blog,
+  Banner
 ];

@@ -189,84 +189,6 @@ export class AuthService {
     };
   }
 
-  async getAllUsers(page: number = 1, limit: number = 10) {
-    const validPage = Math.max(1, page);
-    const validLimit = Math.min(100, Math.max(1, limit)); 
-    const skip = (validPage - 1) * validLimit;
-
-    const [users, total] = await this.userRepository.findAndCount({
-      select: [
-        'id', 
-        'fullname', 
-        'email', 
-        'phone_number', 
-        'address', 
-        'avatar', 
-        'gender', 
-        'date_of_birth',
-        'is_verified',
-        'role',
-        'created_at',
-        'updated_at'
-      ],
-      order: { created_at: 'DESC' },
-      skip,
-      take: validLimit
-    });
-
-    return {
-      users: users.map(user => ({
-        id: user.id,
-        fullname: user.fullname,
-        email: user.email,
-        phone_number: user.phone_number,
-        address: user.address,
-        avatar: user.avatar,
-        gender: user.gender as GenderType,
-        date_of_birth: user.date_of_birth,
-        is_verified: user.is_verified,
-        role: user.role as RoleType,
-        created_at: user.created_at,
-        updated_at: user.updated_at
-      })),
-      pagination: {
-        currentPage: validPage,
-        totalPages: Math.ceil(total / validLimit),
-        totalItems: total,
-        itemsPerPage: validLimit,
-        hasNextPage: validPage < Math.ceil(total / validLimit),
-        hasPrevPage: validPage > 1
-      }
-    };
-  }
-  async getUserById(id: number) {
-    const user = await this.userRepository.findOne({
-      where: { id }
-    });
-
-    if (!user) {
-      throw new AppError(
-        ErrorMessages.USER.USER_NOT_FOUND,
-        HttpStatusCode.NOT_FOUND,
-        ErrorCode.USER_NOT_FOUND
-      );
-    }
-
-    return {
-       id: user.id,
-    fullname: user.fullname,
-    email: user.email,
-    phone_number: user.phone_number,
-    address: user.address,
-    avatar: user.avatar,
-    gender: user.gender as GenderType,
-    date_of_birth: user.date_of_birth,
-    is_verified: user.is_verified,
-    role: user.role as RoleType,
-    created_at: user.created_at,
-    updated_at: user.updated_at
-    };
-  }
 
   async getProfile(userId: number) {
     const user = await this.userRepository.findOne({
@@ -341,26 +263,25 @@ export class AuthService {
     };
   }
 
-
   async deleteAccount(userId: number) {
-  const user = await this.userRepository.findOne({
-    where: { id: userId }
-  });
-  
-  if (!user) {
-    throw new AppError(
-      ErrorMessages.USER.USER_NOT_FOUND,
-      HttpStatusCode.NOT_FOUND,
-      ErrorCode.USER_NOT_FOUND
-    );
-  }
+    const user = await this.userRepository.findOne({
+      where: { id: userId }
+    });
 
-  await this.userRepository.remove(user);
-  
-  return { 
-    message: SuccessMessages.USER.USER_DELETED
-  };
-}
+    if (!user) {
+      throw new AppError(
+        ErrorMessages.USER.USER_NOT_FOUND,
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.USER_NOT_FOUND
+      );
+    }
+
+    await this.userRepository.remove(user);
+
+    return {
+      message: SuccessMessages.USER.USER_DELETED
+    };
+  }
 
   async uploadAvatar(userId: number, avatarUrl: string) {
     const user = await this.userRepository.findOne({

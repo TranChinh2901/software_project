@@ -8,6 +8,6 @@ export interface SignupDto {
   phone_number?: string;
   address?: string;
   gender: GenderType;
-  date_of_birth: Date | string; // Allow both Date and string
+  date_of_birth: Date | string; 
   role?: RoleType;
 }

@@ -296,7 +296,12 @@ export const ErrorMessages = {
     CART_ITEM_NOT_FOUND: "Item not in cart",
     CART_IS_EMPTY: "Cart is empty",
     ITEM_ALREADY_IN_CART: "Item already in cart",
-    CART_QUANTITY_EXCEEDED: "Quantity exceeds stock"
+    CART_QUANTITY_EXCEEDED: "Quantity exceeds stock",
+    FAILED_TO_FETCH_CART: "Failed to fetch cart",
+    ADD_ITEM_FAILED: "Failed to add item to cart",
+    UPDATE_ITEM_FAILED: "Failed to update cart item",
+    REMOVE_ITEM_FAILED: "Failed to remove item from cart",
+    CLEAR_CART_FAILED: "Failed to clear cart"
   },
 
   PAYMENT: {

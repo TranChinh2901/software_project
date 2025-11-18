@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { User } from "@/modules/users/entity/user.entity";
 import { ShippingAddress } from "@/modules/shipping-address/entity/shipping-address.entity";
 import { Voucher } from "@/modules/vouchers/entity/voucher.entity";
 import { OrderType, PaymentMethod, PaymentStatus } from "../enum/order.enum";
+import { OrderDetail } from "./order-detail.entity";
 
 @Entity('orders')
 export class Order {
@@ -41,6 +42,12 @@ export class Order {
   @Column({ type: 'int', nullable: true })
   voucher_id?: number;
 
+  @Column({ type: 'int' })
+  user_id!: number;
+
+  @Column({ type: 'int' })
+  shipping_address_id!: number;
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
 
@@ -58,4 +65,7 @@ export class Order {
   @ManyToOne(() => Voucher, { nullable: true })
   @JoinColumn({ name: 'voucher_id' })
   voucher?: Voucher;
+
+  @OneToMany(() => OrderDetail, orderDetail => orderDetail.order)
+  order_items?: OrderDetail[];
 }

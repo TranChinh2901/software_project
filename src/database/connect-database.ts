@@ -1,4 +1,3 @@
-
 import { AppDataSource } from "@/config/database.config";
 import { logger } from "@/utils/logger";
 
@@ -10,3 +9,5 @@ export const initDatabase = async () => {
     logger.error(`Failed to connect database: ${error}`);
   }
 };
+
+export { AppDataSource };

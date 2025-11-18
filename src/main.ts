@@ -15,12 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger);
-
-// Initialize database connection
 initDatabase();
 app.use("/", router);
 
-// middleware handle exception
 app.use(exceptionHandler);
 
 app.listen(PORT, () => {

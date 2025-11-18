@@ -41,20 +41,15 @@ router.put('/profile',
   asyncHandle(authController.updateProfile)
 );
 
-router.delete('/delete-account', 
+router.delete('/delete-account',
   authMiddleware(),
-  asyncHandle(authController.deleteAccount));
-
-router.put('/upload-avatar', 
-  // authMiddleware(),
-  uploadAvatar.single('avatar'),
-  asyncHandle(authController.uploadAvatar)
+  asyncHandle(authController.deleteAccount)
 );
 
-// Admin only routes
-router.get('/users', 
-  requireAdmin(),
-  asyncHandle(authController.getAllUsers)
+router.put('/upload-avatar',
+  authMiddleware(),
+  uploadAvatar.single('avatar'),
+  asyncHandle(authController.uploadAvatar)
 );
 
 export default router;

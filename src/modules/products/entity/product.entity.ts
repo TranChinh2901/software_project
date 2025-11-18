@@ -43,6 +43,9 @@ export class Product {
  @Column({ type: "int", nullable: true })
   discount?: number;
 
+  @Column({ type: "boolean", default: false })
+  is_on_sale!: boolean;
+
   @ManyToOne(() => Category)
   @JoinColumn({ name: "category_id" })
   category!: Category;

@@ -4,19 +4,22 @@ import express from "express";
 // import userRouter from "@/routes/user";
 import authRouter from "@/routes/auth";
 import productRouter from "@/routes/products";
-import blogRouter from "@/routes/blogs"; 
+import blogRouter from "@/routes/blogs";
 import { brandRoutes } from "@/routes/brands";
 import {categoryRoutes} from "@/routes/categories";
 import colorRouter from "@/routes/colors";
 import voucherRouter from "@/routes/vouchers";
 import productGalleryRouter from "@/routes/product-gallery";
 import { reviewRoutes } from "@/routes/reviews";
+import orderRouter from "@/routes/orders";
+import cartRouter from "@/routes/carts";
+// import userRouter from "@/routes/users";
+import bannerRouter from "@/routes/banners";
 
 const router = express.Router();
 const API_V1 = "/api/v1";
 
 router.use(`${API_V1}/auth`, authRouter);
-// router.use(`${API_V1}/users`, userRouter);
 router.use(`${API_V1}/products`, productRouter);
 
 router.use(`${API_V1}/blogs`, blogRouter);
@@ -32,5 +35,11 @@ router.use(`${API_V1}/vouchers`, voucherRouter);
 router.use(`${API_V1}/product-gallery`, productGalleryRouter);
 
 router.use(`${API_V1}/reviews`, reviewRoutes);
+
+router.use(`${API_V1}/orders`, orderRouter);
+
+router.use(`${API_V1}/carts`, cartRouter);
+
+router.use(`${API_V1}/banners`, bannerRouter);
 
 export default router;

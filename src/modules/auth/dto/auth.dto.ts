@@ -35,5 +35,6 @@ export interface GetAllUsersResponseDto {
     itemsPerPage: number;
     hasNextPage: boolean;
     hasPrevPage: boolean;
-  };
+  
+ }
 }

@@ -4,11 +4,13 @@ import { Brand } from "../brands/entity/brand.entity";
 import { Category } from "../categories/entity/category.entity";
 import { AppDataSource } from "@/config/database.config";
 import { CreateProductDto, ProductResponseDto, UpdateProductDto } from "./dto/product.dto";
+import { QueryProductDto } from "./dto/query-product.dto";
 import { AppError } from "@/common/error.response";
 import { ErrorMessages } from "@/constants/message";
 import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
 import { ProductMapper } from "./product.mapper";
+import { Like, MoreThan, Not } from "typeorm";
 
 export class ProductService {
     private brandResponsitory: Repository<Brand>;
@@ -68,18 +70,167 @@ export class ProductService {
             )
         }
     }
-    async getAllProducts(): Promise<ProductResponseDto[]> {
+    async getAllProducts(query?: QueryProductDto): Promise<{ products: ProductResponseDto[], total: number, page: number, limit: number }> {
         try {
-            const products = await this.productResponsitory.find({
-                relations: ["brand", "category"],
-                order: { updated_at: 'DESC' }
-            })
-            return ProductMapper.toProductResponseDtoList(products);
+            const {
+                search,
+                category_id,
+                brand_id,
+                min_price,
+                max_price,
+                sort = 'newest',
+                page = 1,
+                limit = 12,
+                featured = false
+            } = query || {};
+
+            const queryBuilder = this.productResponsitory.createQueryBuilder('product')
+                .leftJoinAndSelect('product.category', 'category')
+                .leftJoinAndSelect('product.brand', 'brand')
+                .where('product.is_deleted = :is_deleted', { is_deleted: false });
+
+            if (search) {
+                queryBuilder.andWhere('product.name_product LIKE :search', { search: `%${search}%` });
+            }
+
+            if (category_id) {
+                queryBuilder.andWhere('product.category_id = :category_id', { category_id });
+            }
+
+            if (brand_id) {
+                queryBuilder.andWhere('product.brand_id = :brand_id', { brand_id });
+            }
+
+            if (min_price !== undefined) {
+                queryBuilder.andWhere('product.price >= :min_price', { min_price });
+            }
+
+            if (max_price !== undefined) {
+                queryBuilder.andWhere('product.price <= :max_price', { max_price });
+            }
+
+            if (featured) {
+                queryBuilder.andWhere('product.discount > 0');
+            }
+
+            switch (sort) {
+                case 'price_asc':
+                    queryBuilder.orderBy('product.price', 'ASC');
+                    break;
+                case 'price_desc':
+                    queryBuilder.orderBy('product.price', 'DESC');
+                    break;
+                case 'name_asc':
+                    queryBuilder.orderBy('product.name_product', 'ASC');
+                    break;
+                case 'name_desc':
+                    queryBuilder.orderBy('product.name_product', 'DESC');
+                    break;
+                case 'newest':
+                    queryBuilder.orderBy('product.created_at', 'DESC');
+                    break;
+                case 'oldest':
+                    queryBuilder.orderBy('product.created_at', 'ASC');
+                    break;
+                default:
+                    queryBuilder.orderBy('product.created_at', 'DESC');
+            }
+
+            const total = await queryBuilder.getCount();
+
+            const products = await queryBuilder
+                .skip((page - 1) * limit)
+                .take(limit)
+                .getMany();
+
+            return {
+                products: ProductMapper.toProductResponseDtoList(products),
+                total,
+                page,
+                limit
+            };
         } catch (error) {
-            throw new AppError (
+            throw new AppError(
                 ErrorMessages.PRODUCT.FAILED_TO_FETCH_PRODUCT,
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
-                ErrorCode.INTERNAL_SERVER_ERROR
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                error
+            )
+        }
+    }
+
+    async getFeaturedProducts(): Promise<ProductResponseDto[]> {
+        try {
+            const products = await this.productResponsitory.find({
+                where: { discount: MoreThan(0) },
+                relations: ["brand", "category"],
+                order: { discount: 'DESC' },
+                take: 8
+            });
+            return ProductMapper.toProductResponseDtoList(products);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.PRODUCT.FAILED_TO_FETCH_PRODUCT,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                error
+            )
+        }
+    }
+
+    async getBestSellers(): Promise<ProductResponseDto[]> {
+        try {
+            // Lấy sản phẩm có discount cao nhất (giảm giá nhiều nhất) làm best seller
+            const products = await this.productResponsitory.find({
+                where: { discount: MoreThan(0) },
+                relations: ["brand", "category"],
+                order: { discount: 'DESC', created_at: 'DESC' },
+                take: 8
+            });
+            return ProductMapper.toProductResponseDtoList(products);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.PRODUCT.FAILED_TO_FETCH_PRODUCT,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                error
+            )
+        }
+    }
+
+    async getFlashSaleProducts(): Promise<ProductResponseDto[]> {
+        try {
+            const products = await this.productResponsitory.find({
+                where: { is_on_sale: true },
+                relations: ["brand", "category"],
+                order: { discount: 'DESC', created_at: 'DESC' },
+                take: 12
+            });
+            return ProductMapper.toProductResponseDtoList(products);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.PRODUCT.FAILED_TO_FETCH_PRODUCT,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                error
+            )
+        }
+    }
+
+    async getProductsByCategory(categoryId: number): Promise<ProductResponseDto[]> {
+        try {
+            const products = await this.productResponsitory.find({
+                where: { category: { id: categoryId } },
+                relations: ["brand", "category"],
+                order: { created_at: 'DESC' }
+            });
+            return ProductMapper.toProductResponseDtoList(products);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.PRODUCT.FAILED_TO_FETCH_PRODUCT,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                error
             )
         }
     }
@@ -111,7 +262,7 @@ export class ProductService {
            const product = await this.productResponsitory.findOne({
             where: { id },
             relations: ["brand", "category"]
-           }) 
+           })
            if(!product) {
             throw new AppError(
                 ErrorMessages.PRODUCT.PRODUCT_NOT_FOUND,
@@ -156,6 +307,50 @@ export class ProductService {
                 ErrorCode.SERVER_ERROR,
                 error
             )
+        }
+    }
+
+    async getRelatedProducts(productId: number, limit: number = 4): Promise<ProductResponseDto[]> {
+        try {
+            const currentProduct = await this.productResponsitory.findOne({
+                where: { id: productId },
+                relations: ["category", "brand"]
+            });
+
+            if (!currentProduct) {
+                throw new AppError(
+                    ErrorMessages.PRODUCT.PRODUCT_NOT_FOUND,
+                    HttpStatusCode.NOT_FOUND,
+                    ErrorCode.PRODUCT_NOT_FOUND
+                );
+            }
+
+            if (!currentProduct.category || !currentProduct.brand) {
+                throw new AppError(
+                    "Product category or brand not found",
+                    HttpStatusCode.BAD_REQUEST,
+                    ErrorCode.INVALID_PARAMS
+                );
+            }
+
+            const products = await this.productResponsitory.find({
+                where: [
+                    { category: { id: currentProduct.category.id }, id: Not(productId) },
+                    { brand: { id: currentProduct.brand.id }, id: Not(productId) }
+                ],
+                relations: ["brand", "category"],
+                order: { created_at: 'DESC' },
+                take: limit
+            });
+
+            return ProductMapper.toProductResponseDtoList(products);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.PRODUCT.FAILED_TO_FETCH_PRODUCT,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                error
+            );
         }
     }
 }

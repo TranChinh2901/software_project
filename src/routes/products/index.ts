@@ -6,13 +6,18 @@ import productController from "@/modules/products/product.controller";
 import express from "express";
 const router = express.Router();
 
-router.post("/", 
+router.post("/",
   requireAuth(),
-  uploadProductImage.single("image_product"), 
+  uploadProductImage.single("image_product"),
   // validateBody(CreateProductSchema),
   productController.createProduct
 )
 router.get("/", productController.getAllProducts);
+router.get("/featured", productController.getFeaturedProducts);
+router.get("/best-sellers", productController.getBestSellers);
+router.get("/flash-sale", productController.getFlashSaleProducts);
+router.get("/category/:category_id", productController.getProductsByCategory);
+router.get("/:id/related", productController.getRelatedProducts);
 
 router.get("/:id", productController.getProductById);
 

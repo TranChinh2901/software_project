@@ -36,12 +36,11 @@ async function seedUsersAndRoles() {
       date_of_birth: new Date("1985-01-15"),
       role: RoleType.ADMIN,
       is_verified: true,
-      is_deleted: false,
     });
 
     const normalUser = userRepository.create({
       fullname: "John Doe",
-      email: "john@example.com", 
+      email: "john@example.com",
       phone_number: "0987654321",
       address: "456 User Street, Ho Chi Minh City",
       password: hashedPassword,
@@ -49,20 +48,18 @@ async function seedUsersAndRoles() {
       date_of_birth: new Date("1990-06-20"),
       role: RoleType.USER,
       is_verified: true,
-      is_deleted: false,
     });
 
     const femaleUser = userRepository.create({
       fullname: "Jane Smith",
       email: "jane@example.com",
       phone_number: "0111222333",
-      address: "789 Female Street, Ho Chi Minh City", 
+      address: "789 Female Street, Ho Chi Minh City",
       password: hashedPassword,
       gender: GenderType.FEMALE,
       date_of_birth: new Date("1992-03-10"),
       role: RoleType.USER,
       is_verified: false,
-      is_deleted: false,
     });
 
     const savedUsers = await userRepository.save([adminUser, normalUser, femaleUser]);
