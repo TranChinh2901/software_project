@@ -84,6 +84,15 @@ class AuthController {
     }).sendResponse(res);
   }
 
+  async getAllUsers(req:Request, res: Response) {
+    const users = await authService.getAllUsers();
+    return new AppResponse({
+      message: SuccessMessages.USER.USER_GET,
+      statusCode: HttpStatusCode.OK,
+      data: users
+    }).sendResponse(res);
+  }
+
   async updateProfile(req: AuthenticatedRequest, res: Response) {
     const user = req.user;
     
@@ -149,6 +158,26 @@ class AuthController {
       message: SuccessMessages.USER.AVATAR_UPLOADED,
       statusCode: HttpStatusCode.OK,
       data: result
+    }).sendResponse(res);
+  }
+
+  async deleteUserById(req: Request, res: Response) {
+    const userId = parseInt(req.params.id);
+    
+    if (isNaN(userId)) {
+      throw new AppError(
+        'Invalid user ID',
+        HttpStatusCode.BAD_REQUEST,
+        ErrorCode.VALIDATION_ERROR
+      );
+    }
+
+    await authService.deleteAccount(userId);
+    
+    return new AppResponse({
+      message: SuccessMessages.USER.USER_DELETED,
+      statusCode: HttpStatusCode.OK,
+      data: null
     }).sendResponse(res);
   }
 }

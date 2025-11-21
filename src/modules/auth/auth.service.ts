@@ -219,6 +219,25 @@ export class AuthService {
     };
   }
 
+  async getAllUsers() {
+    const users = await this.userRepository.find();
+    return users.map(user => ({
+      id: user.id,
+      fullname: user.fullname,
+      email: user.email,
+      phone_number: user.phone_number,
+      address: user.address,
+      avatar: user.avatar,
+      gender: user.gender,
+      date_of_birth: user.date_of_birth,
+      is_verified: user.is_verified,
+      role: user.role,
+      created_at: user.created_at,
+      updated_at: user.updated_at
+    }));
+    
+  }
+
   async updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
     const user = await this.userRepository.findOne({
       where: { id: userId }

@@ -35,15 +35,27 @@ router.get('/profile',
   asyncHandle(authController.getProfile)
 );
 
+router.get('/users',
+  // authMiddleware(),
+  asyncHandle(authController.getAllUsers)
+);
+
 router.put('/profile', 
   authMiddleware(),
   validateBody(UpdateProfileSchema),
   asyncHandle(authController.updateProfile)
 );
 
-router.delete('/delete-account',
-  authMiddleware(),
+router.delete('/delete-account/:id',
+  // authMiddleware(),
   asyncHandle(authController.deleteAccount)
+);
+
+// Admin route to delete user by ID
+router.delete('/users/:id',
+  // authMiddleware(),
+  // requireAdmin(),
+  asyncHandle(authController.deleteUserById)
 );
 
 router.put('/upload-avatar',
