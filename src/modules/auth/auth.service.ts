@@ -329,6 +329,72 @@ export class AuthService {
       message: "Avatar uploaded successfully"
     };
   }
+
+  async updateUserById(userId: number, updateData: any) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId }
+    });
+
+    if (!user) {
+      throw new AppError(
+        ErrorMessages.USER.USER_NOT_FOUND,
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.USER_NOT_FOUND
+      );
+    }
+
+    // Kiểm tra email nếu có thay đổi
+    if (updateData.email && updateData.email !== user.email) {
+      const existingUser = await this.userRepository.findOne({
+        where: { email: updateData.email }
+      });
+      if (existingUser) {
+        throw new AppError(
+          'Email đã được sử dụng',
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.VALIDATION_ERROR
+        );
+      }
+    }
+
+    if (updateData.phone_number && updateData.phone_number !== user.phone_number) {
+      const existingUser = await this.userRepository.findOne({
+        where: { phone_number: updateData.phone_number }
+      });
+      if (existingUser) {
+        throw new AppError(
+          'Số điện thoại đã được sử dụng',
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.VALIDATION_ERROR
+        );
+      }
+    }
+
+    console.log('Data before update:', updateData);
+    console.log('is_verified before update:', updateData.is_verified, typeof updateData.is_verified);
+
+    // Update user
+    await this.userRepository.update(userId, updateData);
+
+    const updatedUser = await this.userRepository.findOne({
+      where: { id: userId }
+    });
+
+    return {
+      id: updatedUser!.id,
+      fullname: updatedUser!.fullname,
+      email: updatedUser!.email,
+      phone_number: updatedUser!.phone_number,
+      address: updatedUser!.address,
+      gender: updatedUser!.gender as GenderType,
+      date_of_birth: updatedUser!.date_of_birth,
+      avatar: updatedUser!.avatar,
+      role: updatedUser!.role as RoleType,
+      is_verified: updatedUser!.is_verified,
+      created_at: updatedUser!.created_at,
+      updated_at: updatedUser!.updated_at
+    };
+  }
 }
 
 export default new AuthService();

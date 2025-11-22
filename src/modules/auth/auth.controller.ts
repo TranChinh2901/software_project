@@ -180,6 +180,29 @@ class AuthController {
       data: null
     }).sendResponse(res);
   }
+
+  async updateUserById(req: Request, res: Response) {
+    const userId = parseInt(req.params.id);
+    
+    if (isNaN(userId)) {
+      throw new AppError(
+        'Invalid user ID',
+        HttpStatusCode.BAD_REQUEST,
+        ErrorCode.VALIDATION_ERROR
+      );
+    }
+
+    console.log('Update user request body:', req.body);
+    console.log('is_verified in body:', req.body.is_verified);
+
+    const result = await authService.updateUserById(userId, req.body);
+    
+    return new AppResponse({
+      message: SuccessMessages.USER.USER_UPDATED,
+      statusCode: HttpStatusCode.OK,
+      data: result
+    }).sendResponse(res);
+  }
 }
 
 

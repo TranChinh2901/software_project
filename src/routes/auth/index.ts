@@ -58,6 +58,13 @@ router.delete('/users/:id',
   asyncHandle(authController.deleteUserById)
 );
 
+// Admin route to update user by ID
+router.put('/users/:id',
+  // authMiddleware(),
+  // requireAdmin(),
+  asyncHandle(authController.updateUserById)
+);
+
 router.put('/upload-avatar',
   authMiddleware(),
   uploadAvatar.single('avatar'),
