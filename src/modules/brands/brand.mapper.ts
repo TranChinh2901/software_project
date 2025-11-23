@@ -7,6 +7,7 @@ export class BrandMapper {
     id: brand.id,
     name_brand: brand.name_brand,
     logo_url: brand.logo_url,
+    description_brand: brand.description_brand,
     created_at: brand.created_at,
     updated_at: brand.updated_at
 };
