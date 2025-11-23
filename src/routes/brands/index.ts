@@ -27,5 +27,6 @@ router.put(
 );
 
 router.delete("/:id", requireAuth(), brandController.deleteBrand);
+// router.delete("/:id", requireAuth(), brandController.deleteBrand);
 
 export { router as brandRoutes };

@@ -131,7 +131,8 @@ export class BrandService {
   async deleteBrand(id: number): Promise<void> {
     try {
       const brand = await this.brandRepository.findOne({
-        where: { id }
+        where: { id },
+        relations: ['categories']
       });
 
       if (!brand) {
@@ -142,11 +143,21 @@ export class BrandService {
         );
       }
 
+      // Check if brand has related categories
+      if (brand.categories && brand.categories.length > 0) {
+        throw new AppError(
+          'Không thể xóa thương hiệu này vì đang có danh mục liên kết. Vui lòng xóa các danh mục trước.',
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.VALIDATION_ERROR
+        );
+      }
+
       await this.brandRepository.remove(brand);
     } catch (error) {
       if (error instanceof AppError) {
         throw error;
       }
+      console.error('Delete brand error:', error);
       throw new AppError(
         ErrorMessages.BRAND.FAILED_DELETE_BRAND,
         HttpStatusCode.INTERNAL_SERVER_ERROR,

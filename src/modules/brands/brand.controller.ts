@@ -92,6 +92,10 @@ async getBrandById(req: Request, res: Response, next: NextFunction) {
       }
 
       const { name_brand, description_brand } = req.body;
+      
+      console.log('Update brand request body:', req.body);
+      console.log('name_brand:', name_brand);
+      console.log('description_brand:', description_brand);
 
       const logoFile = req.file;
       let logo_url: string | undefined;
@@ -105,6 +109,8 @@ async getBrandById(req: Request, res: Response, next: NextFunction) {
         description_brand,
         ...(logo_url && { logo_url })
       };
+      
+      console.log('UpdateBrandDto:', updateBrandDto);
 
       const brand = await brandService.updateBrand(brandId, updateBrandDto);
 
