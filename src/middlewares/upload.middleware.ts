@@ -56,7 +56,15 @@ const brandLogoStorage = new CloudinaryStorage({
     allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp']
   } as any
 
-})
+});
+
+const bannerImageStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'banner-images',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp']
+  } as any
+});
 
 const fileFilter = (req: any, file: any, cb: any) => {
   if (file.mimetype.startsWith('image/')) {
@@ -120,5 +128,13 @@ export const uploadCategoryImage = multer({
   fileFilter,
   limits: {
     fileSize: 3 * 1024 * 1024 // 3MB
+  }
+});
+
+export const uploadBannerImage = multer({
+  storage: bannerImageStorage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB
   }
 });

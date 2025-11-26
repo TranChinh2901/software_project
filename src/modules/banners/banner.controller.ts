@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BannerService } from './banner.service';
 import { AppResponse } from '@/common/success.response';
+import { BannerType } from './enum/banner.enum';
 
 const bannerService = new BannerService();
 
@@ -41,7 +42,13 @@ const bannerController = {
 
   async createBanner(req: Request, res: Response) {
     try {
-      const { title, subtitle, description, image_url, button_text, button_link, is_active, display_order } = req.body;
+      const { title, subtitle, description, button_text, button_link, status, display_order } = req.body;
+      const image_url = req.file?.path || '';
+
+      if (!image_url) {
+        return res.status(400).json({ message: 'Vui lòng upload hình ảnh banner' });
+      }
+
       const banner = await bannerService.create({
         title,
         subtitle,
@@ -49,7 +56,7 @@ const bannerController = {
         image_url,
         button_text,
         button_link,
-        is_active: is_active !== false,
+        status: status || BannerType.ACTIVE,
         display_order: display_order || 0
       });
 
@@ -67,18 +74,24 @@ const bannerController = {
   async updateBanner(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id);
-      const { title, subtitle, description, image_url, button_text, button_link, is_active, display_order } = req.body;
-
-      const banner = await bannerService.update(id, {
+      const { title, subtitle, description, button_text, button_link, status, display_order } = req.body;
+      
+      const updateData: any = {
         title,
         subtitle,
         description,
-        image_url,
         button_text,
         button_link,
-        is_active,
+        status,
         display_order
-      });
+      };
+
+      // Only update image if new file is uploaded
+      if (req.file?.path) {
+        updateData.image_url = req.file.path;
+      }
+
+      const banner = await bannerService.update(id, updateData);
 
       if (!banner) {
         return res.status(404).json({ message: 'Không tìm thấy banner' });

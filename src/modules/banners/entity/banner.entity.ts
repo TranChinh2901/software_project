@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { BannerType } from '../enum/banner.enum';
 
 @Entity('banners')
 export class Banner {
@@ -23,8 +24,12 @@ export class Banner {
   @Column({ nullable: true })
   button_link?: string;
 
-  @Column({ default: true })
-  is_active!: boolean;
+  @Column({
+    type: 'enum',
+    enum: BannerType,
+    default: BannerType.ACTIVE
+  })
+  status!: BannerType;
 
   @Column({ default: 0 })
   display_order!: number;
