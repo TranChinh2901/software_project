@@ -4,7 +4,7 @@ import { Brand } from "../brands/entity/brand.entity";
 import { Category } from "../categories/entity/category.entity";
 import { AppDataSource } from "@/config/database.config";
 import { CreateProductDto, ProductResponseDto, UpdateProductDto } from "./dto/product.dto";
-import { QueryProductDto } from "./dto/query-product.dto";
+import { QueryProductDto, ProductListResponseDto } from "./dto/query-product.dto";
 import { AppError } from "@/common/error.response";
 import { ErrorMessages } from "@/constants/message";
 import { HttpStatusCode } from "@/constants/status-code";
@@ -70,7 +70,8 @@ export class ProductService {
             )
         }
     }
-    async getAllProducts(query?: QueryProductDto): Promise<{ products: ProductResponseDto[], total: number, page: number, limit: number }> {
+
+    async getAllProducts(query?: QueryProductDto): Promise<ProductListResponseDto> {
         try {
             const {
                 search,
@@ -81,7 +82,9 @@ export class ProductService {
                 sort = 'newest',
                 page = 1,
                 limit = 12,
-                featured = false
+                featured = false,
+                status,
+                is_on_sale
             } = query || {};
 
             const queryBuilder = this.productResponsitory.createQueryBuilder('product')
@@ -89,8 +92,11 @@ export class ProductService {
                 .leftJoinAndSelect('product.brand', 'brand')
                 .where('product.is_deleted = :is_deleted', { is_deleted: false });
 
-            if (search) {
-                queryBuilder.andWhere('product.name_product LIKE :search', { search: `%${search}%` });
+            if (search && search.trim()) {
+                queryBuilder.andWhere(
+                    '(product.name_product LIKE :search OR product.small_description LIKE :search)', 
+                    { search: `%${search}%` }
+                );
             }
 
             if (category_id) {
@@ -101,16 +107,24 @@ export class ProductService {
                 queryBuilder.andWhere('product.brand_id = :brand_id', { brand_id });
             }
 
-            if (min_price !== undefined) {
+            if (min_price !== undefined && min_price > 0) {
                 queryBuilder.andWhere('product.price >= :min_price', { min_price });
             }
 
-            if (max_price !== undefined) {
+            if (max_price !== undefined && max_price > 0) {
                 queryBuilder.andWhere('product.price <= :max_price', { max_price });
             }
 
             if (featured) {
-                queryBuilder.andWhere('product.discount > 0');
+                queryBuilder.andWhere('product.discount > :discount', { discount: 0 });
+            }
+
+            if (status) {
+                queryBuilder.andWhere('product.status = :status', { status });
+            }
+
+            if (is_on_sale !== undefined) {
+                queryBuilder.andWhere('product.is_on_sale = :is_on_sale', { is_on_sale });
             }
 
             switch (sort) {
@@ -126,18 +140,21 @@ export class ProductService {
                 case 'name_desc':
                     queryBuilder.orderBy('product.name_product', 'DESC');
                     break;
-                case 'newest':
-                    queryBuilder.orderBy('product.created_at', 'DESC');
-                    break;
                 case 'oldest':
                     queryBuilder.orderBy('product.created_at', 'ASC');
                     break;
+                case 'newest':
                 default:
                     queryBuilder.orderBy('product.created_at', 'DESC');
             }
 
+            // Đếm tổng số sản phẩm
             const total = await queryBuilder.getCount();
 
+            // Tính tổng số trang
+            const totalPages = Math.ceil(total / limit);
+
+            // Phân trang
             const products = await queryBuilder
                 .skip((page - 1) * limit)
                 .take(limit)
@@ -147,7 +164,8 @@ export class ProductService {
                 products: ProductMapper.toProductResponseDtoList(products),
                 total,
                 page,
-                limit
+                limit,
+                totalPages
             };
         } catch (error) {
             throw new AppError(
@@ -180,7 +198,6 @@ export class ProductService {
 
     async getBestSellers(): Promise<ProductResponseDto[]> {
         try {
-            // Lấy sản phẩm có discount cao nhất (giảm giá nhiều nhất) làm best seller
             const products = await this.productResponsitory.find({
                 where: { discount: MoreThan(0) },
                 relations: ["brand", "category"],

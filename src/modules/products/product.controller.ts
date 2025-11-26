@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CreateProductDto, UpdateProductDto } from "./dto/product.dto";
+import { CreateProductDto, ProductResponseDto, UpdateProductDto } from "./dto/product.dto";
 import { QueryProductDto } from "./dto/query-product.dto";
 import productService from "./product.service";
 import { AppResponse } from "@/common/success.response";
@@ -12,37 +12,90 @@ export class ProductController {
   async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id, brand_id} = req.body;
-            const imageFile = req.file;
-            let image_product: string | undefined;
-            if (imageFile) {
-                image_product = imageFile.path;
-            }
-            const createProductDto: CreateProductDto = {
-              name_product,
-              price,
-              origin_price,
-              small_description,
-              meta_description,
-              image_product,
-              status,
-              stock_quantity,
-              discount,
-              category_id: parseInt(category_id),
-              brand_id: parseInt(brand_id),
-            }
-            const product = await productService.createProduct(createProductDto);
-            return new AppResponse({
-              message: SuccessMessages.PRODUCT.PRODUCT_CREATED,
-              statusCode: HttpStatusCode.CREATED,
-              data: product
-            }).sendResponse(res);
+      
+      // Validate category_id
+      if (!category_id) {
+        throw new AppError(
+          "Category ID is required",
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.INVALID_PARAMS
+        );
+      }
+      
+      const parsedCategoryId = parseInt(category_id);
+      if (isNaN(parsedCategoryId)) {
+        throw new AppError(
+          "Invalid category ID",
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.INVALID_PARAMS
+        );
+      }
+
+      // Validate brand_id
+      if (!brand_id) {
+        throw new AppError(
+          "Brand ID is required",
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.INVALID_PARAMS
+        );
+      }
+      
+      const parsedBrandId = parseInt(brand_id);
+      if (isNaN(parsedBrandId)) {
+        throw new AppError(
+          "Invalid brand ID",
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.INVALID_PARAMS
+        );
+      }
+
+      const imageFile = req.file;
+      let image_product: string | undefined;
+      if (imageFile) {
+        image_product = imageFile.path;
+      }
+      
+      const createProductDto: CreateProductDto = {
+        name_product,
+        price: parseFloat(price),
+        origin_price: origin_price ? parseFloat(origin_price) : undefined,
+        small_description,
+        meta_description,
+        image_product,
+        status,
+        stock_quantity: parseInt(stock_quantity),
+        discount: discount ? parseInt(discount) : 0,
+        category_id: parsedCategoryId,
+        brand_id: parsedBrandId,
+      }
+      
+      const product = await productService.createProduct(createProductDto);
+      return new AppResponse({
+        message: SuccessMessages.PRODUCT.PRODUCT_CREATED,
+        statusCode: HttpStatusCode.CREATED,
+        data: product
+      }).sendResponse(res);
     } catch (error) {
       next(error);
     }
   }
+  
   async getAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const query: QueryProductDto = req.query as any;
+      const query: QueryProductDto = {
+        search: req.query.search as string,
+        category_id: req.query.category_id ? parseInt(req.query.category_id as string) : undefined,
+        brand_id: req.query.brand_id ? parseInt(req.query.brand_id as string) : undefined,
+        min_price: req.query.min_price ? parseFloat(req.query.min_price as string) : undefined,
+        max_price: req.query.max_price ? parseFloat(req.query.max_price as string) : undefined,
+        sort: (req.query.sort as any) || 'newest',
+        page: req.query.page ? parseInt(req.query.page as string) : 1,
+        limit: req.query.limit ? parseInt(req.query.limit as string) : 12,
+        featured: req.query.featured === 'true',
+        status: req.query.status as string,
+        is_on_sale: req.query.is_on_sale === 'true'
+      };
+      
       const result = await productService.getAllProducts(query);
       return new AppResponse({
         message: SuccessMessages.PRODUCT.PRODUCT_LIST_GET,
@@ -173,31 +226,61 @@ export class ProductController {
             ErrorCode.INVALID_PARAMS
         )
       }
-       const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id, brand_id} = req.body;
-       const imageFile = req.file;
-        let image_product: string | undefined;
-        if(imageFile) {
-          image_product = imageFile.path;
+      
+      const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id, brand_id} = req.body;
+      
+      // Validate and parse category_id if provided
+      let parsedCategoryId: number | undefined;
+      if (category_id !== undefined && category_id !== null && category_id !== '') {
+        parsedCategoryId = parseInt(category_id);
+        if (isNaN(parsedCategoryId)) {
+          throw new AppError(
+            "Invalid category ID",
+            HttpStatusCode.BAD_REQUEST,
+            ErrorCode.INVALID_PARAMS
+          );
         }
-        const updateProduct: UpdateProductDto = {
-          name_product,
-          price,
-          origin_price,
-          small_description,
-          meta_description,
-          image_product,
-          status,
-          stock_quantity,
-          discount,
-          category_id: parseInt(category_id),
-          brand_id: parseInt(brand_id),
+      }
+
+      // Validate and parse brand_id if provided
+      let parsedBrandId: number | undefined;
+      if (brand_id !== undefined && brand_id !== null && brand_id !== '') {
+        parsedBrandId = parseInt(brand_id);
+        if (isNaN(parsedBrandId)) {
+          throw new AppError(
+            "Invalid brand ID",
+            HttpStatusCode.BAD_REQUEST,
+            ErrorCode.INVALID_PARAMS
+          );
         }
-        const product = await productService.updateProduct(productId, updateProduct);
-        return new AppResponse({
-          message: SuccessMessages.PRODUCT.PRODUCT_UPDATED,
-          statusCode: HttpStatusCode.OK,
-          data: product
-        }).sendResponse(res);
+      }
+
+      const imageFile = req.file;
+      let image_product: string | undefined;
+      if(imageFile) {
+        image_product = imageFile.path;
+      }
+      
+      const updateProductDto: UpdateProductDto = {
+        name_product,
+        price: price !== undefined ? parseFloat(price) : undefined,
+        origin_price: origin_price !== undefined ? parseFloat(origin_price) : undefined,
+        small_description,
+        meta_description,
+        image_product,
+        status,
+        stock_quantity: stock_quantity !== undefined ? parseInt(stock_quantity) : undefined,
+        discount: discount !== undefined ? parseInt(discount) : undefined,
+        category_id: parsedCategoryId,
+        brand_id: parsedBrandId,
+      }
+      
+      const product = await productService.updateProduct(productId, updateProductDto);
+      return new AppResponse({
+        message: SuccessMessages.PRODUCT.PRODUCT_UPDATED,
+        statusCode: HttpStatusCode.OK,
+        data: product
+      }).sendResponse(res);
     } catch (error) {
       next(error);
     }

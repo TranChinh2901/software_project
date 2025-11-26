@@ -16,17 +16,17 @@ export interface CreateProductDto {
 }
 
 export interface UpdateProductDto {
-  name_product: string;
-  price: number;
+  name_product?: string;
+  price?: number;
   origin_price?: number;
-  small_description: string;
-  meta_description: string;
+  small_description?: string;
+  meta_description?: string;
   image_product?: string;
-  status: ProductType,
-  stock_quantity: number;
-  discount: number;
-  category_id: number;
-  brand_id: number;
+  status?: ProductType,
+  stock_quantity?: number;
+  discount?: number;
+  category_id?: number;
+  brand_id?: number;
 }
 
 export interface ProductResponseDto {

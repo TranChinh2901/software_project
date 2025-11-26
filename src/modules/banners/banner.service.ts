@@ -1,5 +1,5 @@
 import { AppDataSource } from '@/config/database.config';
-import { Banner } from './banner.entity';
+import { Banner } from './entity/banner.entity';
 
 export class BannerService {
   private bannerRepository = AppDataSource.getRepository(Banner);

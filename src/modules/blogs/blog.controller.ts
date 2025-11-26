@@ -10,7 +10,8 @@ class BlogController {
     async createBlog(req: AuthenticatedRequest, res: Response) {
         const blogData: CreateBlogDto = {
             ...req.body,
-            author_id: req.user!.id
+            author_id: req.user!.id,
+            image_blogs: req.file?.path
         }
         const result = await blogService.createBlog(blogData);
         return new AppResponse({
@@ -50,7 +51,10 @@ class BlogController {
 
     async updateBlog(req: AuthenticatedRequest, res: Response) {
         const id = parseInt(req.params.id);
-        const updateData: UpdateBlogDto = req.body;
+        const updateData: UpdateBlogDto = {
+            ...req.body,
+            image_blogs: req.file?.path || req.body.image_blogs
+        };
 
         const result = await blogService.updateBlog(id, updateData);
         return new AppResponse({

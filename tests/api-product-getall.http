@@ -1,0 +1,105 @@
+### Get All Products - Basic
+GET http://localhost:3000/api/products
+Content-Type: application/json
+
+###
+
+### Get All Products - With Search
+GET http://localhost:3000/api/products?search=laptop
+Content-Type: application/json
+
+###
+
+### Get All Products - With Category Filter
+GET http://localhost:3000/api/products?category_id=1
+Content-Type: application/json
+
+###
+
+### Get All Products - With Brand Filter
+GET http://localhost:3000/api/products?brand_id=1
+Content-Type: application/json
+
+###
+
+### Get All Products - With Price Range
+GET http://localhost:3000/api/products?min_price=1000000&max_price=5000000
+Content-Type: application/json
+
+###
+
+### Get All Products - Sort by Price Ascending
+GET http://localhost:3000/api/products?sort=price_asc
+Content-Type: application/json
+
+###
+
+### Get All Products - Sort by Price Descending
+GET http://localhost:3000/api/products?sort=price_desc
+Content-Type: application/json
+
+###
+
+### Get All Products - Sort by Name A-Z
+GET http://localhost:3000/api/products?sort=name_asc
+Content-Type: application/json
+
+###
+
+### Get All Products - Sort by Name Z-A
+GET http://localhost:3000/api/products?sort=name_desc
+Content-Type: application/json
+
+###
+
+### Get All Products - Newest First (Default)
+GET http://localhost:3000/api/products?sort=newest
+Content-Type: application/json
+
+###
+
+### Get All Products - Oldest First
+GET http://localhost:3000/api/products?sort=oldest
+Content-Type: application/json
+
+###
+
+### Get All Products - Featured Products Only
+GET http://localhost:3000/api/products?featured=true
+Content-Type: application/json
+
+###
+
+### Get All Products - With Pagination
+GET http://localhost:3000/api/products?page=1&limit=12
+Content-Type: application/json
+
+###
+
+### Get All Products - Page 2
+GET http://localhost:3000/api/products?page=2&limit=12
+Content-Type: application/json
+
+###
+
+### Get All Products - Status Filter
+GET http://localhost:3000/api/products?status=ACTIVE
+Content-Type: application/json
+
+###
+
+### Get All Products - On Sale Only
+GET http://localhost:3000/api/products?is_on_sale=true
+Content-Type: application/json
+
+###
+
+### Get All Products - Complex Query
+GET http://localhost:3000/api/products?search=laptop&category_id=1&min_price=10000000&max_price=30000000&sort=price_asc&page=1&limit=10&featured=true
+Content-Type: application/json
+
+###
+
+### Get All Products - Combined Filters
+GET http://localhost:3000/api/products?brand_id=1&category_id=2&min_price=5000000&status=ACTIVE&sort=newest&page=1&limit=20
+Content-Type: application/json

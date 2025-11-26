@@ -16,9 +16,6 @@ const avatarStorage = new CloudinaryStorage({
   } as any
 });
 
-
-
-// Cấu hình Cloudinary Storage cho blog images
 const blogImageStorage = new CloudinaryStorage({
   cloudinary,
   params: {

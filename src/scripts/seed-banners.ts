@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { AppDataSource } from '@/database/connect-database';
-import { Banner } from '@/modules/banners/banner.entity';
+import { Banner } from '@/modules/banners/entity/banner.entity';
 
 async function seedBanners() {
   try {

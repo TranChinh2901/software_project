@@ -1,0 +1,123 @@
+### Create Product - Valid Data
+POST http://localhost:3000/api/products
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer YOUR_TOKEN_HERE
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name_product"
+
+Laptop Dell XPS 13
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="price"
+
+25000000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="origin_price"
+
+30000000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="small_description"
+
+Laptop cao cấp cho doanh nhân
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="meta_description"
+
+Laptop Dell XPS 13 với màn hình 13 inch, chip Intel Core i7, RAM 16GB
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="status"
+
+ACTIVE
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="stock_quantity"
+
+50
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="discount"
+
+17
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="category_id"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="brand_id"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### Create Product - Missing category_id (Should Return Error)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "name_product": "Laptop HP",
+  "price": 20000000,
+  "origin_price": 25000000,
+  "small_description": "Laptop HP",
+  "meta_description": "Laptop HP description",
+  "status": "ACTIVE",
+  "stock_quantity": 30,
+  "discount": 20,
+  "brand_id": 2
+}
+
+###
+
+### Create Product - Invalid category_id (Should Return Error)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "name_product": "Laptop HP",
+  "price": 20000000,
+  "origin_price": 25000000,
+  "small_description": "Laptop HP",
+  "meta_description": "Laptop HP description",
+  "status": "ACTIVE",
+  "stock_quantity": 30,
+  "discount": 20,
+  "category_id": "invalid",
+  "brand_id": 2
+}
+
+###
+
+### Create Product - Missing brand_id (Should Return Error)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "name_product": "Laptop Asus",
+  "price": 18000000,
+  "origin_price": 22000000,
+  "small_description": "Laptop Asus gaming",
+  "meta_description": "Laptop Asus gaming description",
+  "status": "ACTIVE",
+  "stock_quantity": 25,
+  "discount": 18,
+  "category_id": 1
+}
+
+###
+
+### Create Product - Minimal Data
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "name_product": "Mouse Logitech",
+  "price": 500000,
+  "small_description": "Chuột không dây",
+  "meta_description": "Chuột không dây Logitech chính hãng",
+  "status": "ACTIVE",
+  "stock_quantity": 100,
+  "discount": 0,
+  "category_id": 3,
+  "brand_id": 5
+}
