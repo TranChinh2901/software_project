@@ -285,6 +285,29 @@ export class ProductController {
       next(error);
     }
   }
+
+  async deleteProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {id} = req.params;
+      const productId = parseInt(id);
+      if(isNaN(productId)) {
+        throw new AppError(
+            "Invalid product ID",
+            HttpStatusCode.BAD_REQUEST,
+            ErrorCode.INVALID_PARAMS
+        )
+      }
+      
+      await productService.deleteProduct(productId);
+      return new AppResponse({
+        message: SuccessMessages.PRODUCT.PRODUCT_DELETED,
+        statusCode: HttpStatusCode.OK,
+        data: null
+      }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new ProductController();

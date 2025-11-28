@@ -43,7 +43,6 @@ export const authMiddleware = (requiredRole?: RoleType) => {
         );
       }
 
-      // Check if user has required role
       if (requiredRole && !hasPermission(decoded.role as RoleType, requiredRole)) {
         throw new AppError(
           'Insufficient permissions to access this resource',
@@ -57,7 +56,6 @@ export const authMiddleware = (requiredRole?: RoleType) => {
         );
       }
 
-      // Add user to request
       req.user = {
         id: decoded.id,
         email: decoded.email,
@@ -70,7 +68,6 @@ export const authMiddleware = (requiredRole?: RoleType) => {
         throw error;
       }
       
-      // For unexpected errors, wrap them in AppError
       const errorMessage = error instanceof Error ? error.message : 'Authentication failed';
       throw new AppError(
         errorMessage,

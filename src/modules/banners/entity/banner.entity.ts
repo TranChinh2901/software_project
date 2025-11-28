@@ -6,7 +6,7 @@ export class Banner {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ length: 100 })
   title!: string;
 
   @Column({ nullable: true })

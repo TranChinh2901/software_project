@@ -370,6 +370,32 @@ export class ProductService {
             );
         }
     }
+
+    async deleteProduct(id: number): Promise<void> {
+        try {
+            const product = await this.productResponsitory.findOne({
+                where: { id }
+            });
+            if (!product) {
+                throw new AppError(
+                    ErrorMessages.PRODUCT.PRODUCT_NOT_FOUND,
+                    HttpStatusCode.NOT_FOUND,
+                    ErrorCode.PRODUCT_NOT_FOUND
+                );
+            }
+            
+            // Soft delete by setting is_deleted flag
+            product.is_deleted = true;
+            await this.productResponsitory.save(product);
+        } catch (error) {
+            throw new AppError(
+                ErrorMessages.PRODUCT.DELETE_PRODUCT_FAILED,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.SERVER_ERROR,
+                error
+            );
+        }
+    }
 }
 
 export default new ProductService();

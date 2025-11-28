@@ -8,7 +8,8 @@ Content-Type: application/json
   "password": "password123",
   "phone_number": "0119299115211",
   "gender": "male",
-  "date_of_birth": "1993-08-25"
+  "date_of_birth": "1993-08-25",
+  "address": "123 Test Street"
 }
 
 ### Login with admin account
@@ -17,7 +18,7 @@ Content-Type: application/json
 
 {
   "email": "admin@gmail.com",
-  "password": "password123"
+  "password": "123456"
 }
 
 ### Login with user account  

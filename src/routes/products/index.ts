@@ -28,5 +28,10 @@ router.put("/:id",
   productController.updateProduct
 )
 
+router.delete("/:id",
+  requireAuth(),
+  productController.deleteProduct
+)
+
 
 export default router;
