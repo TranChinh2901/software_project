@@ -18,7 +18,6 @@ export class ProductVariant {
   @Column({ type: 'int', default: 0 })
   quantity!: number;
 
-  // Relations
   @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })
   product!: Product;
