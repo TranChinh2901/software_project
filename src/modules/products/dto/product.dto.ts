@@ -12,7 +12,7 @@ export interface CreateProductDto {
   stock_quantity: number;
   discount: number;
   category_id: number;
-  brand_id: number;
+  // brand_id removed - brand is accessed through category.brand
 }
 
 export interface UpdateProductDto {
@@ -26,7 +26,7 @@ export interface UpdateProductDto {
   stock_quantity?: number;
   discount?: number;
   category_id?: number;
-  brand_id?: number;
+  // brand_id removed - brand is accessed through category.brand
 }
 
 export interface ProductResponseDto {
@@ -43,11 +43,12 @@ export interface ProductResponseDto {
   category: {
     id: number;
     name_category: string;
+    brand?: {
+      id: number;
+      name_brand: string;
+    };
   };
-  brand?: {
-    id: number;
-    name_brand: string;
-  };
+  // brand removed from root level - access via category.brand
   created_at: Date;
   updated_at: Date;
 }

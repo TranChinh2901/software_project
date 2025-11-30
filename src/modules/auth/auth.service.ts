@@ -219,8 +219,20 @@ export class AuthService {
     };
   }
 
-  async getAllUsers() {
-    const users = await this.userRepository.find();
+  async getAllUsers(query?: { sort?: string; limit?: number }) {
+    const { sort = 'newest', limit } = query || {};
+    let queryBuilder = this.userRepository.createQueryBuilder('user');
+    if (sort === 'newest') {
+      queryBuilder = queryBuilder.orderBy('user.created_at', 'DESC');
+    } else if (sort === 'oldest') {
+      queryBuilder = queryBuilder.orderBy('user.created_at', 'ASC');
+    }
+    if (limit) {
+      queryBuilder = queryBuilder.limit(limit);
+    }
+    
+    const users = await queryBuilder.getMany();
+    
     return users.map(user => ({
       id: user.id,
       fullname: user.fullname,

@@ -85,7 +85,11 @@ class AuthController {
   }
 
   async getAllUsers(req:Request, res: Response) {
-    const users = await authService.getAllUsers();
+    const { sort, limit } = req.query;
+    const users = await authService.getAllUsers({
+      sort: sort as string,
+      limit: limit ? parseInt(limit as string) : undefined
+    });
     return new AppResponse({
       message: SuccessMessages.USER.USER_GET,
       statusCode: HttpStatusCode.OK,

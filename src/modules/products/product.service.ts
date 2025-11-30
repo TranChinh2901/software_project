@@ -11,6 +11,7 @@ import { HttpStatusCode } from "@/constants/status-code";
 import { ErrorCode } from "@/constants/error-code";
 import { ProductMapper } from "./product.mapper";
 import { Like, MoreThan, Not } from "typeorm";
+import { ProductType } from "./enum/product.enum";
 
 export class ProductService {
     private brandResponsitory: Repository<Brand>;
@@ -24,22 +25,18 @@ export class ProductService {
     }
     async createProduct(productData: CreateProductDto): Promise<ProductResponseDto> {
         try {
-            const checkBrand = await this.brandResponsitory.findOne({
-                where: {
-                    id: productData.brand_id
-                }
-            })
-            if(!checkBrand) {
-                throw new AppError(
-                    ErrorMessages.BRAND.BRAND_NOT_FOUND,
-                    HttpStatusCode.NOT_FOUND,
-                    ErrorCode.BRAND_NOT_FOUND
-                )
-            }
+            console.log('Creating product with data:', {
+                name: productData.name_product,
+                category_id: productData.category_id,
+                meta_description_length: productData.meta_description?.length || 0
+            });
+            
+            // Check if category exists and load with brand relation
             const checkCategory = await this.categoryRespository.findOne({
                 where: {
                     id: productData.category_id
-                }
+                },
+                relations: ["brand"] // Load brand through category
             })  
             if(!checkCategory) {
                 throw new AppError(
@@ -48,20 +45,41 @@ export class ProductService {
                     ErrorCode.CATEGORY_NOT_FOUND
                 )
             }
+            
+            console.log('Category found:', checkCategory.name_category);
+            
+            // Brand is determined by the category, no need to check brand separately
+            
+            // Auto-update status based on stock_quantity
+            let finalStatus = productData.status || ProductType.ACTIVE;
+            if (productData.stock_quantity === 0) {
+                // Force out_of_stock when creating product with 0 stock
+                finalStatus = ProductType.OUT_OF_STOCK;
+            }
+            // If stock > 0, allow user to choose active or inactive
+            
+            console.log('Creating product entity...');
             const newProduct = this.productResponsitory.create({
                 ...productData,
-                brand: checkBrand,
+                status: finalStatus,
                 category: checkCategory
             });
+            
+            console.log('Saving product to database...');
             const savedProduct = await this.productResponsitory.save(newProduct);
+            
+            console.log('Product saved with ID:', savedProduct.id);
+            
+            // Load product with category and brand relations
             const productWithRelations = await this.productResponsitory.findOne({
                 where: {    
                     id: savedProduct.id
                 },
-                relations: ["brand", "category"]
+                relations: ["category", "category.brand"] // Load category and its brand
             })
             return ProductMapper.toProductResponseDto(productWithRelations!);
         } catch (error) {
+            console.error('Error in createProduct:', error);
             throw new AppError(
                 ErrorMessages.PRODUCT.CREATE_PRODUCT_FAILED,
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
@@ -89,7 +107,7 @@ export class ProductService {
 
             const queryBuilder = this.productResponsitory.createQueryBuilder('product')
                 .leftJoinAndSelect('product.category', 'category')
-                .leftJoinAndSelect('product.brand', 'brand')
+                .leftJoinAndSelect('category.brand', 'brand')
                 .where('product.is_deleted = :is_deleted', { is_deleted: false });
 
             if (search && search.trim()) {
@@ -104,7 +122,7 @@ export class ProductService {
             }
 
             if (brand_id) {
-                queryBuilder.andWhere('product.brand_id = :brand_id', { brand_id });
+                queryBuilder.andWhere('category.brand_id = :brand_id', { brand_id });
             }
 
             if (min_price !== undefined && min_price > 0) {
@@ -181,7 +199,7 @@ export class ProductService {
         try {
             const products = await this.productResponsitory.find({
                 where: { discount: MoreThan(0) },
-                relations: ["brand", "category"],
+                relations: ["category", "category.brand"],
                 order: { discount: 'DESC' },
                 take: 8
             });
@@ -200,7 +218,7 @@ export class ProductService {
         try {
             const products = await this.productResponsitory.find({
                 where: { discount: MoreThan(0) },
-                relations: ["brand", "category"],
+                relations: ["category", "category.brand"],
                 order: { discount: 'DESC', created_at: 'DESC' },
                 take: 8
             });
@@ -219,7 +237,7 @@ export class ProductService {
         try {
             const products = await this.productResponsitory.find({
                 where: { is_on_sale: true },
-                relations: ["brand", "category"],
+                relations: ["category", "category.brand"],
                 order: { discount: 'DESC', created_at: 'DESC' },
                 take: 12
             });
@@ -238,7 +256,7 @@ export class ProductService {
         try {
             const products = await this.productResponsitory.find({
                 where: { category: { id: categoryId } },
-                relations: ["brand", "category"],
+                relations: ["category", "category.brand"],
                 order: { created_at: 'DESC' }
             });
             return ProductMapper.toProductResponseDtoList(products);
@@ -255,7 +273,7 @@ export class ProductService {
         try {
             const product = await this.productResponsitory.findOne({
                 where: { id },
-                relations: ["brand", "category"]
+                relations: ["category", "category.brand"]
             });
             if(!product) {
                 throw new AppError(
@@ -278,7 +296,7 @@ export class ProductService {
         try {
            const product = await this.productResponsitory.findOne({
             where: { id },
-            relations: ["brand", "category"]
+            relations: ["category", "category.brand"] // Load category and its brand
            })
            if(!product) {
             throw new AppError(
@@ -287,22 +305,12 @@ export class ProductService {
                 ErrorCode.PRODUCT_NOT_FOUND
             )
            }
-        if(updateData.brand_id) {
-            const brandP = await this.brandResponsitory.findOne({
-                where: { id: updateData.brand_id }
-            })
-            if(!brandP) {
-                throw new AppError(
-                    ErrorMessages.BRAND.BRAND_NOT_FOUND,
-                    HttpStatusCode.NOT_FOUND,
-                    ErrorCode.BRAND_NOT_FOUND
-                )
-            }
-            product.brand = brandP;
-        }
+        
+        // Brand is determined by category, so only check if category is being changed
         if(updateData.category_id) {
             const categoryP = await this.categoryRespository.findOne({
-                where: { id: updateData.category_id }
+                where: { id: updateData.category_id },
+                relations: ["brand"] // Load brand with category
             })
             if(!categoryP) {
                 throw new AppError(
@@ -313,10 +321,36 @@ export class ProductService {
             }
             product.category = categoryP;
         }
-        const {brand_id, category_id, ...updateFields} = updateData;
+        
+        const {category_id, ...updateFields} = updateData;
+        
+        // Check if stock_quantity is being updated
+        const isStockUpdated = updateFields.stock_quantity !== undefined;
+        const oldStock = product.stock_quantity;
+        
         Object.assign(product, updateFields);
+        
+        // Auto-update status ONLY when stock_quantity changes
+        if (isStockUpdated) {
+            if (product.stock_quantity === 0) {
+                // Force out_of_stock when stock becomes 0
+                product.status = ProductType.OUT_OF_STOCK;
+            } else if (oldStock === 0 && product.stock_quantity && product.stock_quantity > 0) {
+                // If stock was 0 and now > 0, restore to active
+                product.status = ProductType.ACTIVE;
+            }
+        }
+        // If stock is NOT updated, respect the status from frontend (user's manual choice)
+        
         const updateProduct = await this.productResponsitory.save(product);
-        return ProductMapper.toProductResponseDto(updateProduct);
+        
+        // Reload with relations
+        const productWithRelations = await this.productResponsitory.findOne({
+            where: { id: updateProduct.id },
+            relations: ["category", "category.brand"]
+        });
+        
+        return ProductMapper.toProductResponseDto(productWithRelations!);
         } catch (error) {
             throw new AppError(
                 ErrorMessages.PRODUCT.UPDATE_PRODUCT_FAILED,
@@ -331,7 +365,7 @@ export class ProductService {
         try {
             const currentProduct = await this.productResponsitory.findOne({
                 where: { id: productId },
-                relations: ["category", "brand"]
+                relations: ["category", "category.brand"]
             });
 
             if (!currentProduct) {
@@ -342,20 +376,21 @@ export class ProductService {
                 );
             }
 
-            if (!currentProduct.category || !currentProduct.brand) {
+            if (!currentProduct.category) {
                 throw new AppError(
-                    "Product category or brand not found",
+                    "Product category not found",
                     HttpStatusCode.BAD_REQUEST,
                     ErrorCode.INVALID_PARAMS
                 );
             }
 
+            // Find related products: same category OR same brand (through category)
             const products = await this.productResponsitory.find({
-                where: [
-                    { category: { id: currentProduct.category.id }, id: Not(productId) },
-                    { brand: { id: currentProduct.brand.id }, id: Not(productId) }
-                ],
-                relations: ["brand", "category"],
+                where: { 
+                    category: { id: currentProduct.category.id }, 
+                    id: Not(productId) 
+                },
+                relations: ["category", "category.brand"],
                 order: { created_at: 'DESC' },
                 take: limit
             });

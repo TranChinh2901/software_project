@@ -46,13 +46,9 @@ export class Product {
   @Column({ type: "boolean", default: false })
   is_on_sale!: boolean;
 
-  @ManyToOne(() => Category)
+  @ManyToOne(() => Category, category => category.products)
   @JoinColumn({ name: "category_id" })
   category!: Category;
-
-  @ManyToOne(() => Brand)
-  @JoinColumn({ name: "brand_id" })
-  brand?: Brand;
 
   @Column({ type: "boolean", default: false })
   is_deleted!: boolean;

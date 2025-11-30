@@ -11,7 +11,7 @@ import { ErrorCode } from "@/constants/error-code";
 export class ProductController {
   async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
-      const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id, brand_id} = req.body;
+      const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id} = req.body;
       
       // Validate category_id
       if (!category_id) {
@@ -31,23 +31,7 @@ export class ProductController {
         );
       }
 
-      // Validate brand_id
-      if (!brand_id) {
-        throw new AppError(
-          "Brand ID is required",
-          HttpStatusCode.BAD_REQUEST,
-          ErrorCode.INVALID_PARAMS
-        );
-      }
-      
-      const parsedBrandId = parseInt(brand_id);
-      if (isNaN(parsedBrandId)) {
-        throw new AppError(
-          "Invalid brand ID",
-          HttpStatusCode.BAD_REQUEST,
-          ErrorCode.INVALID_PARAMS
-        );
-      }
+      // Brand is determined by the category, no need to pass brand_id
 
       const imageFile = req.file;
       let image_product: string | undefined;
@@ -66,7 +50,6 @@ export class ProductController {
         stock_quantity: parseInt(stock_quantity),
         discount: discount ? parseInt(discount) : 0,
         category_id: parsedCategoryId,
-        brand_id: parsedBrandId,
       }
       
       const product = await productService.createProduct(createProductDto);
@@ -88,15 +71,16 @@ export class ProductController {
         brand_id: req.query.brand_id ? parseInt(req.query.brand_id as string) : undefined,
         min_price: req.query.min_price ? parseFloat(req.query.min_price as string) : undefined,
         max_price: req.query.max_price ? parseFloat(req.query.max_price as string) : undefined,
-        sort: (req.query.sort as any) || 'newest',
+        sort: req.query.sort as 'newest' | 'oldest' | 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc',
         page: req.query.page ? parseInt(req.query.page as string) : 1,
         limit: req.query.limit ? parseInt(req.query.limit as string) : 12,
         featured: req.query.featured === 'true',
         status: req.query.status as string,
-        is_on_sale: req.query.is_on_sale === 'true'
+        is_on_sale: req.query.is_on_sale ? req.query.is_on_sale === 'true' : undefined
       };
-      
+
       const result = await productService.getAllProducts(query);
+      
       return new AppResponse({
         message: SuccessMessages.PRODUCT.PRODUCT_LIST_GET,
         statusCode: HttpStatusCode.OK,
@@ -227,7 +211,7 @@ export class ProductController {
         )
       }
       
-      const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id, brand_id} = req.body;
+      const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id} = req.body;
       
       // Validate and parse category_id if provided
       let parsedCategoryId: number | undefined;
@@ -242,18 +226,7 @@ export class ProductController {
         }
       }
 
-      // Validate and parse brand_id if provided
-      let parsedBrandId: number | undefined;
-      if (brand_id !== undefined && brand_id !== null && brand_id !== '') {
-        parsedBrandId = parseInt(brand_id);
-        if (isNaN(parsedBrandId)) {
-          throw new AppError(
-            "Invalid brand ID",
-            HttpStatusCode.BAD_REQUEST,
-            ErrorCode.INVALID_PARAMS
-          );
-        }
-      }
+      // Brand is determined by the category, no need to handle brand_id
 
       const imageFile = req.file;
       let image_product: string | undefined;
@@ -272,7 +245,6 @@ export class ProductController {
         stock_quantity: stock_quantity !== undefined ? parseInt(stock_quantity) : undefined,
         discount: discount !== undefined ? parseInt(discount) : undefined,
         category_id: parsedCategoryId,
-        brand_id: parsedBrandId,
       }
       
       const product = await productService.updateProduct(productId, updateProductDto);

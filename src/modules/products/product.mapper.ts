@@ -18,11 +18,12 @@ export class ProductMapper {
             category: product.category ? {
                 id: product.category.id,
                 name_category: product.category.name_category,
+                brand: product.category.brand ? {
+                    id: product.category.brand.id,
+                    name_brand: product.category.brand.name_brand,
+                } : undefined
             } : { id: 0, name_category: '' },
-            brand: product.brand ? {
-                id: product.brand.id,
-                name_brand: product.brand.name_brand,
-            } : undefined,
+            // Brand is now accessed through category.brand
             created_at: product.created_at,
             updated_at: product.updated_at,
         };
