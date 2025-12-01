@@ -12,6 +12,8 @@ router.post("/",
 )
 router.get("/", voucherController.getAllVouchers);
 
+router.get("/validate/:code", voucherController.validateVoucherCode);
+
 router.get("/:id", voucherController.getVoucherById);
 
 router.put("/:id", 

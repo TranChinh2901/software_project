@@ -1,6 +1,4 @@
-
-import { Product } from "@/modules/products/entity/product.entity";
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('colors')
 export class Color {
@@ -10,8 +8,6 @@ export class Color {
   @Column({ length: 50, unique: true })
   name_color!: string;
 
-      @ManyToOne(() => Product)
-      @JoinColumn({ name: 'product_id' })
-      product!: Product;
-
+  @Column({ length: 7, nullable: true })
+  hex_code?: string;
 }

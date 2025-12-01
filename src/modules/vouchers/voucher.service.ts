@@ -153,6 +153,71 @@ export class VoucherService {
             );
         }
     }
+
+    async validateVoucherCode(code: string, orderValue: number): Promise<VoucherResponseDto> {
+        try {
+            const voucher = await this.voucherReponsitory.findOne({
+                where: { code: code.toUpperCase() }
+            });
+
+            if (!voucher) {
+                throw new AppError(
+                    "Mã voucher không tồn tại",
+                    HttpStatusCode.NOT_FOUND,
+                    ErrorCode.VOUCHER_NOT_FOUND
+                );
+            }
+
+            // Check if voucher is active
+            if (voucher.status !== 'active') {
+                throw new AppError(
+                    "Mã voucher đã bị vô hiệu hóa",
+                    HttpStatusCode.BAD_REQUEST,
+                    ErrorCode.VOUCHER_INACTIVE
+                );
+            }
+
+            // Check if voucher is expired
+            const now = new Date();
+            const expiryDate = new Date(voucher.expiry_date);
+            if (expiryDate < now) {
+                throw new AppError(
+                    "Mã voucher đã hết hạn",
+                    HttpStatusCode.BAD_REQUEST,
+                    ErrorCode.VOUCHER_EXPIRED
+                );
+            }
+
+            // Check if voucher quantity is available
+            if (voucher.quantity <= 0) {
+                throw new AppError(
+                    "Mã voucher đã hết lượt sử dụng",
+                    HttpStatusCode.BAD_REQUEST,
+                    ErrorCode.VOUCHER_OUT_OF_STOCK
+                );
+            }
+
+            // Check minimum order value
+            if (voucher.min_order_value && orderValue < voucher.min_order_value) {
+                throw new AppError(
+                    `Đơn hàng tối thiểu phải từ ${voucher.min_order_value.toLocaleString('vi-VN')} ₫`,
+                    HttpStatusCode.BAD_REQUEST,
+                    ErrorCode.ORDER_VALUE_TOO_LOW
+                );
+            }
+
+            return VoucherMapper.toVoucherResponseDto(voucher);
+        } catch (error) {
+            if (error instanceof AppError) {
+                throw error;
+            }
+            throw new AppError(
+                "Không thể xác thực mã voucher",
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
 
 export default new VoucherService();

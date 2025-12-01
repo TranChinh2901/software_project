@@ -49,22 +49,9 @@ async getAllProductGalleries(): Promise<ProductGalleryResponseDto[]> {
       relations: ["product"]
     });
 
-    const groups: Record<number, ProductGalleryGroupedResponseDto> = {};
-    galleries.forEach(g => {
-      const pid = g.product.id;
-      if (!groups[pid]) {
-        groups[pid] = {
-            id: g.id,
-          product_id: pid,
-          product: { id: g.product.id, name_product: g.product.name_product },
-          image_url: [g.image_url]
-        };
-      } else {
-        groups[pid].image_url.push(g.image_url);
-      }
-    });
-
-    return Object.values(groups) as any;
+    // Return individual gallery objects instead of grouped format
+    // This preserves the unique ID for each image
+    return ProductGalleryMapper.toProductGalleryResponseDtoList(galleries);
     } catch (error) {
         throw new AppError(
             ErrorMessages.PRODUCT_GALLERY.FAILED_TO_FETCH_GALLERY,

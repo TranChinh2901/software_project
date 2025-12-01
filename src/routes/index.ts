@@ -10,6 +10,7 @@ import {categoryRoutes} from "@/routes/categories";
 import colorRouter from "@/routes/colors";
 import voucherRouter from "@/routes/vouchers";
 import productGalleryRouter from "@/routes/product-gallery";
+import productVariantRouter from "@/routes/product-variants";
 import { reviewRoutes } from "@/routes/reviews";
 import orderRouter from "@/routes/orders";
 import cartRouter from "@/routes/carts";
@@ -33,6 +34,8 @@ router.use(`${API_V1}/colors`, colorRouter);
 router.use(`${API_V1}/vouchers`, voucherRouter);
 
 router.use(`${API_V1}/product-gallery`, productGalleryRouter);
+
+router.use(`${API_V1}/product-variants`, productVariantRouter);
 
 router.use(`${API_V1}/reviews`, reviewRoutes);
 

@@ -6,11 +6,7 @@ export class ColorMapper {
     return {
       id: color.id,
       name_color: color.name_color,
-      product_id: color?.product?.id ?? null,
-      product: {
-        id: color?.product?.id ?? null,
-        name: color?.product?.name_product ?? null
-      }
+      hex_code: color.hex_code
     };
   }
 

@@ -112,6 +112,32 @@ export class VoucherController {
         next(error);
     }
   }
+
+  async validateVoucherCode(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { code } = req.params;
+        const { orderValue } = req.query;
+
+        if (!code) {
+            throw new AppError(
+                "Voucher code is required",
+                HttpStatusCode.BAD_REQUEST,
+                ErrorCode.INVALID_PARAMS
+            );
+        }
+
+        const orderAmount = orderValue ? parseFloat(orderValue as string) : 0;
+        const voucher = await voucherService.validateVoucherCode(code, orderAmount);
+
+        return new AppResponse({
+            message: "Voucher is valid",
+            statusCode: HttpStatusCode.OK,
+            data: voucher
+        }).sendResponse(res);
+    } catch (error) {
+        next(error);
+    }
+  }
 }
 
 export default new VoucherController();

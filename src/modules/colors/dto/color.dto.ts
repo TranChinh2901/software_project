@@ -1,19 +1,15 @@
 export interface CreateColorDto {
   name_color: string;
-  product_id?: number;
+  hex_code?: string;
 }
 
 export interface UpdateColorDto {
   name_color?: string;
-  product_id?: number;
+  hex_code?: string;
 }
 
 export interface ColorResponseDto {
   id: number;
   name_color: string;
-  product_id?: number | null;
-  product?: {
-    id?: number ;
-    name?: string;
-  } ;
+  hex_code?: string;
 }

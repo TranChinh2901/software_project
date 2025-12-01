@@ -1,6 +1,5 @@
 import { Repository } from 'typeorm';
 import { Color } from './entity/color.entity';
-import { Product } from '@/modules/products/entity/product.entity';
 import { AppDataSource } from '@/config/database.config';
 import { CreateColorDto, ColorResponseDto, UpdateColorDto } from './dto/color.dto';
 import { AppError } from '@/common/error.response';
@@ -18,7 +17,12 @@ export class ColorService {
 
 	async createColor(data: CreateColorDto): Promise<ColorResponseDto> {
 		try {
-			const exists = await this.colorRepository.findOne({ where: { name_color: data.name_color } });
+			// Check if color already exists (case-insensitive)
+			const exists = await this.colorRepository
+				.createQueryBuilder('color')
+				.where('LOWER(color.name_color) = LOWER(:name)', { name: data.name_color })
+				.getOne();
+
 			if (exists) {
 				throw new AppError(
 					ErrorMessages.COLORS.COLOR_ALREADY_EXISTS,
@@ -26,21 +30,12 @@ export class ColorService {
 					ErrorCode.COLOR_ALREADY_EXISTS
 				);
 			}
-			const color = this.colorRepository.create();
-			if (data.product_id) {
-				const productRepo = AppDataSource.getRepository(Product);
-				const product = await productRepo.findOne({ where: { id: data.product_id } });
-				if (!product) {
-					throw new AppError(
-						ErrorMessages.PRODUCT.PRODUCT_NOT_FOUND,
-						HttpStatusCode.NOT_FOUND,
-						ErrorCode.PRODUCT_NOT_FOUND
-					);
-				}
-				color.product = product;
-			}
 
-			color.name_color = data.name_color;
+			const color = this.colorRepository.create({
+				name_color: data.name_color,
+				hex_code: data.hex_code
+			});
+
 			const result = await this.colorRepository.save(color);
 			const saved = Array.isArray(result) ? result[0] : result;
 			return ColorMapper.toColorResponseDto(saved as Color);
@@ -59,9 +54,8 @@ export class ColorService {
 	async getAllColors(): Promise<ColorResponseDto[]> {
 		try {
 			const colors = await this.colorRepository.find({
-        order: { id: 'ASC' },
-        relations: ['product']
-            });
+				order: { name_color: 'ASC' }
+			});
 			return ColorMapper.toColorResponseDtoList(colors);
 		} catch (error) {
 			throw new AppError(
@@ -75,9 +69,8 @@ export class ColorService {
 	async getColorById(id: number): Promise<ColorResponseDto> {
 		try {
 			const color = await this.colorRepository.findOne({
-                 where: { id },
-                 relations: ['product']
-            });
+				where: { id }
+			});
 			if (!color) {
 				throw new AppError(
 					ErrorMessages.COLORS.COLOR_NOT_FOUND,
@@ -99,10 +92,7 @@ export class ColorService {
 
 	async updateColor(id: number, data: UpdateColorDto): Promise<ColorResponseDto> {
 		try {
-			const color = await this.colorRepository.findOne({ 
-                where: { id },
-                relations: ['product']
-            });
+			const color = await this.colorRepository.findOne({ where: { id } });
 			if (!color) {
 				throw new AppError(
 					ErrorMessages.COLORS.COLOR_NOT_FOUND,
@@ -110,6 +100,24 @@ export class ColorService {
 					ErrorCode.COLOR_NOT_FOUND
 				);
 			}
+
+			// Check if new name conflicts with existing color
+			if (data.name_color && data.name_color !== color.name_color) {
+				const exists = await this.colorRepository
+					.createQueryBuilder('color')
+					.where('LOWER(color.name_color) = LOWER(:name)', { name: data.name_color })
+					.andWhere('color.id != :id', { id })
+					.getOne();
+
+				if (exists) {
+					throw new AppError(
+						ErrorMessages.COLORS.COLOR_ALREADY_EXISTS,
+						HttpStatusCode.BAD_REQUEST,
+						ErrorCode.COLOR_ALREADY_EXISTS
+					);
+				}
+			}
+
 			Object.assign(color, data);
 			const result = await this.colorRepository.save(color);
 			const saved = Array.isArray(result) ? result[0] : result;
@@ -127,10 +135,7 @@ export class ColorService {
 
 	async deleteColor(id: number): Promise<void> {
 		try {
-			const color = await this.colorRepository.findOne({
-                where: { id },
-                relations: ['product']
-            });
+			const color = await this.colorRepository.findOne({ where: { id } });
 			if (!color) {
 				throw new AppError(
 					ErrorMessages.COLORS.COLOR_NOT_FOUND,

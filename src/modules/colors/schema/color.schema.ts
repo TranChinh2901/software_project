@@ -7,16 +7,17 @@ export const CreateColorSchema = Joi.object({
     'string.max': 'Color name is too long',
     'any.required': 'Color name is required',
   }),
-    product_id: Joi.number().integer().required().messages({
-    'number.base': 'Product ID must be a number',
-    'number.integer': 'Product ID must be an integer',
-    'any.required': 'Product ID is required',
+  hex_code: Joi.string().pattern(/^#[0-9A-F]{6}$/i).optional().messages({
+    'string.pattern.base': 'Hex code must be a valid color code (e.g., #FF5733)',
   }),
 });
 
-// export const UpdateColorSchema = Joi.object({
-//   name_color: Joi.string().min(1).max(50).optional().messages({
-//     'string.base': 'Color name must be a string',
-//     'string.max': 'Color name is too long',
-//   }),
-//     });
+export const UpdateColorSchema = Joi.object({
+  name_color: Joi.string().min(1).max(50).optional().messages({
+    'string.base': 'Color name must be a string',
+    'string.max': 'Color name is too long',
+  }),
+  hex_code: Joi.string().pattern(/^#[0-9A-F]{6}$/i).optional().messages({
+    'string.pattern.base': 'Hex code must be a valid color code (e.g., #FF5733)',
+  }),
+});

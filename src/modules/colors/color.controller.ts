@@ -10,8 +10,8 @@ import { ErrorCode } from '@/constants/error-code';
 export class ColorController {
 	async createColor(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { name_color, product_id } = req.body;
-			const dto: CreateColorDto = { name_color, product_id };
+			const { name_color, hex_code } = req.body;
+			const dto: CreateColorDto = { name_color, hex_code };
 			const color = await colorService.createColor(dto);
 			return new AppResponse({
 				message: SuccessMessages.COLORS.COLOR_CREATED,
@@ -61,8 +61,8 @@ export class ColorController {
 			if (isNaN(colorId)) {
 				throw new AppError('Invalid color id', HttpStatusCode.BAD_REQUEST, ErrorCode.INVALID_PARAMS);
 			}
-			const { name_color, product_id } = req.body;
-			const dto: UpdateColorDto = { name_color, product_id };
+			const { name_color, hex_code } = req.body;
+			const dto: UpdateColorDto = { name_color, hex_code };
 			const updated = await colorService.updateColor(colorId, dto);
 			return new AppResponse({
 				message: SuccessMessages.COLORS.COLOR_UPDATED,
