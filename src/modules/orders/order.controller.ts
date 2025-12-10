@@ -10,15 +10,19 @@ export class OrderController {
   async createOrder(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
       const userId = req.user?.id;
+      console.log('Create Order Request Body:', JSON.stringify(req.body, null, 2));
+      console.log('User ID from token:', userId);
+      
       if (!userId) {
         throw new Error('User not authenticated');
       }
-      const { items, shipping_address_id, voucher_id, note, payment_method } = req.body;
+      const { items, shipping_address_id, shipping_address, voucher_id, note, payment_method } = req.body;
 
       const order = await orderService.createOrder({
         user_id: userId,
         items,
         shipping_address_id,
+        shipping_address,
         voucher_id,
         note,
         payment_method
@@ -30,6 +34,7 @@ export class OrderController {
         data: order
       }).sendResponse(res);
     } catch (error) {
+      console.error('Create Order Error:', error);
       next(error);
     }
   }

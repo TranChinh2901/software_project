@@ -1,0 +1,54 @@
+### ============================================
+### MoMo Payment API Tests
+### ============================================
+
+### Biến môi trường
+@baseUrl = http://localhost:4000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjUyOTg2MTYsImV4cCI6MTc2NTMwMDQxNn0.-BKDCq5xwwHRBLtWQ7y5Xk9JwBYC0WiyZ6Pp5JrmzUk
+
+### ============================================
+### 1. Tạo yêu cầu thanh toán MoMo
+### ============================================
+POST {{baseUrl}}/momo/create-payment
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "order_id": 10,
+  "amount": 50000,
+  "orderInfo": "Thanh toán đơn hàng test #1"
+}
+
+### ============================================
+### 2. Kiểm tra trạng thái giao dịch
+### (Thay MOMO_ORDER_ID bằng orderId từ response create-payment)
+### ============================================
+GET {{baseUrl}}/momo/check-status/MOMO_1_1702123456789
+Authorization: Bearer {{token}}
+
+### ============================================
+### 3. Test callback từ MoMo (Simulate IPN)
+### ============================================
+POST {{baseUrl}}/momo/callback
+Content-Type: application/json
+
+{
+  "partnerCode": "MOMO",
+  "orderId": "MOMO_1_1702123456789",
+  "requestId": "MOMO_1_1702123456789",
+  "amount": 50000,
+  "orderInfo": "Thanh toán đơn hàng test #1",
+  "orderType": "momo_wallet",
+  "transId": 2953436437,
+  "resultCode": 0,
+  "message": "Thành công.",
+  "payType": "qr",
+  "responseTime": 1702123456789,
+  "extraData": "eyJvcmRlcl9pZCI6MX0=",
+  "signature": "test_signature_here"
+}
+
+### ============================================
+### 4. Test Return URL (Redirect sau thanh toán)
+### ============================================
+GET {{baseUrl}}/momo/return?partnerCode=MOMO&orderId=MOMO_1_1702123456789&requestId=MOMO_1_1702123456789&amount=50000&orderInfo=Thanh+to%C3%A1n+%C4%91%C6%A1n+h%C3%A0ng+test&orderType=momo_wallet&transId=2953436437&resultCode=0&message=Th%C3%A0nh+c%C3%B4ng.&payType=qr&responseTime=1702123456789&extraData=eyJvcmRlcl9pZCI6MX0%3D&signature=test

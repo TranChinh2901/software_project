@@ -1,7 +1,17 @@
+export interface ShippingAddressDto {
+  fullname: string;
+  phone_number: string;
+  address: string;
+  city?: string;
+  district?: string;
+  ward?: string;
+}
+
 export interface CreateOrderDto {
   user_id: number;
   items: OrderItemDto[];
-  shipping_address_id: number;
+  shipping_address_id?: number;
+  shipping_address?: ShippingAddressDto;
   voucher_id?: number;
   note?: string;
   payment_method: string;
@@ -29,6 +39,7 @@ export interface OrderResponseDto {
   payment_status: string;
   created_at: Date;
   updated_at: Date;
+  order_items?: OrderItemResponseDto[];
 }
 
 export interface OrderDetailResponseDto extends OrderResponseDto {

@@ -40,7 +40,7 @@ export class OrderService {
     await queryRunner.startTransaction();
 
     try {
-      const { user_id, items, shipping_address_id, voucher_id, note, payment_method } = orderData;
+      const { user_id, items, shipping_address_id, shipping_address, voucher_id, note, payment_method } = orderData;
 
       const user = await queryRunner.manager.findOne(User, {
         where: { id: user_id }
@@ -54,11 +54,35 @@ export class OrderService {
         );
       }
 
-      const shippingAddress = await queryRunner.manager.findOne(ShippingAddress, {
-        where: { id: shipping_address_id }
+      // Xử lý shipping address - tạo mới nếu không có ID
+      let shippingAddressId = shipping_address_id;
+      
+      if (!shippingAddressId && shipping_address) {
+        // Tạo shipping address mới
+        const newShippingAddress = queryRunner.manager.create(ShippingAddress, {
+          user_id,
+          fullname: shipping_address.fullname,
+          phone_number: shipping_address.phone_number,
+          address: `${shipping_address.address}${shipping_address.ward ? ', ' + shipping_address.ward : ''}${shipping_address.district ? ', ' + shipping_address.district : ''}${shipping_address.city ? ', ' + shipping_address.city : ''}`,
+          is_default: false
+        });
+        const savedAddress = await queryRunner.manager.save(newShippingAddress);
+        shippingAddressId = savedAddress.id;
+      }
+
+      if (!shippingAddressId) {
+        throw new AppError(
+          'Shipping address is required',
+          HttpStatusCode.BAD_REQUEST,
+          ErrorCode.VALIDATION_ERROR
+        );
+      }
+
+      const shippingAddressRecord = await queryRunner.manager.findOne(ShippingAddress, {
+        where: { id: shippingAddressId }
       });
 
-      if (!shippingAddress) {
+      if (!shippingAddressRecord) {
         throw new AppError(
           'Shipping address not found',
           HttpStatusCode.NOT_FOUND,
@@ -104,7 +128,7 @@ export class OrderService {
 
       const order = queryRunner.manager.create(Order, {
         user_id,
-        shipping_address_id,
+        shipping_address_id: shippingAddressId,
         total_amount: final_amount,
         note,
         payment_method: payment_method as PaymentMethod,
@@ -151,7 +175,7 @@ export class OrderService {
   async getUserOrders(userId: number): Promise<OrderResponseDto[]> {
     const orders = await this.orderRepository.find({
       where: { user_id: userId },
-      relations: ['order_items', 'order_items.product'],
+      relations: ['order_items', 'order_items.product_variant', 'order_items.product_variant.product'],
       order: { created_at: 'DESC' }
     });
 

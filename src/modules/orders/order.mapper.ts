@@ -13,13 +13,7 @@ export class OrderMapper {
       payment_method: order.payment_method,
       payment_status: order.payment_status,
       created_at: order.created_at,
-      updated_at: order.updated_at
-    };
-  }
-
-  static toOrderDetailResponseDto(order: Order): OrderDetailResponseDto {
-    return {
-      ...this.toOrderResponseDto(order),
+      updated_at: order.updated_at,
       order_items: order.order_items?.map((item: any) => ({
         id: item.id,
         order_id: item.order_id,
@@ -31,9 +25,16 @@ export class OrderMapper {
           name_product: item.product_variant.product.name_product,
           image_product: item.product_variant.product.image_product
         } : undefined
-      })) || [],
-      user: order.user ? {
+      })) || []
+    };
+  }
 
+  static toOrderDetailResponseDto(order: Order): OrderDetailResponseDto {
+    const baseDto = this.toOrderResponseDto(order);
+    return {
+      ...baseDto,
+      order_items: baseDto.order_items || [],
+      user: order.user ? {
         id: order.user.id,
         full_name: order.user.fullname,
         email: order.user.email

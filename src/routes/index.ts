@@ -16,6 +16,7 @@ import orderRouter from "@/routes/orders";
 import cartRouter from "@/routes/carts";
 // import userRouter from "@/routes/users";
 import bannerRouter from "@/routes/banners";
+import momoRouter from "@/routes/momo";
 
 const router = express.Router();
 const API_V1 = "/api/v1";
@@ -44,5 +45,7 @@ router.use(`${API_V1}/orders`, orderRouter);
 router.use(`${API_V1}/carts`, cartRouter);
 
 router.use(`${API_V1}/banners`, bannerRouter);
+
+router.use(`${API_V1}/momo`, momoRouter);
 
 export default router;

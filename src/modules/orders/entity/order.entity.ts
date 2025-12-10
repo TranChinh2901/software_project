@@ -23,12 +23,6 @@ export class Order {
   @Column('text', { nullable: true })
   cancel_reason?: string;
 
-  // @Column({
-  //   type: 'enum',
-  //   enum: ['COD', 'Momo', 'VNpay']
-  // })
-  // payment_method!: string;
-
   @Column({type: 'enum', enum: PaymentMethod, default: PaymentMethod.COD})
   payment_method!: PaymentMethod;
 
