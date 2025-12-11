@@ -2,7 +2,7 @@ import { Order } from "./entity/order.entity";
 import { OrderResponseDto, OrderDetailResponseDto } from "./dto/order.dto";
 
 export class OrderMapper {
-  static toOrderResponseDto(order: Order): OrderResponseDto {
+  static toOrderResponseDto(order: Order): OrderResponseDto & { user?: any; shipping_address?: any } {
     return {
       id: order.id,
       user_id: order.user_id,
@@ -24,8 +24,25 @@ export class OrderMapper {
           id: item.product_variant.product.id,
           name_product: item.product_variant.product.name_product,
           image_product: item.product_variant.product.image_product
-        } : undefined
-      })) || []
+        } : (item.product ? {
+          id: item.product.id,
+          name_product: item.product.name_product,
+          image_product: item.product.image_product
+        } : undefined)
+      })) || [],
+      // Include user info if available
+      user: order.user ? {
+        id: order.user.id,
+        fullname: order.user.fullname,
+        full_name: order.user.fullname,
+        email: order.user.email
+      } : undefined,
+      // Include shipping address if available
+      shipping_address: order.shipping_address ? {
+        id: order.shipping_address.id,
+        address: order.shipping_address.address,
+        phone: order.shipping_address.phone_number
+      } : undefined
     };
   }
 
@@ -47,7 +64,7 @@ export class OrderMapper {
     };
   }
 
-  static toOrderResponseDtoArray(orders: Order[]): OrderResponseDto[] {
+  static toOrderResponseDtoArray(orders: Order[]): (OrderResponseDto & { user?: any; shipping_address?: any })[] {
     return orders.map(order => this.toOrderResponseDto(order));
   }
 }

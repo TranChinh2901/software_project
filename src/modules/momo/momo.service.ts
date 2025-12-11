@@ -304,6 +304,98 @@ export class MomoService {
       message: "Thanh toán thất bại hoặc bị hủy"
     };
   }
+
+  /**
+   * Verify và cập nhật payment status từ frontend
+   * Được gọi khi MoMo redirect về frontend với resultCode = 0
+   */
+  async verifyAndUpdatePayment(data: {
+    orderId: string;
+    resultCode: number;
+    transId?: string;
+    amount?: number;
+    extraData?: string;
+  }): Promise<{ success: boolean; order_id: number | null; message: string }> {
+    const { orderId, resultCode, transId, extraData } = data;
+
+    // Parse order_id từ extraData
+    let orderIdFromExtra: number | null = null;
+    try {
+      if (extraData) {
+        const decoded = JSON.parse(Buffer.from(extraData, "base64").toString("utf-8"));
+        orderIdFromExtra = decoded.order_id;
+      }
+    } catch (e) {
+      // Try to parse from orderId (format: MOMO_orderId_timestamp)
+      const parts = orderId?.split('_');
+      if (parts && parts.length >= 2) {
+        orderIdFromExtra = parseInt(parts[1]);
+      }
+    }
+
+    if (!orderIdFromExtra) {
+      return {
+        success: false,
+        order_id: null,
+        message: "Không tìm thấy order_id"
+      };
+    }
+
+    // Kiểm tra resultCode = 0 (thành công)
+    if (resultCode !== 0) {
+      return {
+        success: false,
+        order_id: orderIdFromExtra,
+        message: "Thanh toán không thành công"
+      };
+    }
+
+    // Tìm đơn hàng
+    const order = await this.orderRepository.findOne({
+      where: { id: orderIdFromExtra }
+    });
+
+    if (!order) {
+      return {
+        success: false,
+        order_id: orderIdFromExtra,
+        message: "Đơn hàng không tồn tại"
+      };
+    }
+
+    // Nếu đã paid rồi thì không cần update nữa
+    if (order.payment_status === PaymentStatus.PAID) {
+      return {
+        success: true,
+        order_id: orderIdFromExtra,
+        message: "Đơn hàng đã được thanh toán"
+      };
+    }
+
+    // Cập nhật payment status
+    order.payment_status = PaymentStatus.PAID;
+    await this.orderRepository.save(order);
+
+    // Cập nhật transaction nếu có
+    if (orderId) {
+      const transaction = await this.transactionRepository.findOne({
+        where: { transaction_code: orderId }
+      });
+
+      if (transaction) {
+        transaction.status = TransactionStatus.SUCCESS;
+        await this.transactionRepository.save(transaction);
+      }
+    }
+
+    console.log(`[MoMo] Payment verified and updated for order #${orderIdFromExtra}`);
+
+    return {
+      success: true,
+      order_id: orderIdFromExtra,
+      message: "Thanh toán thành công"
+    };
+  }
 }
 
 export default new MomoService();

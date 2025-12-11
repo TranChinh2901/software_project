@@ -14,6 +14,7 @@ import { OrderType, PaymentMethod, PaymentStatus } from "./enum/order.enum";
 import { User } from "@/modules/users/entity/user.entity";
 import { ShippingAddress } from "@/modules/shipping-address/entity/shipping-address.entity";
 import { Voucher } from "@/modules/vouchers/entity/voucher.entity";
+import { Transaction } from "@/modules/transactions/entity/transaction.entity";
 
 export class OrderService {
   private orderRepository: Repository<Order>;
@@ -23,6 +24,7 @@ export class OrderService {
   private userRepository: Repository<User>;
   private shippingAddressRepository: Repository<ShippingAddress>;
   private voucherRepository: Repository<Voucher>;
+  private transactionRepository: Repository<Transaction>;
 
   constructor() {
     this.orderRepository = AppDataSource.getRepository(Order);
@@ -32,6 +34,7 @@ export class OrderService {
     this.userRepository = AppDataSource.getRepository(User);
     this.shippingAddressRepository = AppDataSource.getRepository(ShippingAddress);
     this.voucherRepository = AppDataSource.getRepository(Voucher);
+    this.transactionRepository = AppDataSource.getRepository(Transaction);
   }
 
   async createOrder(orderData: CreateOrderDto): Promise<OrderResponseDto> {
@@ -188,8 +191,10 @@ export class OrderService {
 
     const queryBuilder = this.orderRepository.createQueryBuilder('order')
       .leftJoinAndSelect('order.user', 'user')
+      .leftJoinAndSelect('order.shipping_address', 'shipping_address')
       .leftJoinAndSelect('order.order_items', 'order_items')
-      .leftJoinAndSelect('order_items.product', 'product')
+      .leftJoinAndSelect('order_items.product_variant', 'product_variant')
+      .leftJoinAndSelect('product_variant.product', 'product')
       .skip(skip)
       .take(limit)
       .orderBy('order.created_at', 'DESC');
@@ -244,6 +249,56 @@ export class OrderService {
     const updatedOrder = await this.orderRepository.save(order);
 
     return OrderMapper.toOrderResponseDto(updatedOrder);
+  }
+
+  async deleteOrder(id: number): Promise<void> {
+    const order = await this.orderRepository.findOne({ 
+      where: { id },
+      relations: ['order_items']
+    });
+
+    if (!order) {
+      throw new AppError(
+        ErrorMessages.ORDER.ORDER_NOT_FOUND,
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.ORDER_NOT_FOUND
+      );
+    }
+
+    // Admin can delete any order - no status restriction
+
+    // Delete transactions related to this order first
+    const transactions = await this.transactionRepository.find({
+      where: { order: { id: id } }
+    });
+    if (transactions && transactions.length > 0) {
+      await this.transactionRepository.remove(transactions);
+    }
+
+    // Delete order details
+    if (order.order_items && order.order_items.length > 0) {
+      await this.orderDetailRepository.remove(order.order_items);
+    }
+
+    // Delete order
+    await this.orderRepository.remove(order);
+  }
+
+  async getOrderDetailById(id: number): Promise<any> {
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['order_items', 'order_items.product_variant', 'order_items.product_variant.product', 'user', 'shipping_address']
+    });
+
+    if (!order) {
+      throw new AppError(
+        ErrorMessages.ORDER.ORDER_NOT_FOUND,
+        HttpStatusCode.NOT_FOUND,
+        ErrorCode.ORDER_NOT_FOUND
+      );
+    }
+
+    return OrderMapper.toOrderDetailResponseDto(order);
   }
 }
 

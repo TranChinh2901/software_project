@@ -13,6 +13,9 @@ router.post("/callback", momoController.handleCallback.bind(momoController));
 // Return URL sau khi thanh toán - không cần auth
 router.get("/return", momoController.handleReturn.bind(momoController));
 
+// Verify và cập nhật payment status từ frontend (cần đăng nhập)
+router.post("/verify-payment", authMiddleware(), momoController.verifyPayment.bind(momoController));
+
 // Kiểm tra trạng thái giao dịch
 router.get("/check-status/:orderId", authMiddleware(), momoController.checkTransactionStatus.bind(momoController));
 

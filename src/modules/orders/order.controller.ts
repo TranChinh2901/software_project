@@ -124,6 +124,37 @@ export class OrderController {
       next(error);
     }
   }
+
+  async deleteOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      await orderService.deleteOrder(parseInt(id));
+
+      return new AppResponse({
+        message: 'Xóa đơn hàng thành công',
+        statusCode: HttpStatusCode.OK,
+        data: null
+      }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getOrderDetail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const order = await orderService.getOrderDetailById(parseInt(id));
+
+      return new AppResponse({
+        message: SuccessMessages.ORDER.ORDER_GET,
+        statusCode: HttpStatusCode.OK,
+        data: order
+      }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new OrderController();

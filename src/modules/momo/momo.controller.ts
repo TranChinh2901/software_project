@@ -101,6 +101,34 @@ export class MomoController {
       next(error);
     }
   }
+
+  /**
+   * Verify và cập nhật payment status từ frontend redirect
+   * POST /api/v1/momo/verify-payment
+   */
+  async verifyPayment(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { orderId, resultCode, transId, amount, extraData } = req.body;
+
+      console.log("MoMo Verify Payment:", req.body);
+
+      const result = await momoService.verifyAndUpdatePayment({
+        orderId,
+        resultCode: Number(resultCode),
+        transId,
+        amount: Number(amount),
+        extraData
+      });
+
+      return new AppResponse({
+        message: result.message,
+        statusCode: HttpStatusCode.OK,
+        data: { success: result.success, order_id: result.order_id }
+      }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new MomoController();
