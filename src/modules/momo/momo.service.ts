@@ -18,8 +18,6 @@ import {
 export class MomoService {
   private orderRepository: Repository<Order>;
   private transactionRepository: Repository<Transaction>;
-
-  // MoMo Sandbox Config
   private partnerCode: string;
   private accessKey: string;
   private secretKey: string;
@@ -30,20 +28,15 @@ export class MomoService {
   constructor() {
     this.orderRepository = AppDataSource.getRepository(Order);
     this.transactionRepository = AppDataSource.getRepository(Transaction);
-
-    // Load config từ .env
     this.partnerCode = process.env.MOMO_PARTNER_CODE || "MOMO";
     this.accessKey = process.env.MOMO_ACCESS_KEY || "F8BBA842ECF85";
     this.secretKey = process.env.MOMO_SECRET_KEY || "K951B6PE1waDMi640xX08PD3vg6EkVlz";
     this.endpoint = process.env.MOMO_ENDPOINT || "https://test-payment.momo.vn/v2/gateway/api";
-    // Redirect trực tiếp về frontend sau khi thanh toán
     this.redirectUrl = process.env.MOMO_REDIRECT_URL || "http://localhost:3000/checkout/momo-return";
     this.ipnUrl = process.env.MOMO_IPN_URL || "http://localhost:4000/api/v1/momo/callback";
   }
 
-  /**
-   * Tạo chữ ký HMAC SHA256
-   */
+//taoj chữ ký
   private createSignature(rawSignature: string): string {
     return crypto
       .createHmac("sha256", this.secretKey)
@@ -51,13 +44,9 @@ export class MomoService {
       .digest("hex");
   }
 
-  /**
-   * Tạo yêu cầu thanh toán MoMo
-   */
+
   async createPayment(data: CreateMomoPaymentDto): Promise<MomoPaymentResponse> {
     const { order_id, amount, orderInfo } = data;
-
-    // Kiểm tra đơn hàng tồn tại
     const order = await this.orderRepository.findOne({
       where: { id: order_id }
     });
@@ -70,7 +59,6 @@ export class MomoService {
       );
     }
 
-    // Tạo orderId và requestId unique
     const momoOrderId = `${this.partnerCode}_${order_id}_${Date.now()}`;
     const requestId = momoOrderId;
     const requestType = "payWithMethod";
@@ -80,7 +68,6 @@ export class MomoService {
     const lang = "vi";
     const paymentInfo = orderInfo || `Thanh toán đơn hàng #${order_id}`;
 
-    // Tạo raw signature theo thứ tự alphabet
     const rawSignature =
       `accessKey=${this.accessKey}` +
       `&amount=${amount}` +
@@ -95,7 +82,6 @@ export class MomoService {
 
     const signature = this.createSignature(rawSignature);
 
-    // Request body
     const requestBody = {
       partnerCode: this.partnerCode,
       partnerName: "Test Store",
@@ -125,7 +111,6 @@ export class MomoService {
         }
       );
 
-      // Lưu transaction pending
       if (response.data.resultCode === 0) {
         const transaction = this.transactionRepository.create({
           transaction_code: momoOrderId,
@@ -146,10 +131,6 @@ export class MomoService {
       );
     }
   }
-
-  /**
-   * Xử lý callback từ MoMo (IPN)
-   */
   async handleCallback(callbackData: MomoCallbackDto): Promise<{ success: boolean; message: string }> {
     const {
       partnerCode,
@@ -167,7 +148,6 @@ export class MomoService {
       signature
     } = callbackData;
 
-    // Verify signature
     const rawSignature =
       `accessKey=${this.accessKey}` +
       `&amount=${amount}` +
@@ -193,7 +173,6 @@ export class MomoService {
       );
     }
 
-    // Tìm transaction
     const transaction = await this.transactionRepository.findOne({
       where: { transaction_code: orderId },
       relations: ["order"]
@@ -207,13 +186,10 @@ export class MomoService {
       );
     }
 
-    // Cập nhật trạng thái dựa vào resultCode
     if (resultCode === 0) {
-      // Thanh toán thành công
       transaction.status = TransactionStatus.SUCCESS;
       await this.transactionRepository.save(transaction);
 
-      // Cập nhật trạng thái đơn hàng
       if (transaction.order) {
         transaction.order.payment_status = PaymentStatus.PAID;
         await this.orderRepository.save(transaction.order);
@@ -221,7 +197,6 @@ export class MomoService {
 
       return { success: true, message: "Thanh toán thành công" };
     } else {
-      // Thanh toán thất bại
       transaction.status = TransactionStatus.FAILED;
       await this.transactionRepository.save(transaction);
 
@@ -229,9 +204,6 @@ export class MomoService {
     }
   }
 
-  /**
-   * Kiểm tra trạng thái giao dịch
-   */
   async checkTransactionStatus(orderId: string): Promise<MomoTransactionStatusResponse> {
     const requestId = `check_${Date.now()}`;
     const lang = "vi";
@@ -273,9 +245,6 @@ export class MomoService {
     }
   }
 
-  /**
-   * Xử lý redirect URL (khi user quay về từ MoMo)
-   */
   async handleReturn(query: any): Promise<{ success: boolean; order_id: number | null; message: string }> {
     const { resultCode, orderId, extraData } = query;
 
@@ -287,7 +256,6 @@ export class MomoService {
         orderIdFromExtra = decoded.order_id;
       }
     } catch (e) {
-      // Ignore parse error
     }
 
     if (resultCode === "0" || resultCode === 0) {
@@ -305,10 +273,7 @@ export class MomoService {
     };
   }
 
-  /**
-   * Verify và cập nhật payment status từ frontend
-   * Được gọi khi MoMo redirect về frontend với resultCode = 0
-   */
+
   async verifyAndUpdatePayment(data: {
     orderId: string;
     resultCode: number;
@@ -318,7 +283,6 @@ export class MomoService {
   }): Promise<{ success: boolean; order_id: number | null; message: string }> {
     const { orderId, resultCode, transId, extraData } = data;
 
-    // Parse order_id từ extraData
     let orderIdFromExtra: number | null = null;
     try {
       if (extraData) {
@@ -326,7 +290,6 @@ export class MomoService {
         orderIdFromExtra = decoded.order_id;
       }
     } catch (e) {
-      // Try to parse from orderId (format: MOMO_orderId_timestamp)
       const parts = orderId?.split('_');
       if (parts && parts.length >= 2) {
         orderIdFromExtra = parseInt(parts[1]);
@@ -341,7 +304,6 @@ export class MomoService {
       };
     }
 
-    // Kiểm tra resultCode = 0 (thành công)
     if (resultCode !== 0) {
       return {
         success: false,
@@ -350,7 +312,6 @@ export class MomoService {
       };
     }
 
-    // Tìm đơn hàng
     const order = await this.orderRepository.findOne({
       where: { id: orderIdFromExtra }
     });
@@ -363,7 +324,6 @@ export class MomoService {
       };
     }
 
-    // Nếu đã paid rồi thì không cần update nữa
     if (order.payment_status === PaymentStatus.PAID) {
       return {
         success: true,
@@ -372,11 +332,9 @@ export class MomoService {
       };
     }
 
-    // Cập nhật payment status
     order.payment_status = PaymentStatus.PAID;
     await this.orderRepository.save(order);
 
-    // Cập nhật transaction nếu có
     if (orderId) {
       const transaction = await this.transactionRepository.findOne({
         where: { transaction_code: orderId }

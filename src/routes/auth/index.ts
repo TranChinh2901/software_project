@@ -9,7 +9,6 @@ import { asyncHandle } from '@/utils/handle-error';
 
 const router = Router();
 
-// Public routes
 router.post('/register', 
   // validateBody(RegisterSchema), 
   asyncHandle(authController.register)
@@ -24,7 +23,6 @@ router.post('/refresh-token',
   asyncHandle(authController.refreshToken)
 );
 
-// Protected routes
 router.post('/logout', 
   authMiddleware, 
   asyncHandle(authController.logout)
@@ -51,14 +49,12 @@ router.delete('/delete-account/:id',
   asyncHandle(authController.deleteAccount)
 );
 
-// Admin route to delete user by ID
 router.delete('/users/:id',
   // authMiddleware(),
   // requireAdmin(),
   asyncHandle(authController.deleteUserById)
 );
 
-// Admin route to update user by ID
 router.put('/users/:id',
   // authMiddleware(),
   // requireAdmin(),

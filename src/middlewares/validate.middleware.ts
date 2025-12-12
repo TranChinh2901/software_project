@@ -10,7 +10,6 @@ export const validateBody = (schema: ObjectSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const { error, value } = schema.validate(req.body, { abortEarly: false });
     if (error) {
-      // custom errors detail for response
       const errorDetails = error.details.map((err) => {
         return {
           field: err.context?.label,

@@ -17,7 +17,6 @@ export class ColorService {
 
 	async createColor(data: CreateColorDto): Promise<ColorResponseDto> {
 		try {
-			// Check if color already exists (case-insensitive)
 			const exists = await this.colorRepository
 				.createQueryBuilder('color')
 				.where('LOWER(color.name_color) = LOWER(:name)', { name: data.name_color })
@@ -100,8 +99,6 @@ export class ColorService {
 					ErrorCode.COLOR_NOT_FOUND
 				);
 			}
-
-			// Check if new name conflicts with existing color
 			if (data.name_color && data.name_color !== color.name_color) {
 				const exists = await this.colorRepository
 					.createQueryBuilder('color')

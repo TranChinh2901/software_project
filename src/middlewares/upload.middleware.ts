@@ -87,7 +87,7 @@ export const uploadAvatar = multer({
   storage: avatarStorage,
   fileFilter,
   limits: {
-    fileSize: 2 * 1024 * 1024 // 2MB
+    fileSize: 2 * 1024 * 1024 //2mb
   }
 });
 
@@ -95,7 +95,7 @@ export const uploadBrandLogo = multer({
   storage: brandLogoStorage,
   fileFilter,
   limits: {
-    fileSize: 3 * 1024 * 1024 // 3MB
+    fileSize: 3 * 1024 * 1024 
   }
 });
 
@@ -103,7 +103,7 @@ export const uploadBlogImage = multer({
   storage: blogImageStorage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB
+    fileSize: 5 * 1024 * 1024 
   }
 });
 
@@ -119,7 +119,7 @@ export const uploadProductGalleryImages = multer({
   storage: productGalleryImageStorage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB per image
+    fileSize: 5 * 1024 * 1024 
   }
 })
 
@@ -127,7 +127,7 @@ export const uploadCategoryImage = multer({
   storage: categoryImageStorage,
   fileFilter,
   limits: {
-    fileSize: 3 * 1024 * 1024 // 3MB
+    fileSize: 3 * 1024 * 1024 
   }
 });
 
@@ -135,6 +135,6 @@ export const uploadBannerImage = multer({
   storage: bannerImageStorage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB
+    fileSize: 5 * 1024 * 1024 
   }
 });

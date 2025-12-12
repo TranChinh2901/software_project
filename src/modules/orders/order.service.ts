@@ -57,11 +57,9 @@ export class OrderService {
         );
       }
 
-      // Xử lý shipping address - tạo mới nếu không có ID
       let shippingAddressId = shipping_address_id;
       
       if (!shippingAddressId && shipping_address) {
-        // Tạo shipping address mới
         const newShippingAddress = queryRunner.manager.create(ShippingAddress, {
           user_id,
           fullname: shipping_address.fullname,
@@ -161,7 +159,7 @@ export class OrderService {
   async getOrderById(id: number): Promise<OrderResponseDto> {
     const order = await this.orderRepository.findOne({
       where: { id },
-      relations: ['order_items', 'user', 'shipping_address']
+      relations: ['order_items', 'order_items.product_variant', 'order_items.product_variant.product', 'user', 'shipping_address']
     });
 
     if (!order) {
@@ -265,9 +263,6 @@ export class OrderService {
       );
     }
 
-    // Admin can delete any order - no status restriction
-
-    // Delete transactions related to this order first
     const transactions = await this.transactionRepository.find({
       where: { order: { id: id } }
     });
@@ -275,12 +270,10 @@ export class OrderService {
       await this.transactionRepository.remove(transactions);
     }
 
-    // Delete order details
     if (order.order_items && order.order_items.length > 0) {
       await this.orderDetailRepository.remove(order.order_items);
     }
 
-    // Delete order
     await this.orderRepository.remove(order);
   }
 

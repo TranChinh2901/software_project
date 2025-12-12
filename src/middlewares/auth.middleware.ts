@@ -17,7 +17,6 @@ export interface AuthenticatedRequest extends Request {
 
 export const authMiddleware = (requiredRole?: RoleType) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    // Get token from header
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; 
 
@@ -31,7 +30,6 @@ export const authMiddleware = (requiredRole?: RoleType) => {
     }
 
     try {
-      // Verify token
       const decoded = authService.verifyToken(token);
       console.log(decoded);
       if (!decoded) {
@@ -82,12 +80,10 @@ export const authMiddleware = (requiredRole?: RoleType) => {
   };
 };
 
-// Helper middleware cho các role cụ thể
 export const requireAuth = () => authMiddleware();
 export const requireUser = () => authMiddleware(RoleType.USER);
 export const requireAdmin = () => authMiddleware(RoleType.ADMIN);
 
-// Middleware kiểm tra nhiều role (OR logic)
 export const requireAnyRole = (roles: RoleType[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const authCheck = authMiddleware();

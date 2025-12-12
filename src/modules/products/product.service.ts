@@ -31,12 +31,11 @@ export class ProductService {
                 meta_description_length: productData.meta_description?.length || 0
             });
             
-            // Check if category exists and load with brand relation
             const checkCategory = await this.categoryRespository.findOne({
                 where: {
                     id: productData.category_id
                 },
-                relations: ["brand"] // Load brand through category
+                relations: ["brand"] 
             })  
             if(!checkCategory) {
                 throw new AppError(
@@ -48,15 +47,11 @@ export class ProductService {
             
             console.log('Category found:', checkCategory.name_category);
             
-            // Brand is determined by the category, no need to check brand separately
             
-            // Auto-update status based on stock_quantity
             let finalStatus = productData.status || ProductType.ACTIVE;
             if (productData.stock_quantity === 0) {
-                // Force out_of_stock when creating product with 0 stock
                 finalStatus = ProductType.OUT_OF_STOCK;
             }
-            // If stock > 0, allow user to choose active or inactive
             
             console.log('Creating product entity...');
             const newProduct = this.productResponsitory.create({
@@ -68,14 +63,13 @@ export class ProductService {
             console.log('Saving product to database...');
             const savedProduct = await this.productResponsitory.save(newProduct);
             
-            console.log('Product saved with ID:', savedProduct.id);
+            // console.log('Product saved with ID:', savedProduct.id);
             
-            // Load product with category and brand relations
             const productWithRelations = await this.productResponsitory.findOne({
                 where: {    
                     id: savedProduct.id
                 },
-                relations: ["category", "category.brand"] // Load category and its brand
+                relations: ["category", "category.brand"]
             })
             return ProductMapper.toProductResponseDto(productWithRelations!);
         } catch (error) {
@@ -166,13 +160,8 @@ export class ProductService {
                     queryBuilder.orderBy('product.created_at', 'DESC');
             }
 
-            // Đếm tổng số sản phẩm
             const total = await queryBuilder.getCount();
-
-            // Tính tổng số trang
             const totalPages = Math.ceil(total / limit);
-
-            // Phân trang
             const products = await queryBuilder
                 .skip((page - 1) * limit)
                 .take(limit)
@@ -296,7 +285,7 @@ export class ProductService {
         try {
            const product = await this.productResponsitory.findOne({
             where: { id },
-            relations: ["category", "category.brand"] // Load category and its brand
+            relations: ["category", "category.brand"] 
            })
            if(!product) {
             throw new AppError(
@@ -305,12 +294,10 @@ export class ProductService {
                 ErrorCode.PRODUCT_NOT_FOUND
             )
            }
-        
-        // Brand is determined by category, so only check if category is being changed
         if(updateData.category_id) {
             const categoryP = await this.categoryRespository.findOne({
                 where: { id: updateData.category_id },
-                relations: ["brand"] // Load brand with category
+                relations: ["brand"] 
             })
             if(!categoryP) {
                 throw new AppError(
@@ -323,28 +310,19 @@ export class ProductService {
         }
         
         const {category_id, ...updateFields} = updateData;
-        
-        // Check if stock_quantity is being updated
         const isStockUpdated = updateFields.stock_quantity !== undefined;
         const oldStock = product.stock_quantity;
         
         Object.assign(product, updateFields);
-        
-        // Auto-update status ONLY when stock_quantity changes
         if (isStockUpdated) {
             if (product.stock_quantity === 0) {
-                // Force out_of_stock when stock becomes 0
                 product.status = ProductType.OUT_OF_STOCK;
             } else if (oldStock === 0 && product.stock_quantity && product.stock_quantity > 0) {
-                // If stock was 0 and now > 0, restore to active
                 product.status = ProductType.ACTIVE;
             }
         }
-        // If stock is NOT updated, respect the status from frontend (user's manual choice)
         
         const updateProduct = await this.productResponsitory.save(product);
-        
-        // Reload with relations
         const productWithRelations = await this.productResponsitory.findOne({
             where: { id: updateProduct.id },
             relations: ["category", "category.brand"]
@@ -383,8 +361,6 @@ export class ProductService {
                     ErrorCode.INVALID_PARAMS
                 );
             }
-
-            // Find related products: same category OR same brand (through category)
             const products = await this.productResponsitory.find({
                 where: { 
                     category: { id: currentProduct.category.id }, 
@@ -418,8 +394,6 @@ export class ProductService {
                     ErrorCode.PRODUCT_NOT_FOUND
                 );
             }
-            
-            // Soft delete by setting is_deleted flag
             product.is_deleted = true;
             await this.productResponsitory.save(product);
         } catch (error) {

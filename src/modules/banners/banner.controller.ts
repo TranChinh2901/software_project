@@ -86,7 +86,6 @@ const bannerController = {
         display_order
       };
 
-      // Only update image if new file is uploaded
       if (req.file?.path) {
         updateData.image_url = req.file.path;
       }

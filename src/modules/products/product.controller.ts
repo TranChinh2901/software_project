@@ -13,7 +13,6 @@ export class ProductController {
     try {
       const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id} = req.body;
       
-      // Validate category_id
       if (!category_id) {
         throw new AppError(
           "Category ID is required",
@@ -31,7 +30,6 @@ export class ProductController {
         );
       }
 
-      // Brand is determined by the category, no need to pass brand_id
 
       const imageFile = req.file;
       let image_product: string | undefined;
@@ -213,7 +211,6 @@ export class ProductController {
       
       const {name_product, price, origin_price, small_description, meta_description, status, stock_quantity, discount, category_id} = req.body;
       
-      // Validate and parse category_id if provided
       let parsedCategoryId: number | undefined;
       if (category_id !== undefined && category_id !== null && category_id !== '') {
         parsedCategoryId = parseInt(category_id);
@@ -226,7 +223,6 @@ export class ProductController {
         }
       }
 
-      // Brand is determined by the category, no need to handle brand_id
 
       const imageFile = req.file;
       let image_product: string | undefined;

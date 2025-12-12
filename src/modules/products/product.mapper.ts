@@ -23,7 +23,6 @@ export class ProductMapper {
                     name_brand: product.category.brand.name_brand,
                 } : undefined
             } : { id: 0, name_category: '' },
-            // Brand is now accessed through category.brand
             created_at: product.created_at,
             updated_at: product.updated_at,
         };

@@ -22,7 +22,6 @@ export class ProductVariantService {
   }
 
   async createVariant(dto: CreateProductVariantDto): Promise<ProductVariantResponseDto> {
-    // Verify product exists
     const product = await this.productRepository.findOne({
       where: { id: dto.product_id }
     });
@@ -34,7 +33,6 @@ export class ProductVariantService {
       );
     }
 
-    // Verify color exists if provided
     let color: Color | undefined;
     if (dto.color_id) {
       const foundColor = await this.colorRepository.findOne({
@@ -50,7 +48,6 @@ export class ProductVariantService {
       color = foundColor;
     }
 
-    // Create variant
     const variant = this.variantRepository.create({
       product: product,
       color: color,
@@ -61,7 +58,6 @@ export class ProductVariantService {
 
     const savedVariant = await this.variantRepository.save(variant);
 
-    // Load relations for response
     const variantWithRelations = await this.variantRepository.findOne({
       where: { id: savedVariant.id },
       relations: ['product', 'color']
@@ -115,8 +111,6 @@ export class ProductVariantService {
         ErrorCode.PRODUCT_NOT_FOUND
       );
     }
-
-    // Update color if provided
     if (dto.color_id !== undefined) {
       if (dto.color_id) {
         const color = await this.colorRepository.findOne({
@@ -135,14 +129,12 @@ export class ProductVariantService {
       }
     }
 
-    // Update other fields
     if (dto.size !== undefined) variant.size = dto.size;
     if (dto.price !== undefined) variant.price = dto.price;
     if (dto.quantity !== undefined) variant.quantity = dto.quantity;
 
     const savedVariant = await this.variantRepository.save(variant);
 
-    // Reload with relations
     const updatedVariant = await this.variantRepository.findOne({
       where: { id: savedVariant.id },
       relations: ['product', 'color']

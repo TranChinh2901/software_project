@@ -30,14 +30,12 @@ export class OrderMapper {
           image_product: item.product.image_product
         } : undefined)
       })) || [],
-      // Include user info if available
       user: order.user ? {
         id: order.user.id,
         fullname: order.user.fullname,
         full_name: order.user.fullname,
         email: order.user.email
       } : undefined,
-      // Include shipping address if available
       shipping_address: order.shipping_address ? {
         id: order.shipping_address.id,
         address: order.shipping_address.address,

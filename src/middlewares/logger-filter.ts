@@ -11,9 +11,8 @@ export const requestLogger = (
   next: NextFunction
 ) => {
   const { method, originalUrl } = req;
-  const startTime = Date.now(); // Record start time
+  const startTime = Date.now(); 
 
-  // Listen for the response to finish
   res.on("finish", () => {
     const { statusCode } = res;
     const duration = Date.now() - startTime;
@@ -22,3 +21,4 @@ export const requestLogger = (
 
   next();
 };
+ 

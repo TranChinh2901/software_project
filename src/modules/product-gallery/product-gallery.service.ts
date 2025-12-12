@@ -49,8 +49,7 @@ async getAllProductGalleries(): Promise<ProductGalleryResponseDto[]> {
       relations: ["product"]
     });
 
-    // Return individual gallery objects instead of grouped format
-    // This preserves the unique ID for each image
+  
     return ProductGalleryMapper.toProductGalleryResponseDtoList(galleries);
     } catch (error) {
         throw new AppError(

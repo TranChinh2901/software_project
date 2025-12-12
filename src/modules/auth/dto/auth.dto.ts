@@ -1,7 +1,5 @@
 import { GenderType } from "@/modules/users/enum/user.enum";
 import { RoleType } from "../enum/auth.enum";
-
-// DTO for updating user profile
 export interface UpdateProfileDto {
   fullname?: string;
   phone_number?: string;

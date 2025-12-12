@@ -6,7 +6,6 @@ import { requireAuth } from '@/middlewares/auth.middleware';
 const router = express.Router();
 
 router.post('/', 
-    // requireAuth(), // Tạm thời bỏ để test - NHỚ BẬT LẠI SAU!
     validateBody(CreateColorSchema), 
     colorController.createColor
 );

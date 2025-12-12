@@ -4,10 +4,7 @@ import { AppResponse } from "@/common/success.response";
 import { HttpStatusCode } from "@/constants/status-code";
 
 export class MomoController {
-  /**
-   * Tạo yêu cầu thanh toán MoMo
-   * POST /api/v1/momo/create-payment
-   */
+
   async createPayment(req: Request, res: Response, next: NextFunction) {
     try {
       const { order_id, amount, orderInfo } = req.body;
@@ -35,36 +32,26 @@ export class MomoController {
     }
   }
 
-  /**
-   * Xử lý callback từ MoMo (IPN)
-   * POST /api/v1/momo/callback
-   */
+
   async handleCallback(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("MoMo IPN Callback:", JSON.stringify(req.body, null, 2));
       
       const result = await momoService.handleCallback(req.body);
-
-      // MoMo yêu cầu trả về status 204 hoặc 200
       return res.status(HttpStatusCode.NO_CONTENT).send();
     } catch (error) {
       console.error("MoMo Callback Error:", error);
-      // Vẫn trả về 204 để MoMo không retry
       return res.status(HttpStatusCode.NO_CONTENT).send();
     }
   }
 
-  /**
-   * Xử lý redirect sau khi thanh toán (Return URL)
-   * GET /api/v1/momo/return
-   */
+
   async handleReturn(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("MoMo Return Query:", req.query);
       
       const result = await momoService.handleReturn(req.query);
       
-      // Redirect về frontend với kết quả
       const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
       const redirectUrl = `${frontendUrl}/checkout/momo-return?success=${result.success}&order_id=${result.order_id || ""}&message=${encodeURIComponent(result.message)}`;
       
@@ -75,10 +62,7 @@ export class MomoController {
     }
   }
 
-  /**
-   * Kiểm tra trạng thái giao dịch
-   * GET /api/v1/momo/check-status/:orderId
-   */
+ 
   async checkTransactionStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const { orderId } = req.params;
@@ -102,10 +86,6 @@ export class MomoController {
     }
   }
 
-  /**
-   * Verify và cập nhật payment status từ frontend redirect
-   * POST /api/v1/momo/verify-payment
-   */
   async verifyPayment(req: Request, res: Response, next: NextFunction) {
     try {
       const { orderId, resultCode, transId, amount, extraData } = req.body;

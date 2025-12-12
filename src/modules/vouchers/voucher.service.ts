@@ -168,7 +168,6 @@ export class VoucherService {
                 );
             }
 
-            // Check if voucher is active
             if (voucher.status !== 'active') {
                 throw new AppError(
                     "Mã voucher đã bị vô hiệu hóa",
@@ -177,7 +176,6 @@ export class VoucherService {
                 );
             }
 
-            // Check if voucher is expired
             const now = new Date();
             const expiryDate = new Date(voucher.expiry_date);
             if (expiryDate < now) {
@@ -187,8 +185,6 @@ export class VoucherService {
                     ErrorCode.VOUCHER_EXPIRED
                 );
             }
-
-            // Check if voucher quantity is available
             if (voucher.quantity <= 0) {
                 throw new AppError(
                     "Mã voucher đã hết lượt sử dụng",
@@ -196,8 +192,6 @@ export class VoucherService {
                     ErrorCode.VOUCHER_OUT_OF_STOCK
                 );
             }
-
-            // Check minimum order value
             if (voucher.min_order_value && orderValue < voucher.min_order_value) {
                 throw new AppError(
                     `Đơn hàng tối thiểu phải từ ${voucher.min_order_value.toLocaleString('vi-VN')} ₫`,

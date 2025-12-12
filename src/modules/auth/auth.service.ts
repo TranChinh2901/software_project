@@ -84,8 +84,6 @@ export class AuthService {
     }
 
     const hashedPassword = await hash(password, this.SALT_ROUNDS);
-    
-    // Convert date_of_birth to proper Date format for MySQL
     const birthDate = typeof date_of_birth === 'string' 
       ? new Date(date_of_birth) 
       : date_of_birth;
@@ -103,9 +101,6 @@ export class AuthService {
      
     });
     const savedUser = await this.userRepository.save(newUser);
-    
-    // KHÔNG tự động tạo token khi register
-    // User phải login sau khi register
     return {
       message: "Registration successful",
       user: {
@@ -354,8 +349,6 @@ export class AuthService {
         ErrorCode.USER_NOT_FOUND
       );
     }
-
-    // Kiểm tra email nếu có thay đổi
     if (updateData.email && updateData.email !== user.email) {
       const existingUser = await this.userRepository.findOne({
         where: { email: updateData.email }
@@ -382,10 +375,9 @@ export class AuthService {
       }
     }
 
-    console.log('Data before update:', updateData);
-    console.log('is_verified before update:', updateData.is_verified, typeof updateData.is_verified);
+    // console.log('Data before update:', updateData);
+    // console.log('is_verified before update:', updateData.is_verified, typeof updateData.is_verified);
 
-    // Update user
     await this.userRepository.update(userId, updateData);
 
     const updatedUser = await this.userRepository.findOne({

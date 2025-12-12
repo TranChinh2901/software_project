@@ -20,7 +20,6 @@ discount_voucher!: number;
   status!: VoucherType;
 
 
-  //điều kiện áp dụng nếu cần (ví dụ: đơn hàng từ 300K).
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   min_order_value?: number;
 
