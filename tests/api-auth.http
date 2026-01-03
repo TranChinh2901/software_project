@@ -3,10 +3,10 @@ POST http://localhost:4000/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "fullname": "Test delete user",
-  "email": "user@gmail.com",
-  "password": "password123",
-  "phone_number": "0119299115211",
+  "fullname": "Tesst new user ",
+  "email": "usernew@gmail.com",
+  "password": "123456",
+  "phone_number": "0763723475",
   "gender": "male",
   "date_of_birth": "1993-08-25",
   "address": "123 Test Street"
